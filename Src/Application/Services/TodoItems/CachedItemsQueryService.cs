@@ -20,7 +20,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<TodoItemDetails> GetItem(Guid parentId)
         {
-            return await _cacheService.Get(CacheKey.Items.Item(parentId), CacheKey.Time.Default, async () =>
+            return await _cacheService.Get(CacheKey.Items.Item(parentId), CacheKey.Times.Default, async () =>
             {
                 return await _queryService.GetItem(parentId);
             });
@@ -28,7 +28,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<ICollection<TodoItemDetails>> GetChildItems(Guid parentId)
         {
-            return await _cacheService.Get(CacheKey.Items.ChildItems(parentId), CacheKey.Time.Default, async () =>
+            return await _cacheService.Get(CacheKey.Items.ChildItems(parentId), CacheKey.Times.Default, async () =>
             {
                 return await _queryService.GetChildItems(parentId);
             });
@@ -36,7 +36,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
         {
-            return await _cacheService.Get(CacheKey.Items.ListItems(parameters), CacheKey.Time.Default, async () =>
+            return await _cacheService.Get(CacheKey.Items.ListItems(parameters), CacheKey.Times.Default, async () =>
             {
                 return await _queryService.ListItems(parameters);
             });
@@ -44,7 +44,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters)
         {
-            return await _cacheService.Get(CacheKey.Items.PagedItems(page, pageSize, parameters), CacheKey.Time.Default, async () =>
+            return await _cacheService.Get(CacheKey.Items.PagedItems(page, pageSize, parameters), CacheKey.Times.Default, async () =>
             {
                 return await _queryService.PagedListItems(page, pageSize, parameters);
             });

@@ -5,7 +5,7 @@ namespace Todo.Application.Services.TodoItems
 {
     public static class CacheKey
     {
-        public static class Time
+        public static class Times
         {
             public const int ShortTime = 5;
 
@@ -18,7 +18,7 @@ namespace Todo.Application.Services.TodoItems
 
         public static class Items
         {
-            public const string Pattern = "/items";
+            private const string Pattern = "/items";
 
             public static string Item(Guid itemId) => $"{Pattern}?itemId={itemId}";
 
