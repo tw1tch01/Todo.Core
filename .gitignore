@@ -1,0 +1,16 @@
+
+.vs/*
+/Src/Application/bin/*
+/Src/Application/obj/*
+/Src/Domain/bin/*
+/Src/Domain/obj/*
+/Src/Models/bin/*
+/Src/Models/obj/*
+/Tests/Application.IntegrationTests/bin/*
+/Tests/Application.IntegrationTests/obj/*
+/Tests/Application.UnitTests/bin/*
+/Tests/Application.UnitTests/obj/*
+/Tests/Domain.UnitTests/bin/*
+/Tests/Domain.UnitTests/obj/*
+/Tests/Models.UnitTests/bin/*
+/Tests/Models.UnitTests/obj/*
