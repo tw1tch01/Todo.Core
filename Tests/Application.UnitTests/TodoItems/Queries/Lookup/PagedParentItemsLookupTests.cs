@@ -9,8 +9,8 @@ using NUnit.Framework;
 using Todo.Application.Interfaces;
 using Todo.Application.TodoItems.Queries.Lookup;
 using Todo.Application.TodoItems.Queries.Specifications;
-using Todo.Application.UnitTests.TestingFactories;
 using Todo.Domain.Entities;
+using Todo.Factories;
 using Todo.Models.TodoItems;
 
 namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
@@ -27,7 +27,7 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
             var query = new PagedParentItemsLookup(page, pageSize);
-            var handler = new PagedParentItemsLookup.Handler(mockRepository.Object, mockMapper.Object);
+            var handler = new PagedParentItemsLookup.RequestHandler(mockRepository.Object, mockMapper.Object);
 
             ICollection<TodoItem> items = new List<TodoItem>();
             PagedCollection<TodoItem> pagedCollection = new PagedCollection<TodoItem>(page, pageSize, 0, items);
@@ -53,7 +53,7 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
             var query = new PagedParentItemsLookup(page, pageSize);
-            var handler = new PagedParentItemsLookup.Handler(mockRepository.Object, mockMapper.Object);
+            var handler = new PagedParentItemsLookup.RequestHandler(mockRepository.Object, mockMapper.Object);
 
             ICollection<TodoItem> items = new List<TodoItem> { TodoItemFactory.GenerateItem() };
             PagedCollection<TodoItem> pagedCollection = new PagedCollection<TodoItem>(page, pageSize, 0, items);
@@ -80,7 +80,7 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
         {
             int page = -1;
 
-            var result = PagedParentItemsLookup.Handler.ValidatePaging(page, 10);
+            var result = PagedParentItemsLookup.RequestHandler.ValidatePaging(page, 10);
 
             Assert.Multiple(() =>
             {
@@ -93,7 +93,7 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
         [TestCase(11)]
         public void ValidatePaging_WhenPageIsGreaterThanOrEqualToZero_LeavesPageUnchanged(int page)
         {
-            var result = PagedParentItemsLookup.Handler.ValidatePaging(page, 10);
+            var result = PagedParentItemsLookup.RequestHandler.ValidatePaging(page, 10);
 
             Assert.AreEqual(page, result.page);
         }
@@ -102,7 +102,7 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
         [TestCase(-1)]
         public void ValidatePaging_WhenPageSizeIsLessThanOrEqualToZero_SetsPageSizeEqualToDefaultPageSize(int pageSize)
         {
-            var result = PagedParentItemsLookup.Handler.ValidatePaging(0, pageSize);
+            var result = PagedParentItemsLookup.RequestHandler.ValidatePaging(0, pageSize);
 
             Assert.Multiple(() =>
             {
@@ -110,13 +110,13 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
                 Assert.AreNotEqual(pageSize, result.pageSize);
             });
         }
-        
+
         [Test]
         public void ValidatePaging_WhenPageSizeIsGreaterThanMaximumPageSize_SetsPageSizeEqualToMaximumPageSize()
         {
             var pageSize = 26;
 
-            var result = PagedParentItemsLookup.Handler.ValidatePaging(0, pageSize);
+            var result = PagedParentItemsLookup.RequestHandler.ValidatePaging(0, pageSize);
 
             Assert.Multiple(() =>
             {
@@ -130,7 +130,7 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
         {
             var pageSize = 20;
 
-            var result = PagedParentItemsLookup.Handler.ValidatePaging(0, pageSize);
+            var result = PagedParentItemsLookup.RequestHandler.ValidatePaging(0, pageSize);
 
             Assert.AreEqual(pageSize, result.pageSize);
         }

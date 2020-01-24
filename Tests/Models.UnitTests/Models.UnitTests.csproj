@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Src\Models\Models.csproj" />
+    <ProjectReference Include="..\Factories\Factories.csproj" />
   </ItemGroup>
 
 </Project>

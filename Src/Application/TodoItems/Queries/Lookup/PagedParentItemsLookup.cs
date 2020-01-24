@@ -27,7 +27,7 @@ namespace Todo.Application.TodoItems.Queries.Lookup
         protected int Page { get; }
         protected int PageSize { get; }
 
-        internal class Handler : IRequestHandler<PagedParentItemsLookup, PagedCollection<ParentTodoItemLookup>>
+        internal class RequestHandler : IRequestHandler<PagedParentItemsLookup, PagedCollection<ParentTodoItemLookup>>
         {
             private const int _defaultPageSize = 10;
             private const int _maximumPageSize = 25;
@@ -35,7 +35,7 @@ namespace Todo.Application.TodoItems.Queries.Lookup
             private readonly IContextRepository<ITodoContext> _repository;
             private readonly IMapper _mapper;
 
-            public Handler(IContextRepository<ITodoContext> repository, IMapper mapper)
+            public RequestHandler(IContextRepository<ITodoContext> repository, IMapper mapper)
             {
                 _repository = repository;
                 _mapper = mapper;
@@ -47,7 +47,7 @@ namespace Todo.Application.TodoItems.Queries.Lookup
 
                 request.Specification.Include(a => a.ChildItems).Include(a => a.Notes);
 
-                var pagedCollection = await _repository.PagedListAsync(page, pageSize, request.Specification);
+                var pagedCollection = await _repository.PagedListAsync(page, pageSize, request.Specification, item => item.ItemId);
 
                 var details = _mapper.Map<ICollection<ParentTodoItemLookup>>(pagedCollection.Items);
 

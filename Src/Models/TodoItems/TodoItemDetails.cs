@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
+using Todo.Models.Common;
 using Todo.Models.Mappings;
 
 namespace Todo.Models.TodoItems
@@ -11,6 +12,8 @@ namespace Todo.Models.TodoItems
     {
         public Guid ItemId { get; set; }
         public Guid? ParentItemId { get; set; }
+        public CreatedAuditInfo Created { get; set; }
+        public ModifiedAuditInfo Modified { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime? DueDate { get; set; }
@@ -25,7 +28,9 @@ namespace Todo.Models.TodoItems
         {
             profile.CreateMap<TodoItem, TodoItemDetails>()
                 .ForMember(i => i.Status, o => o.MapFrom(item => item.GetStatus()))
-                .ForMember(i => i.ChildItems, o => o.MapFrom(item => item.ChildItems));
+                .ForMember(i => i.ChildItems, o => o.MapFrom(item => item.ChildItems))
+                .ForMember(i => i.Created, o => o.MapFrom(i => i))
+                .ForMember(i => i.Modified, o => o.MapFrom(i => i));
         }
     }
 }

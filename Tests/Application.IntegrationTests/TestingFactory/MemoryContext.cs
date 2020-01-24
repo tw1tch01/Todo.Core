@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Todo.Application.Interfaces;
 using Todo.Domain.Common;
 using Todo.Domain.Entities;
+using Todo.Factories;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
 {

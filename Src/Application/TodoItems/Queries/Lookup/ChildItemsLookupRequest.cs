@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,19 +10,20 @@ using Todo.Application.Interfaces;
 using Todo.Application.TodoItems.Queries.Specifications;
 using Todo.Models.TodoItems;
 
-[assembly: InternalsVisibleTo("Todo.Application.IntegrationTests")]
 [assembly: InternalsVisibleTo("Todo.Application.UnitTests")]
 
 namespace Todo.Application.TodoItems.Queries.Lookup
 {
-    internal class ParentItemsLookup : AbstractItemsLookup, IRequest<ICollection<ParentTodoItemLookup>>
+    internal class ChildItemsLookupRequest : IRequest<ICollection<TodoItemLookup>>
     {
-        public ParentItemsLookup()
-            : base(new GetParentItems())
+        public ChildItemsLookupRequest(Guid parentId)
         {
+            Specification = new GetItemsByParentId(parentId);
         }
 
-        internal class RequestHandler : IRequestHandler<ParentItemsLookup, ICollection<ParentTodoItemLookup>>
+        internal GetItemsByParentId Specification { get; }
+
+        internal class RequestHandler : IRequestHandler<ChildItemsLookupRequest, ICollection<TodoItemLookup>>
         {
             private readonly IContextRepository<ITodoContext> _repository;
             private readonly IMapper _mapper;
@@ -32,11 +34,11 @@ namespace Todo.Application.TodoItems.Queries.Lookup
                 _mapper = mapper;
             }
 
-            public async Task<ICollection<ParentTodoItemLookup>> Handle(ParentItemsLookup request, CancellationToken cancellationToken)
+            public async Task<ICollection<TodoItemLookup>> Handle(ChildItemsLookupRequest request, CancellationToken cancellationToken)
             {
-                var parentItems = await _repository.ListAsync(request.Specification);
+                var items = await _repository.ListAsync(request.Specification);
 
-                var details = _mapper.Map<ICollection<ParentTodoItemLookup>>(parentItems);
+                var details = _mapper.Map<ICollection<TodoItemLookup>>(items);
 
                 return details;
             }

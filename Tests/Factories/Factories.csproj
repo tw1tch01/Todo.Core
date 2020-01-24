@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Todo.Factories</AssemblyName>
+    <RootNamespace>Todo.Factories</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Src\Domain\Domain.csproj" />
+    <ProjectReference Include="..\..\Src\Models\Models.csproj" />
+  </ItemGroup>
+
+</Project>
