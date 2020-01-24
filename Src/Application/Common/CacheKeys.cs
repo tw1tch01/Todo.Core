@@ -1,9 +1,9 @@
 ﻿using System;
 using Todo.Models.TodoItems;
 
-namespace Todo.Application.Services.TodoItems
+namespace Todo.Application.Common
 {
-    public static class CacheKey
+    internal static class CacheKeys
     {
         public static class Times
         {

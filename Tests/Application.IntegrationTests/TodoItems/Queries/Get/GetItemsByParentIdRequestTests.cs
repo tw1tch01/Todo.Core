@@ -2,17 +2,17 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
-using Todo.Application.TodoItems.Queries.Get;
+using Todo.Application.TodoItems.Queries.Lookup;
 
 namespace Todo.Application.IntegrationTests.TodoItems.Queries.Get
 {
     [TestFixture]
-    public class GetItemsByParentIdTests : MemorySetupFixture
+    public class GetItemsByParentIdRequestTests : MemorySetupFixture
     {
         [Test]
         public async Task Handle_WhenNoEntitesAreFound_ReturnsEmptyList()
         {
-            var query = new GetItemsByParentId(Guid.NewGuid());
+            var query = new ChildItemsLookupRequest(Guid.NewGuid());
             var _ = await _mediator.Send(query);
 
             Assert.Pass();
@@ -21,7 +21,7 @@ namespace Todo.Application.IntegrationTests.TodoItems.Queries.Get
         [Test]
         public async Task Handle_WhenEntitesAreFound_ReturnsCollectionOfItemDetails()
         {
-            var query = new GetItemsByParentId(_itemWithChildren.ItemId);
+            var query = new ChildItemsLookupRequest(_itemWithChildren.ItemId);
             var _ = await _mediator.Send(query);
 
             Assert.Pass();

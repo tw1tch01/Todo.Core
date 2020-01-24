@@ -9,19 +9,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{C74D3C6D-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8A5674A-AAAB-42CE-ADCA-C12FF1781005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Src\Domain\Domain.csproj", "{384ECFB2-46CC-4A1B-8D16-F91B94E4813B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Src\Domain\Domain.csproj", "{384ECFB2-46CC-4A1B-8D16-F91B94E4813B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.UnitTests", "Tests\Domain.UnitTests\Domain.UnitTests.csproj", "{DF0902C2-464F-4C54-98E1-1DC4178B2ED6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "Tests\Domain.UnitTests\Domain.UnitTests.csproj", "{DF0902C2-464F-4C54-98E1-1DC4178B2ED6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Src\Models\Models.csproj", "{16A84FF6-95C9-4A64-B342-8FA89D572CB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Src\Models\Models.csproj", "{16A84FF6-95C9-4A64-B342-8FA89D572CB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.UnitTests", "Tests\Models.UnitTests\Models.UnitTests.csproj", "{A63917C0-7FF3-434D-A75E-B86847D001FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models.UnitTests", "Tests\Models.UnitTests\Models.UnitTests.csproj", "{A63917C0-7FF3-434D-A75E-B86847D001FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Src\Application\Application.csproj", "{35193BF7-6B4B-4A2D-8BCF-84AF91C64740}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Src\Application\Application.csproj", "{35193BF7-6B4B-4A2D-8BCF-84AF91C64740}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.IntegrationTests", "Tests\Application.IntegrationTests\Application.IntegrationTests.csproj", "{C03BA201-BF00-4553-AE7B-AAEAC3CBE5F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationTests", "Tests\Application.IntegrationTests\Application.IntegrationTests.csproj", "{C03BA201-BF00-4553-AE7B-AAEAC3CBE5F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "Tests\Application.UnitTests\Application.UnitTests.csproj", "{CFFA17C4-2FA3-4152-BB23-84C09E588A4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.UnitTests", "Tests\Application.UnitTests\Application.UnitTests.csproj", "{CFFA17C4-2FA3-4152-BB23-84C09E588A4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Factories", "Tests\Factories\Factories.csproj", "{F4BE8189-B994-4399-B5DF-42FEBEE4B48F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{CFFA17C4-2FA3-4152-BB23-84C09E588A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFFA17C4-2FA3-4152-BB23-84C09E588A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFFA17C4-2FA3-4152-BB23-84C09E588A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4BE8189-B994-4399-B5DF-42FEBEE4B48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4BE8189-B994-4399-B5DF-42FEBEE4B48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4BE8189-B994-4399-B5DF-42FEBEE4B48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4BE8189-B994-4399-B5DF-42FEBEE4B48F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{35193BF7-6B4B-4A2D-8BCF-84AF91C64740} = {736A5A00-DA94-4F74-9F37-1A6BA6EE35FC}
 		{C03BA201-BF00-4553-AE7B-AAEAC3CBE5F2} = {A8A5674A-AAAB-42CE-ADCA-C12FF1781005}
 		{CFFA17C4-2FA3-4152-BB23-84C09E588A4C} = {A8A5674A-AAAB-42CE-ADCA-C12FF1781005}
+		{F4BE8189-B994-4399-B5DF-42FEBEE4B48F} = {A8A5674A-AAAB-42CE-ADCA-C12FF1781005}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3212DB53-759C-4599-8823-FFB4559CE20E}

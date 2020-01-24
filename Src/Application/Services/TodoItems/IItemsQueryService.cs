@@ -10,7 +10,7 @@ namespace Todo.Application.Services.TodoItems
     {
         Task<TodoItemDetails> GetItem(Guid guid);
 
-        Task<ICollection<TodoItemDetails>> GetChildItems(Guid parentId);
+        Task<ICollection<TodoItemLookup>> GetChildItems(Guid parentId);
 
         Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters);
 

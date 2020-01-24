@@ -8,12 +8,12 @@ using Todo.Common.Exceptions;
 namespace Todo.Application.IntegrationTests.TodoItems.Queries.Get
 {
     [TestFixture]
-    public class GetItemByIdTests : MemorySetupFixture
+    public class GetItemByIdRequestTests : MemorySetupFixture
     {
         [Test]
         public void Handle_WhenItemDoesNotExist_ThrowsNotFoundException()
         {
-            var query = new GetItemById(Guid.NewGuid());
+            var query = new GetItemByIdRequest(Guid.NewGuid());
             var _ = Assert.CatchAsync<NotFoundException>(() => _mediator.Send(query));
 
             Assert.Pass();
@@ -22,7 +22,7 @@ namespace Todo.Application.IntegrationTests.TodoItems.Queries.Get
         [Test]
         public async Task Handle_WhenItemExists_ReturnsItemDetails()
         {
-            var query = new GetItemById(_item.ItemId);
+            var query = new GetItemByIdRequest(_item.ItemId);
             var _ = await _mediator.Send(query);
 
             Assert.Pass();

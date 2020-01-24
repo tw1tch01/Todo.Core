@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,38 +8,35 @@ using Moq;
 using NUnit.Framework;
 using Todo.Application.Interfaces;
 using Todo.Application.TodoItems.Queries.Lookup;
-using Todo.Application.TodoItems.Queries.Specifications;
 using Todo.Domain.Entities;
 using Todo.Factories;
 using Todo.Models.TodoItems;
 
-namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
+namespace Todo.Application.UnitTests.TodoItems.Queries.Get
 {
     [TestFixture]
-    public class ParentItemsLookupTests
+    public class GetItemsByParentIdRequestTests
     {
-        #region Handler
-
         [Test]
         public async Task Handle_WhenNoEntitesAreFound_ReturnsEmptyList()
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
-            var query = new ParentItemsLookup();
-            var handler = new ParentItemsLookup.RequestHandler(mockRepository.Object, mockMapper.Object);
+            var query = new ChildItemsLookupRequest(Guid.NewGuid());
+            var handler = new ChildItemsLookupRequest.RequestHandler(mockRepository.Object, mockMapper.Object);
 
             ICollection<TodoItem> items = new List<TodoItem>();
-            ICollection<ParentTodoItemLookup> details = new List<ParentTodoItemLookup>();
+            ICollection<TodoItemLookup> details = new List<TodoItemLookup>();
 
-            mockRepository.Setup(a => a.ListAsync(It.IsAny<GetParentItems>())).Returns(Task.FromResult(items));
-            mockMapper.Setup(a => a.Map<ICollection<ParentTodoItemLookup>>(items)).Returns(details);
+            mockRepository.Setup(a => a.ListAsync(query.Specification)).Returns(Task.FromResult(items));
+            mockMapper.Setup(a => a.Map<ICollection<TodoItemLookup>>(items)).Returns(details);
 
             var result = await handler.Handle(query, default);
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
                 Assert.IsEmpty(result);
-                Assert.IsInstanceOf<ICollection<ParentTodoItemLookup>>(result);
+                Assert.IsInstanceOf<ICollection<TodoItemLookup>>(result);
             });
         }
 
@@ -47,24 +45,22 @@ namespace Todo.Application.UnitTests.TodoItems.Queries.Lookup
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
-            var query = new ParentItemsLookup();
-            var handler = new ParentItemsLookup.RequestHandler(mockRepository.Object, mockMapper.Object);
+            var query = new ChildItemsLookupRequest(Guid.NewGuid());
+            var handler = new ChildItemsLookupRequest.RequestHandler(mockRepository.Object, mockMapper.Object);
 
             ICollection<TodoItem> items = new List<TodoItem> { TodoItemFactory.GenerateItem() };
-            ICollection<ParentTodoItemLookup> details = items.Select(TodoItemFactory.MappedParentItemLookup).ToList();
+            ICollection<TodoItemLookup> details = items.Select(TodoItemFactory.MappedItemLookup).ToList();
 
-            mockRepository.Setup(a => a.ListAsync(It.IsAny<GetParentItems>())).Returns(Task.FromResult(items));
-            mockMapper.Setup(a => a.Map<ICollection<ParentTodoItemLookup>>(items)).Returns(details);
+            mockRepository.Setup(a => a.ListAsync(query.Specification)).Returns(Task.FromResult(items));
+            mockMapper.Setup(a => a.Map<ICollection<TodoItemLookup>>(items)).Returns(details);
 
             var result = await handler.Handle(query, default);
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
                 Assert.AreEqual(items.Count, result.Count);
-                Assert.IsInstanceOf<ICollection<ParentTodoItemLookup>>(result);
+                Assert.IsInstanceOf<ICollection<TodoItemLookup>>(result);
             });
         }
-
-        #endregion Handler
     }
 }

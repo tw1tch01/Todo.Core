@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.Interfaces;
 using Todo.Domain.Entities;
+using Todo.Factories;
 using Todo.Models.Mappings;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
@@ -21,17 +22,9 @@ namespace Todo.Application.IntegrationTests.TestingFactory
         {
             var services = RegisterDependencies();
             var provider = services.BuildServiceProvider();
-            
+
             SetupContext(provider);
             _mediator = provider.GetRequiredService<IMediator>();
-        }
-
-        private void SetupContext(ServiceProvider provider)
-        {
-            var context = provider.GetRequiredService<MemoryContext>();
-            context.Add(_item);
-            context.Add(_itemWithChildren);
-            context.Seed();
         }
 
         private static ServiceCollection RegisterDependencies()
@@ -53,6 +46,14 @@ namespace Todo.Application.IntegrationTests.TestingFactory
             }).CreateMapper());
 
             return services;
+        }
+
+        private void SetupContext(ServiceProvider provider)
+        {
+            var context = provider.GetRequiredService<MemoryContext>();
+            context.Add(_item);
+            context.Add(_itemWithChildren);
+            context.Seed();
         }
     }
 }

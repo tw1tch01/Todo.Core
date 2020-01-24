@@ -6,15 +6,10 @@ namespace Todo.Models.TodoItems
 {
     public class TodoItemLookupParams
     {
-        public TodoItemLookupParams()
-        {
-            ItemIds = new List<Guid>();
-        }
-
         public DateTime? CreatedAfter { get; set; }
         public DateTime? CreatedBefore { get; set; }
         public string SearchBy { get; set; }
-        public ICollection<Guid> ItemIds { get; set; }
+        public ICollection<Guid> ItemIds { get; set; } = new List<Guid>();
         public FilterTodoItemsBy.Status? FilterByStatus { get; set; }
         public FilterTodoItemsBy.Importance? FilterByImportance { get; set; }
         public FilterTodoItemsBy.Priority? FilterByPriority { get; set; }
@@ -25,7 +20,7 @@ namespace Todo.Models.TodoItems
             return $"{nameof(CreatedAfter)}={CreatedAfter}&" +
                    $"{nameof(CreatedBefore)}={CreatedBefore}&" +
                    $"{nameof(SearchBy)}={SearchBy}&" +
-                   $"{nameof(ItemIds)}={string.Join(',', ItemIds)}&" +
+                   $"{nameof(ItemIds)}={string.Join(',', ItemIds ?? new List<Guid>())}&" +
                    $"{nameof(FilterByStatus)}={FilterByStatus}&" +
                    $"{nameof(FilterByImportance)}={FilterByImportance}&" +
                    $"{nameof(FilterByPriority)}={FilterByPriority}&" +

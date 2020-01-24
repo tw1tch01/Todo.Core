@@ -20,12 +20,12 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<TodoItemDetails> GetItem(Guid guid)
         {
-            return await _mediator.Send(new GetItemById(guid));
+            return await _mediator.Send(new GetItemByIdRequest(guid));
         }
 
-        public async Task<ICollection<TodoItemDetails>> GetChildItems(Guid parentId)
+        public async Task<ICollection<TodoItemLookup>> GetChildItems(Guid parentId)
         {
-            return await _mediator.Send(new GetItemsByParentId(parentId));
+            return await _mediator.Send(new ChildItemsLookupRequest(parentId));
         }
 
         public async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
