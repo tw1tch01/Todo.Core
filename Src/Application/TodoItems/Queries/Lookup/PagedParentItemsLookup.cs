@@ -47,7 +47,7 @@ namespace Todo.Application.TodoItems.Queries.Lookup
 
                 request.Specification.Include(a => a.ChildItems).Include(a => a.Notes);
 
-                var pagedCollection = await _repository.PagedListAsync(page, pageSize, request.Specification);
+                var pagedCollection = await _repository.PagedListAsync(page, pageSize, request.Specification, item => item.ItemId);
 
                 var details = _mapper.Map<ICollection<ParentTodoItemLookup>>(pagedCollection.Items);
 

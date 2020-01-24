@@ -19,5 +19,17 @@ namespace Todo.Models.TodoItems
         public FilterTodoItemsBy.Importance? FilterByImportance { get; set; }
         public FilterTodoItemsBy.Priority? FilterByPriority { get; set; }
         public SortTodoItemsBy? SortBy { get; set; }
+
+        public string ToQueryString()
+        {
+            return $"{nameof(CreatedAfter)}={CreatedAfter}&" +
+                   $"{nameof(CreatedBefore)}={CreatedBefore}&" +
+                   $"{nameof(SearchBy)}={SearchBy}&" +
+                   $"{nameof(ItemIds)}={string.Join(',', ItemIds)}&" +
+                   $"{nameof(FilterByStatus)}={FilterByStatus}&" +
+                   $"{nameof(FilterByImportance)}={FilterByImportance}&" +
+                   $"{nameof(FilterByPriority)}={FilterByPriority}&" +
+                   $"{nameof(SortBy)}={SortBy}";
+        }
     }
 }

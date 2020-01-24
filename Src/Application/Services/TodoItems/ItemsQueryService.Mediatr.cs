@@ -9,7 +9,7 @@ using Todo.Models.TodoItems;
 
 namespace Todo.Application.Services.TodoItems
 {
-    public class ItemsQueryService : AbstractItemsQueryService
+    public class ItemsQueryService : IItemsQueryService
     {
         private readonly IMediator _mediator;
 
@@ -18,17 +18,17 @@ namespace Todo.Application.Services.TodoItems
             _mediator = mediator;
         }
 
-        public override async Task<TodoItemDetails> GetItem(Guid guid)
+        public async Task<TodoItemDetails> GetItem(Guid guid)
         {
             return await _mediator.Send(new GetItemById(guid));
         }
 
-        public override async Task<ICollection<TodoItemDetails>> GetChildItems(Guid parentId)
+        public async Task<ICollection<TodoItemDetails>> GetChildItems(Guid parentId)
         {
             return await _mediator.Send(new GetItemsByParentId(parentId));
         }
 
-        public override async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
+        public async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
         {
             var request = new ParentItemsLookup();
 
@@ -37,7 +37,7 @@ namespace Todo.Application.Services.TodoItems
             return await _mediator.Send(request);
         }
 
-        public override async Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters)
+        public async Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters)
         {
             var request = new PagedParentItemsLookup(page, pageSize);
 

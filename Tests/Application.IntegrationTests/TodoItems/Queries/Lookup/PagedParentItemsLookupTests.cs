@@ -29,5 +29,17 @@ namespace Todo.Application.IntegrationTests.TodoItems.Queries.Lookup
 
             Assert.Pass();
         }
+
+        [Test]
+        public async Task PagedParentItems_CreatedBeforeDate()
+        {
+            var createdBefore = DateTime.UtcNow;
+            var query = new PagedParentItemsLookup(0, 25);
+            query.CreatedBefore(createdBefore);
+
+            var _ = await _mediator.Send(query);
+
+            Assert.Pass();
+        }
     }
 }
