@@ -1,7 +1,8 @@
 ﻿using System;
+using NUnit.Framework;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
-using NUnit.Framework;
+using Todo.Domain.Exceptions;
 
 namespace Todo.Domain.UnitTests.HelperTests
 {
@@ -125,27 +126,27 @@ namespace Todo.Domain.UnitTests.HelperTests
         #region CancelItem
 
         [Test]
-        public void CancelItem_WhenItemHasAlreadyBeenCompleted_ThrowsInvalidOperationException()
-        {
-            var item = new TodoItem
-            {
-                CompletedOn = DateTime.Now,
-                CancelledOn = null
-            };
-            var exception = Assert.Catch<InvalidOperationException>(() => item.CancelItem());
-            Assert.AreEqual($"Cannot cancel a Completed item. Completed On: {item.CompletedOn}", exception.Message);
-        }
-
-        [Test]
-        public void CancelItem_WhenItemHasAlreadyBeenCancelled_ThrowsInvalidOperationException()
+        public void CancelItem_WhenItemHasAlreadyBeenCancelled_ThrowsItemPreviouslyCancelledException()
         {
             var item = new TodoItem
             {
                 CompletedOn = null,
                 CancelledOn = DateTime.Now
             };
-            var exception = Assert.Catch<InvalidOperationException>(() => item.CancelItem());
-            Assert.AreEqual($"Item was already cancelled on {item.CancelledOn}", exception.Message);
+            var exception = Assert.Catch<ItemPreviouslyCancelledException>(() => item.CancelItem());
+            Assert.AreEqual($"Item was previously cancelled on {item.CancelledOn}. (ItemId: {item.ItemId})", exception.Message);
+        }
+
+        [Test]
+        public void CancelItem_WhenItemHasAlreadyBeenCompleted_ThrowsItemPreviouslyCompletedException()
+        {
+            var item = new TodoItem
+            {
+                CompletedOn = DateTime.Now,
+                CancelledOn = null
+            };
+            var exception = Assert.Catch<ItemPreviouslyCompletedException>(() => item.CancelItem());
+            Assert.AreEqual($"Item was previously completed on {item.CompletedOn}. (ItemId: {item.ItemId})", exception.Message);
         }
 
         [Test]
@@ -205,18 +206,6 @@ namespace Todo.Domain.UnitTests.HelperTests
         #region CompleteItem
 
         [Test]
-        public void CompleteItem_WhenItemHasAlreadyBeenCompleted_ThrowsInvalidOperationException()
-        {
-            var item = new TodoItem
-            {
-                CompletedOn = DateTime.Now,
-                CancelledOn = null
-            };
-            var exception = Assert.Catch<InvalidOperationException>(() => item.CompleteItem());
-            Assert.AreEqual($"Item was already completed on {item.CompletedOn}", exception.Message);
-        }
-
-        [Test]
         public void CompleteItem_WhenItemHasAlreadyBeenCancelled_ThrowsInvalidOperationException()
         {
             var item = new TodoItem
@@ -224,8 +213,20 @@ namespace Todo.Domain.UnitTests.HelperTests
                 CompletedOn = null,
                 CancelledOn = DateTime.Now
             };
-            var exception = Assert.Catch<InvalidOperationException>(() => item.CompleteItem());
-            Assert.AreEqual($"Cannot complete a Cancelled item. Cancelled On: {item.CancelledOn}", exception.Message);
+            var exception = Assert.Catch<ItemPreviouslyCancelledException>(() => item.CompleteItem());
+            Assert.AreEqual($"Item was previously cancelled on {item.CancelledOn}. (ItemId: {item.ItemId})", exception.Message);
+        }
+
+        [Test]
+        public void CompleteItem_WhenItemHasAlreadyBeenCompleted_ThrowsInvalidOperationException()
+        {
+            var item = new TodoItem
+            {
+                CompletedOn = DateTime.Now,
+                CancelledOn = null
+            };
+            var exception = Assert.Catch<ItemPreviouslyCompletedException>(() => item.CompleteItem());
+            Assert.AreEqual($"Item was previously completed on {item.CompletedOn}. (ItemId: {item.ItemId})", exception.Message);
         }
 
         [Test]

@@ -8,7 +8,7 @@ using Todo.Models.TodoItems;
 
 namespace Todo.Application.Services.TodoItems
 {
-    public class CachedItemsQueryService : IItemsQueryService
+    public class CachedItemsQueryService : ICachedItemsQueryService
     {
         private readonly IItemsQueryService _queryService;
         private readonly ICacheService _cacheService;
@@ -21,7 +21,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<TodoItemDetails> GetItem(Guid parentId)
         {
-            return await _cacheService.Get(CacheKeys.Items.Item(parentId), CacheKeys.Times.Default, async () =>
+            return await _cacheService.Get(CacheKeys.Items.GetItem(parentId), CacheKeys.Times.Default, async () =>
             {
                 return await _queryService.GetItem(parentId);
             });
@@ -29,7 +29,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<ICollection<TodoItemLookup>> GetChildItems(Guid parentId)
         {
-            return await _cacheService.Get(CacheKeys.Items.ChildItems(parentId), CacheKeys.Times.Default, async () =>
+            return await _cacheService.Get(CacheKeys.Items.GetChildItems(parentId), CacheKeys.Times.Default, async () =>
             {
                 return await _queryService.GetChildItems(parentId);
             });
@@ -37,7 +37,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
         {
-            return await _cacheService.Get(CacheKeys.Items.ListItems(parameters), CacheKeys.Times.Default, async () =>
+            return await _cacheService.Get(CacheKeys.Items.LookupItems(parameters), CacheKeys.Times.Default, async () =>
             {
                 return await _queryService.ListItems(parameters);
             });
@@ -45,7 +45,7 @@ namespace Todo.Application.Services.TodoItems
 
         public async Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters)
         {
-            return await _cacheService.Get(CacheKeys.Items.PagedItems(page, pageSize, parameters), CacheKeys.Times.Default, async () =>
+            return await _cacheService.Get(CacheKeys.Items.PagedLookupItems(page, pageSize, parameters), CacheKeys.Times.Default, async () =>
             {
                 return await _queryService.PagedListItems(page, pageSize, parameters);
             });

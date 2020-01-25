@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Todo.Domain.Common;
 using Todo.Domain.Enums;
+using Todo.Domain.Exceptions;
 
 namespace Todo.Domain.Entities
 {
@@ -24,22 +25,12 @@ namespace Todo.Domain.Entities
         public DateTime? StartedOn { get; set; }
         public DateTime? CancelledOn { get; set; }
         public DateTime? CompletedOn { get; set; }
-        //public string ImportanceLevelEnum { get; set; }
-        //public string PriorityLevelEnum { get; set; }
 
         #region Enumeration Properties
 
-        public ImportanceLevel ImportanceLevel
-        {
-            get; //=> (ImportanceLevel)Enum.Parse(typeof(ImportanceLevel), ImportanceLevelEnum);
-            set; //=> ImportanceLevelEnum = value.ToString();
-        }
+        public ImportanceLevel ImportanceLevel { get; set; }
 
-        public PriorityLevel PriorityLevel
-        {
-            get; //=> (PriorityLevel)Enum.Parse(typeof(PriorityLevel), PriorityLevelEnum);
-            set; //=> PriorityLevelEnum = value.ToString();
-        }
+        public PriorityLevel PriorityLevel { get; set; }
 
         #endregion Enumeration Properties
 
@@ -68,16 +59,14 @@ namespace Todo.Domain.Entities
 
         public bool CanBeCancelled()
         {
-            if (CompletedOn.HasValue) return false;
-
-            return !CancelledOn.HasValue;
+            return !CancelledOn.HasValue && !CompletedOn.HasValue;
         }
 
         public void CancelItem()
         {
-            if (CompletedOn.HasValue) throw new InvalidOperationException($"Cannot cancel a Completed item. Completed On: {CompletedOn.Value}");
+            if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
-            if (CancelledOn.HasValue) throw new InvalidOperationException($"Item was already cancelled on {CancelledOn.Value}");
+            if (CompletedOn.HasValue) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
 
             ChildItems.OrderBy(item => item.Rank).ToList().ForEach(item =>
             {
@@ -88,16 +77,14 @@ namespace Todo.Domain.Entities
 
         public bool CanBeCompleted()
         {
-            if (CancelledOn.HasValue) return false;
-
-            return !CompletedOn.HasValue;
+            return !CancelledOn.HasValue && !CompletedOn.HasValue;
         }
 
         public void CompleteItem()
         {
-            if (CompletedOn.HasValue) throw new InvalidOperationException($"Item was already completed on {CompletedOn.Value}");
+            if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
-            if (CancelledOn.HasValue) throw new InvalidOperationException($"Cannot complete a Cancelled item. Cancelled On: {CancelledOn.Value}");
+            if (CompletedOn.HasValue) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
 
             ChildItems.OrderBy(item => item.Rank).ToList().ForEach(item =>
             {
