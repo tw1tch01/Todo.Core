@@ -33,6 +33,29 @@ namespace Todo.Models.UnitTests.TodoItems
                 Assert.AreEqual(item.ImportanceLevel, details.Importance);
                 Assert.AreEqual(item.PriorityLevel, details.Priority);
                 Assert.AreEqual(item.GetStatus(), details.Status);
+                Assert.AreEqual(item.ChildItems.Count, details.ChildItems);
+                Assert.AreEqual(item.Notes.Count, details.Notes);
+            });
+        }
+
+        [Test]
+        public void MapsItemWithChildItemsToParentTodoItemLookup()
+        {
+            var item = TodoItemFactory.GenerateItemWithChildren(5);
+            var details = _mapper.Map<ParentTodoItemLookup>(item);
+
+            Assert.Multiple(() =>
+            {
+                Assert.IsNotNull(details);
+                Assert.IsInstanceOf<ParentTodoItemLookup>(details);
+                Assert.AreEqual(item.ItemId, details.ItemId);
+                Assert.AreEqual(item.Name, details.Name);
+                Assert.AreEqual(item.DueDate, details.DueDate);
+                Assert.AreEqual(item.ImportanceLevel, details.Importance);
+                Assert.AreEqual(item.PriorityLevel, details.Priority);
+                Assert.AreEqual(item.GetStatus(), details.Status);
+                Assert.AreEqual(item.ChildItems.Count, details.ChildItems);
+                Assert.AreEqual(item.Notes.Count, details.Notes);
             });
         }
     }

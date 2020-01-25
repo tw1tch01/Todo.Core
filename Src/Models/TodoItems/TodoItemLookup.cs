@@ -18,6 +18,8 @@ namespace Todo.Models.TodoItems
         public virtual void Mapping(Profile profile)
         {
             profile.CreateMap<TodoItem, TodoItemLookup>()
+                .ForMember(m => m.Importance, o => o.MapFrom(m => m.ImportanceLevel))
+                .ForMember(m => m.Priority, o => o.MapFrom(m => m.PriorityLevel))
                 .ForMember(m => m.Status, o => o.MapFrom(m => m.GetStatus()));
         }
     }
