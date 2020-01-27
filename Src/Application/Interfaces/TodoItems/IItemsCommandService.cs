@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Todo.Models.TodoItems;
 
-namespace Todo.Application.Services.TodoItems
+namespace Todo.Application.Interfaces.TodoItems
 {
     public interface IItemsCommandService
     {

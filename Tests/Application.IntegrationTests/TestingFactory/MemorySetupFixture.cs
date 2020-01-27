@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.Interfaces;
+using Todo.Application.Interfaces.TodoItems;
 using Todo.Domain.Entities;
 using Todo.Factories;
 using Todo.Models.Mappings;
@@ -17,6 +18,7 @@ namespace Todo.Application.IntegrationTests.TestingFactory
         protected readonly TodoItem _item = TodoItemFactory.GenerateItem();
         protected readonly TodoItem _itemWithChildren = TodoItemFactory.GenerateItemWithChildren(5);
         protected readonly IMediator _mediator;
+        protected readonly IItemsCommandService _itemsCommandService;
 
         public MemorySetupFixture()
         {
@@ -25,6 +27,7 @@ namespace Todo.Application.IntegrationTests.TestingFactory
 
             SetupContext(provider);
             _mediator = provider.GetRequiredService<IMediator>();
+            _itemsCommandService = provider.GetRequiredService<IItemsCommandService>();
         }
 
         private static ServiceCollection RegisterDependencies()

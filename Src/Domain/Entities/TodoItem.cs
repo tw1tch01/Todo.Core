@@ -95,10 +95,15 @@ namespace Todo.Domain.Entities
 
         public void StartItem()
         {
+            if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
+
+            if (CompletedOn.HasValue) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
+
+            if (StartedOn.HasValue) throw new ItemAlreadyStartedException(StartedOn.Value, ItemId);
+
             StartedOn = DateTime.UtcNow;
             CompletedOn = null;
             CancelledOn = null;
-            ChildItems.ToList().ForEach(item => item.StartItem());
         }
 
         public void ResetItem()

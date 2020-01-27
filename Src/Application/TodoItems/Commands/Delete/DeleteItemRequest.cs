@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Data.Repositories;
 using MediatR;
 using Todo.Application.Interfaces;
+using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
 
 namespace Todo.Application.TodoItems.Commands.Delete
@@ -30,11 +31,10 @@ namespace Todo.Application.TodoItems.Commands.Delete
             {
                 var item = await _repository.FindByPrimaryKeyAsync<TodoItem, Guid>(request.ItemId);
 
-                if (item != null)
-                {
-                    _repository.Remove(item);
-                    await _repository.SaveAsync();
-                }
+                if (item == null) throw new NotFoundException(nameof(TodoItem), request.ItemId);
+
+                _repository.Remove(item);
+                await _repository.SaveAsync();
 
                 return Unit.Value;
             }

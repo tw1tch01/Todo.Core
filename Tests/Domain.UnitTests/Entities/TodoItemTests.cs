@@ -131,10 +131,9 @@ namespace Todo.Domain.UnitTests.HelperTests
             var item = new TodoItem
             {
                 CompletedOn = null,
-                CancelledOn = DateTime.Now
+                CancelledOn = DateTime.UtcNow
             };
-            var exception = Assert.Catch<ItemPreviouslyCancelledException>(() => item.CancelItem());
-            Assert.AreEqual($"Item was previously cancelled on {item.CancelledOn}. (ItemId: {item.ItemId})", exception.Message);
+            Assert.Throws<ItemPreviouslyCancelledException>(() => item.CancelItem());
         }
 
         [Test]
@@ -142,11 +141,10 @@ namespace Todo.Domain.UnitTests.HelperTests
         {
             var item = new TodoItem
             {
-                CompletedOn = DateTime.Now,
+                CompletedOn = DateTime.UtcNow,
                 CancelledOn = null
             };
-            var exception = Assert.Catch<ItemPreviouslyCompletedException>(() => item.CancelItem());
-            Assert.AreEqual($"Item was previously completed on {item.CompletedOn}. (ItemId: {item.ItemId})", exception.Message);
+            Assert.Throws<ItemPreviouslyCompletedException>(() => item.CancelItem());
         }
 
         [Test]
@@ -206,27 +204,25 @@ namespace Todo.Domain.UnitTests.HelperTests
         #region CompleteItem
 
         [Test]
-        public void CompleteItem_WhenItemHasAlreadyBeenCancelled_ThrowsInvalidOperationException()
+        public void CompleteItem_WhenItemHasAlreadyBeenCancelled_ThrowsItemPreviouslyCancelledException()
         {
             var item = new TodoItem
             {
                 CompletedOn = null,
-                CancelledOn = DateTime.Now
+                CancelledOn = DateTime.UtcNow
             };
-            var exception = Assert.Catch<ItemPreviouslyCancelledException>(() => item.CompleteItem());
-            Assert.AreEqual($"Item was previously cancelled on {item.CancelledOn}. (ItemId: {item.ItemId})", exception.Message);
+            Assert.Throws<ItemPreviouslyCancelledException>(() => item.CompleteItem());
         }
 
         [Test]
-        public void CompleteItem_WhenItemHasAlreadyBeenCompleted_ThrowsInvalidOperationException()
+        public void CompleteItem_WhenItemHasAlreadyBeenCompleted_ThrowsItemPreviouslyCompletedException()
         {
             var item = new TodoItem
             {
-                CompletedOn = DateTime.Now,
+                CompletedOn = DateTime.UtcNow,
                 CancelledOn = null
             };
-            var exception = Assert.Catch<ItemPreviouslyCompletedException>(() => item.CompleteItem());
-            Assert.AreEqual($"Item was previously completed on {item.CompletedOn}. (ItemId: {item.ItemId})", exception.Message);
+            Assert.Throws<ItemPreviouslyCompletedException>(() => item.CompleteItem());
         }
 
         [Test]
@@ -244,6 +240,42 @@ namespace Todo.Domain.UnitTests.HelperTests
         #endregion CompleteItem
 
         #region StartItem
+
+        [Test]
+        public void StartItem_WhenItemAlreadyStarted_ThrowsItemAlreadyStartedException()
+        {
+            var item = new TodoItem
+            {
+                StartedOn = DateTime.UtcNow,
+                CancelledOn = null,
+                CompletedOn = null
+            };
+            Assert.Throws<ItemAlreadyStartedException>(() => item.StartItem());
+        }
+
+        [Test]
+        public void StartItem_WhenItemHasAlreadyBeenCancelled_ThrowsItemPreviouslyCancelledException()
+        {
+            var item = new TodoItem
+            {
+                StartedOn = null,
+                CancelledOn = DateTime.UtcNow,
+                CompletedOn = null
+            };
+            Assert.Throws<ItemPreviouslyCancelledException>(() => item.StartItem());
+        }
+
+        [Test]
+        public void StartItem_WhenItemHasAlreadyBeenCompleted_ThrowsItemPreviouslyCompletedException()
+        {
+            var item = new TodoItem
+            {
+                StartedOn = null,
+                CancelledOn = null,
+                CompletedOn = DateTime.UtcNow
+            };
+            Assert.Throws<ItemPreviouslyCompletedException>(() => item.StartItem());
+        }
 
         [Test]
         public void StartItem_SetsProperties()

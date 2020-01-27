@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Data.Repositories;
 using MediatR;
 using Todo.Application.Interfaces;
+using Todo.Application.Notifications.TodoItems;
+using Todo.Application.TodoItems.Queries.Specifications;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
 
@@ -15,25 +15,27 @@ namespace Todo.Application.TodoItems.Commands.Actions
     {
         public CancelItemRequest(Guid itemId)
         {
-            ItemId = itemId;
+            Specification = new GetItemById(itemId);
         }
 
-        internal Guid ItemId { get; }
+        internal GetItemById Specification { get; }
 
         internal class RequestHandler : IRequestHandler<CancelItemRequest>
         {
             private readonly IContextRepository<ITodoContext> _repository;
+            private readonly IMediator _mediator;
 
-            public RequestHandler(IContextRepository<ITodoContext> repository)
+            public RequestHandler(IContextRepository<ITodoContext> repository, IMediator mediator)
             {
                 _repository = repository;
+                _mediator = mediator;
             }
 
             public async Task<Unit> Handle(CancelItemRequest request, CancellationToken cancellationToken)
             {
-                var item = await _repository.FindByPrimaryKeyAsync<TodoItem, Guid>(request.ItemId);
+                var item = await _repository.GetAsync(request.Specification);
 
-                if (item == null) throw new NotFoundException(nameof(TodoItem), request.ItemId);
+                if (item == null) throw new NotFoundException(nameof(TodoItem), request.Specification.ItemId);
 
                 item.CancelItem();
 

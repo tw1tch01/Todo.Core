@@ -4,6 +4,8 @@ using Data.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Todo.Application.Interfaces.TodoItems;
+using Todo.Application.Services.TodoItems;
 
 namespace Todo.Application
 {
@@ -16,6 +18,8 @@ namespace Todo.Application
             services.AddAutoMapper(assembly);
             services.AddMediatR(assembly);
             services.AddValidatorsFromAssembly(assembly);
+
+            services.AddScoped(typeof(IItemsCommandService), typeof(ItemsCommandService));
 
             return services;
         }

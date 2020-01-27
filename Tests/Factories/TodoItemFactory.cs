@@ -119,7 +119,7 @@ namespace Todo.Factories
                 CancelledOn = item.CancelledOn,
                 CompletedOn = item.CompletedOn,
                 Status = item.GetStatus(),
-                ChildItems = item.ChildItems.Select(MappedItemDetails).ToList()
+                ChildItems = item.ChildItems.Select(MappedItemLookup).ToList()
             };
         }
 

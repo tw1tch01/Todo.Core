@@ -21,9 +21,9 @@ namespace Todo.Models.TodoItems
         public DateTime? CancelledOn { get; set; }
         public DateTime? CompletedOn { get; set; }
         public TodoItemStatus Status { get; set; }
-        public PriorityLevel Priority { get; set; }
         public ImportanceLevel Importance { get; set; }
-        public ICollection<TodoItemDetails> ChildItems { get; set; }
+        public PriorityLevel Priority { get; set; }
+        public ICollection<TodoItemLookup> ChildItems { get; set; }
         //public ICollection<TodoNoteDetails> Notes { get; set; }
 
         public void Mapping(Profile profile)

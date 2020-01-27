@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,14 +39,21 @@ namespace Todo.Application.TodoItems.Queries.Get
 
             public async Task<TodoItemDetails> Handle(GetItemByIdRequest request, CancellationToken cancellationToken)
             {
-                request.Specification.Include(a => a.ChildItems);
-
                 var item = await _repository.GetAsync(request.Specification);
 
                 if (item == null) throw new NotFoundException(nameof(TodoItem), request.Specification.ItemId);
 
-                var details = _mapper.Map<TodoItemDetails>(item);
+                var getChildItemsTask = _repository.ListAsync(new GetItemsByParentId(item.ItemId));
 
+                // TODO: get notes:
+                //var getNotesTask = _repository.ListAsync(new GetNotesByItemId(item.ItemId));
+
+                await Task.WhenAll(getChildItemsTask/*, getNotesTask*/);
+
+                item.ChildItems.ToList().AddRange(await getChildItemsTask);
+                //item.Notes.ToList().AddRange(await getNotesTask);
+
+                var details = _mapper.Map<TodoItemDetails>(item);
                 return details;
             }
         }

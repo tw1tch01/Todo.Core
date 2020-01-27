@@ -20,4 +20,10 @@
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\TodoNotes\" />
+    <Folder Include="TodoNotes\" />
+    <Folder Include="Services\TodoNotes\" />
+  </ItemGroup>
+
 </Project>
