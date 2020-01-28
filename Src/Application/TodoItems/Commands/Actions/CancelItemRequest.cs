@@ -22,12 +22,10 @@ namespace Todo.Application.TodoItems.Commands.Actions
         internal class RequestHandler : IRequestHandler<CancelItemRequest>
         {
             private readonly IContextRepository<ITodoContext> _repository;
-            private readonly IMediator _mediator;
 
-            public RequestHandler(IContextRepository<ITodoContext> repository, IMediator mediator)
+            public RequestHandler(IContextRepository<ITodoContext> repository)
             {
                 _repository = repository;
-                _mediator = mediator;
             }
 
             public async Task<Unit> Handle(CancelItemRequest request, CancellationToken cancellationToken)

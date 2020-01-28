@@ -20,11 +20,16 @@ namespace Todo.Application.Notifications.TodoItems
 
         internal class SendItemCancelledEmail : INotificationHandler<ItemWasCancelled>
         {
-            private readonly IMessageService _notificationService;
+            private readonly IMessageService _messageService;
+
+            public SendItemCancelledEmail(IMessageService messageService)
+            {
+                _messageService = messageService;
+            }
 
             public async Task Handle(ItemWasCancelled notification, CancellationToken cancellationToken)
             {
-                await _notificationService.Send($"Item cancelled on {notification.CancelledOn}. (ItemId: '{notification.ItemId}')");
+                await _messageService.Send($"Item cancelled on {notification.CancelledOn}. (ItemId: '{notification.ItemId}')");
             }
         }
     }
