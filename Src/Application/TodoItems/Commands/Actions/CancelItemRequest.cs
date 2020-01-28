@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Data.Repositories;
 using MediatR;
 using Todo.Application.Interfaces;
-using Todo.Application.TodoItems.Queries.Specifications;
+using Todo.Application.TodoItems.Specifications;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
 
@@ -22,12 +22,10 @@ namespace Todo.Application.TodoItems.Commands.Actions
         internal class RequestHandler : IRequestHandler<CancelItemRequest>
         {
             private readonly IContextRepository<ITodoContext> _repository;
-            private readonly IMediator _mediator;
 
-            public RequestHandler(IContextRepository<ITodoContext> repository, IMediator mediator)
+            public RequestHandler(IContextRepository<ITodoContext> repository)
             {
                 _repository = repository;
-                _mediator = mediator;
             }
 
             public async Task<Unit> Handle(CancelItemRequest request, CancellationToken cancellationToken)

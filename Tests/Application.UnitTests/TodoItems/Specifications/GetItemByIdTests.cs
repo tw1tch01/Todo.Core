@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using Todo.Application.TodoItems.Queries.Specifications;
+using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
 
-namespace Todo.Application.UnitTests.TodoItems.Queries.Specifications
+namespace Todo.Application.UnitTests.TodoItems.Specifications
 {
     [TestFixture]
     public class GetItemByIdTests

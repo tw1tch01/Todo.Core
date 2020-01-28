@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Data.Specifications;
 using Todo.Application.Common.Specifications;
-using Todo.Application.TodoItems.Queries.Specifications;
+using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
 using Todo.Models.TodoItems;
 using Todo.Models.TodoItems.Enums;
