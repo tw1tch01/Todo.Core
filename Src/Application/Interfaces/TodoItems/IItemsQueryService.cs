@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Data.Common;
 using Todo.Models.TodoItems;
 
-namespace Todo.Application.Services.TodoItems
+namespace Todo.Application.Interfaces.TodoItems
 {
     public interface IItemsQueryService
     {
@@ -12,8 +12,8 @@ namespace Todo.Application.Services.TodoItems
 
         Task<ICollection<TodoItemLookup>> GetChildItems(Guid parentId);
 
-        Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters);
+        Task<ICollection<ParentTodoItemLookup>> LookupItems(TodoItemLookupParams parameters);
 
-        Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters);
+        Task<PagedCollection<ParentTodoItemLookup>> PagedLookupItems(int page, int pageSize, TodoItemLookupParams parameters);
     }
 }

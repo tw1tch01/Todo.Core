@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data.Common;
 using MediatR;
+using Todo.Application.Interfaces.TodoItems;
 using Todo.Application.TodoItems.Queries.Get;
 using Todo.Application.TodoItems.Queries.Lookup;
 using Todo.Models.TodoItems;
@@ -28,7 +29,7 @@ namespace Todo.Application.Services.TodoItems
             return await _mediator.Send(new ChildItemsLookupRequest(parentId));
         }
 
-        public async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
+        public async Task<ICollection<ParentTodoItemLookup>> LookupItems(TodoItemLookupParams parameters)
         {
             var request = new ParentItemsLookup();
 
@@ -37,7 +38,7 @@ namespace Todo.Application.Services.TodoItems
             return await _mediator.Send(request);
         }
 
-        public async Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters)
+        public async Task<PagedCollection<ParentTodoItemLookup>> PagedLookupItems(int page, int pageSize, TodoItemLookupParams parameters)
         {
             var request = new PagedParentItemsLookup(page, pageSize);
 

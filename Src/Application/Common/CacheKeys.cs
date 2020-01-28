@@ -20,13 +20,13 @@ namespace Todo.Application.Common
         {
             private const string Pattern = "/items";
 
-            public static string Item(Guid itemId) => $"{Pattern}?itemId={itemId}";
+            public static string GetItem(Guid itemId) => $"{Pattern}?itemId={itemId}";
 
-            public static string ListItems(TodoItemLookupParams parameters) => $"{Pattern}?{parameters.ToQueryString()}";
+            public static string LookupItems(TodoItemLookupParams parameters) => $"{Pattern}?{parameters.ToQueryString()}";
 
-            public static string PagedItems(int page, int pageSize, TodoItemLookupParams parameters) => $"{Pattern}?Page={page}&PageSize={pageSize}&{parameters.ToQueryString()}";
+            public static string PagedLookupItems(int page, int pageSize, TodoItemLookupParams parameters) => $"{Pattern}?Page={page}&PageSize={pageSize}&{parameters.ToQueryString()}";
 
-            public static string ChildItems(Guid parentId) => $"{Pattern}?parentId={parentId}";
+            public static string GetChildItems(Guid parentId) => $"{Pattern}?parentId={parentId}";
         }
     }
 }

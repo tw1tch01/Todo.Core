@@ -74,22 +74,13 @@ namespace Todo.Models.UnitTests.TodoItems
                 Assert.AreEqual(parentItem.CancelledOn, parentDetails.CancelledOn);
                 Assert.AreEqual(parentItem.CompletedOn, parentDetails.CompletedOn);
                 Assert.AreEqual(parentItem.GetStatus(), parentDetails.Status);
+                Assert.AreEqual(parentItem.ImportanceLevel, parentDetails.Importance);
+                Assert.AreEqual(parentItem.PriorityLevel, parentDetails.Priority);
                 Assert.IsNotNull(childDetails);
-                Assert.IsInstanceOf<TodoItemDetails>(childDetails);
-                Assert.AreEqual(childItem.CreatedBy, childDetails.Created.By);
-                Assert.AreEqual(childItem.CreatedOn, childDetails.Created.On);
-                Assert.AreEqual(childItem.CreatedProcess, childDetails.Created.Process);
-                Assert.AreEqual(childItem.ModifiedBy, childDetails.Modified.By);
-                Assert.AreEqual(childItem.ModifiedOn, childDetails.Modified.On);
-                Assert.AreEqual(childItem.ModifiedProcess, childDetails.Modified.Process);
+                Assert.IsInstanceOf<TodoItemLookup>(childDetails);
                 Assert.AreEqual(childItem.ItemId, childDetails.ItemId);
-                Assert.AreEqual(childItem.ParentItemId, childDetails.ParentItemId);
                 Assert.AreEqual(childItem.Name, childDetails.Name);
-                Assert.AreEqual(childItem.Description, childDetails.Description);
                 Assert.AreEqual(childItem.DueDate, childDetails.DueDate);
-                Assert.AreEqual(childItem.StartedOn, childDetails.StartedOn);
-                Assert.AreEqual(childItem.CancelledOn, childDetails.CancelledOn);
-                Assert.AreEqual(childItem.CompletedOn, childDetails.CompletedOn);
                 Assert.AreEqual(childItem.GetStatus(), childDetails.Status);
             });
         }

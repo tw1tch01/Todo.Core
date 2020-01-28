@@ -12,7 +12,7 @@ namespace Todo.Factories
 {
     public class TodoItemFactory
     {
-        private static Fixture _fixture = new Fixture();
+        private static readonly Fixture _fixture = new Fixture();
 
         public static TodoItem GenerateItem(Guid? parentId = null)
         {
@@ -80,6 +80,18 @@ namespace Todo.Factories
             };
         }
 
+        public static CreateItemDto GenerateCreateDto()
+        {
+            return new CreateItemDto
+            {
+                Name = _fixture.Create<string>(),
+                Description = _fixture.Create<string>(),
+                DueDate = _fixture.Create<DateTime?>(),
+                Importance = _fixture.Create<ImportanceLevel>(),
+                Priority = _fixture.Create<PriorityLevel>()
+            };
+        }
+
         #region Mapped
 
         public static TodoItemDetails MappedItemDetails(TodoItem item)
@@ -107,7 +119,7 @@ namespace Todo.Factories
                 CancelledOn = item.CancelledOn,
                 CompletedOn = item.CompletedOn,
                 Status = item.GetStatus(),
-                ChildItems = item.ChildItems.Select(MappedItemDetails).ToList()
+                ChildItems = item.ChildItems.Select(MappedItemLookup).ToList()
             };
         }
 
@@ -136,6 +148,18 @@ namespace Todo.Factories
                 Status = item.GetStatus(),
                 ChildItems = item.ChildItems.Count,
                 Notes = item.Notes.Count
+            };
+        }
+
+        public static TodoItem MappedItem(CreateItemDto dto)
+        {
+            return new TodoItem
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                DueDate = dto.DueDate,
+                ImportanceLevel = dto.Importance,
+                PriorityLevel = dto.Priority
             };
         }
 

@@ -8,7 +8,7 @@ namespace Todo.Application.Interfaces
     {
         Task<T> Get<T>(string key, int cacheTime, Func<Task<T>> acquire);
 
-        Task<IDictionary<string, T>> List<T>(ICollection<string> keys);
+        Task<IDictionary<string, T>> Lookup<T>(string key);
 
         Task<bool> Contains(string key);
 
