@@ -8,7 +8,7 @@ using Data.Repositories;
 using MediatR;
 using Todo.Application.Interfaces;
 using Todo.Application.TodoItems.Specifications;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 [assembly: InternalsVisibleTo("Todo.Application.IntegrationTests")]
 [assembly: InternalsVisibleTo("Todo.Application.UnitTests")]

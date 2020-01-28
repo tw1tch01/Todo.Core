@@ -5,7 +5,7 @@ using Todo.Application.Interfaces.TodoNotes;
 using Todo.Application.TodoNotes.Commands.Create;
 using Todo.Application.TodoNotes.Commands.Delete;
 using Todo.Application.TodoNotes.Commands.Update;
-using Todo.Models.TodoNotes;
+using Todo.DomainModels.TodoNotes;
 
 namespace Todo.Application.Services.TodoNotes
 {

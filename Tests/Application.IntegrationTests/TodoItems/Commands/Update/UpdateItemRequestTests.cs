@@ -3,7 +3,7 @@ using AutoFixture;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
 using Todo.Application.TodoItems.Commands.Update;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.IntegrationTests.TodoItems.Commands.Update
 {

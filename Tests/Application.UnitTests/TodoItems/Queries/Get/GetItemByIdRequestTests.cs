@@ -11,7 +11,7 @@ using Todo.Application.TodoItems.Specifications;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
 using Todo.Factories;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.UnitTests.TodoItems.Queries.Get
 {

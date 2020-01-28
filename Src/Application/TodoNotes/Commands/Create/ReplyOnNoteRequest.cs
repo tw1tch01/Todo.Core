@@ -8,7 +8,7 @@ using Todo.Application.Interfaces;
 using Todo.Application.TodoNotes.Specifications;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
-using Todo.Models.TodoNotes;
+using Todo.DomainModels.TodoNotes;
 
 namespace Todo.Application.TodoNotes.Commands.Create
 {

@@ -8,7 +8,7 @@ using Todo.Application.Interfaces;
 using Todo.Application.Interfaces.TodoItems;
 using Todo.Domain.Entities;
 using Todo.Factories;
-using Todo.Models.Mappings;
+using Todo.DomainModels.Mappings;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
 {

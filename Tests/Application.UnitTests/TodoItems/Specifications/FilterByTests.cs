@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
-using Todo.Models.TodoItems.Enums;
+using Todo.DomainModels.TodoItems.Enums;
 
 namespace Todo.Application.UnitTests.TodoItems.Specifications
 {

@@ -6,7 +6,7 @@ using Todo.Application.TodoItems.Commands.Actions;
 using Todo.Application.TodoItems.Commands.Create;
 using Todo.Application.TodoItems.Commands.Delete;
 using Todo.Application.TodoItems.Commands.Update;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Services.TodoItems
 {

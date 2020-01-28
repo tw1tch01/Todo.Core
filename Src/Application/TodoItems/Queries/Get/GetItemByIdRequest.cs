@@ -10,7 +10,7 @@ using Todo.Application.Interfaces;
 using Todo.Application.TodoItems.Specifications;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 [assembly: InternalsVisibleTo("Todo.Application.IntegrationTests")]
 [assembly: InternalsVisibleTo("Todo.Application.UnitTests")]

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Todo.Models.TodoNotes;
+using Todo.DomainModels.TodoNotes;
 
 namespace Todo.Application.Interfaces.TodoNotes
 {

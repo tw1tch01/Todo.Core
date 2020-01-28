@@ -1,5 +1,5 @@
 ﻿using System;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Common
 {

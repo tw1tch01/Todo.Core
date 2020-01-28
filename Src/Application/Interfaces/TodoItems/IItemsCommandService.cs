@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Interfaces.TodoItems
 {

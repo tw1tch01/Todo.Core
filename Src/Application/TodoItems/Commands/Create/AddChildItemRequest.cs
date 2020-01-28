@@ -7,7 +7,7 @@ using MediatR;
 using Todo.Application.Interfaces;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.TodoItems.Commands.Create
 {

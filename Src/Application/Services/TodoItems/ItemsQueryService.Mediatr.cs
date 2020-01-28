@@ -6,7 +6,7 @@ using MediatR;
 using Todo.Application.Interfaces.TodoItems;
 using Todo.Application.TodoItems.Queries.Get;
 using Todo.Application.TodoItems.Queries.Lookup;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Services.TodoItems
 {

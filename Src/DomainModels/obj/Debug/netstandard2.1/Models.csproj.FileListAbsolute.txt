@@ -1,0 +1,11 @@
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\bin\Debug\netstandard2.1\Todo.Models.deps.json
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\bin\Debug\netstandard2.1\Todo.Models.dll
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\bin\Debug\netstandard2.1\Todo.Models.pdb
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\bin\Debug\netstandard2.1\Todo.Domain.dll
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\bin\Debug\netstandard2.1\Todo.Domain.pdb
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\obj\Debug\netstandard2.1\Models.csprojAssemblyReference.cache
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\obj\Debug\netstandard2.1\Models.AssemblyInfoInputs.cache
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\obj\Debug\netstandard2.1\Models.AssemblyInfo.cs
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\obj\Debug\netstandard2.1\Models.csproj.CopyComplete
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\obj\Debug\netstandard2.1\Todo.Models.dll
+C:\Projects\DevGate\Todo\Todo.Core\Src\Models\obj\Debug\netstandard2.1\Todo.Models.pdb

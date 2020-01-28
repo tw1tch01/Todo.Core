@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using Data.Specifications;
 using Todo.Domain.Entities;
-using Todo.Models.TodoItems.Enums;
+using Todo.DomainModels.TodoItems.Enums;
 
 namespace Todo.Application.TodoItems.Specifications
 {

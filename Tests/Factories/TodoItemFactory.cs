@@ -4,9 +4,9 @@ using System.Linq;
 using AutoFixture;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
-using Todo.Models.Common;
-using Todo.Models.TodoItems;
-using Todo.Models.TodoItems.Enums;
+using Todo.DomainModels.Common;
+using Todo.DomainModels.TodoItems;
+using Todo.DomainModels.TodoItems.Enums;
 
 namespace Todo.Factories
 {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Todo.Application.Common;
 using Todo.Application.Interfaces;
 using Todo.Application.Interfaces.TodoItems;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Services.TodoItems
 {

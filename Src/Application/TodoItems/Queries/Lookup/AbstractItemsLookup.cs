@@ -6,8 +6,8 @@ using Data.Specifications;
 using Todo.Application.Common.Specifications;
 using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
-using Todo.Models.TodoItems;
-using Todo.Models.TodoItems.Enums;
+using Todo.DomainModels.TodoItems;
+using Todo.DomainModels.TodoItems.Enums;
 
 [assembly: InternalsVisibleTo("Todo.Application.UnitTests")]
 
