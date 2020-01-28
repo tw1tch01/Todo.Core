@@ -1,11 +1,11 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Todo.Application.TodoItems.Queries.Specifications;
+using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
 using Todo.Models.TodoItems.Enums;
 
-namespace Todo.Application.UnitTests.TodoItems.Queries.Specifications
+namespace Todo.Application.UnitTests.TodoItems.Specifications
 {
     [TestFixture]
     public class FilterByTests

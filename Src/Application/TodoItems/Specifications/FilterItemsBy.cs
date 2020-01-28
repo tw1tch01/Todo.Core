@@ -4,7 +4,7 @@ using Data.Specifications;
 using Todo.Domain.Entities;
 using Todo.Models.TodoItems.Enums;
 
-namespace Todo.Application.TodoItems.Queries.Specifications
+namespace Todo.Application.TodoItems.Specifications
 {
     internal class FilterItemsBy
     {

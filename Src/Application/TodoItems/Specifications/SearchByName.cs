@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using Data.Specifications;
 using Todo.Domain.Entities;
 
-namespace Todo.Application.TodoItems.Queries.Specifications
+namespace Todo.Application.TodoItems.Specifications
 {
     internal class SearchByName : LinqSpecification<TodoItem>
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Data.Repositories;
 using MediatR;
 using Todo.Application.Interfaces;
-using Todo.Application.TodoItems.Queries.Specifications;
+using Todo.Application.TodoItems.Specifications;
 using Todo.Common.Exceptions;
 using Todo.Domain.Entities;
 

@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Todo.Application.Interfaces;
 using Todo.Application.TodoItems.Queries.Lookup;
-using Todo.Application.TodoItems.Queries.Specifications;
+using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
 using Todo.Factories;
 using Todo.Models.TodoItems;
