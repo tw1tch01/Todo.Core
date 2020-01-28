@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Todo.Models.TodoItems;
 
-namespace Todo.Models.Validators
+namespace Todo.Models.TodoItems.Validators
 {
     public class CreateItemValidator : AbstractValidator<CreateItemDto>
     {

@@ -12,8 +12,8 @@ namespace Todo.Application.Interfaces.TodoItems
 
         Task<ICollection<TodoItemLookup>> GetChildItems(Guid parentId);
 
-        Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters);
+        Task<ICollection<ParentTodoItemLookup>> LookupItems(TodoItemLookupParams parameters);
 
-        Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters);
+        Task<PagedCollection<ParentTodoItemLookup>> PagedLookupItems(int page, int pageSize, TodoItemLookupParams parameters);
     }
 }

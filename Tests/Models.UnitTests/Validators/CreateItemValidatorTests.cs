@@ -2,7 +2,7 @@
 using AutoFixture;
 using NUnit.Framework;
 using Todo.Models.TodoItems;
-using Todo.Models.Validators;
+using Todo.Models.TodoItems.Validators;
 
 namespace Todo.Models.UnitTests.Validators
 {

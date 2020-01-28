@@ -36,19 +36,19 @@ namespace Todo.Application.Services.TodoItems
             });
         }
 
-        public async Task<ICollection<ParentTodoItemLookup>> ListItems(TodoItemLookupParams parameters)
+        public async Task<ICollection<ParentTodoItemLookup>> LookupItems(TodoItemLookupParams parameters)
         {
             return await _cacheService.Get(CacheKeys.Items.LookupItems(parameters), CacheKeys.Times.Default, async () =>
             {
-                return await _queryService.ListItems(parameters);
+                return await _queryService.LookupItems(parameters);
             });
         }
 
-        public async Task<PagedCollection<ParentTodoItemLookup>> PagedListItems(int page, int pageSize, TodoItemLookupParams parameters)
+        public async Task<PagedCollection<ParentTodoItemLookup>> PagedLookupItems(int page, int pageSize, TodoItemLookupParams parameters)
         {
             return await _cacheService.Get(CacheKeys.Items.PagedLookupItems(page, pageSize, parameters), CacheKeys.Times.Default, async () =>
             {
-                return await _queryService.PagedListItems(page, pageSize, parameters);
+                return await _queryService.PagedLookupItems(page, pageSize, parameters);
             });
         }
     }
