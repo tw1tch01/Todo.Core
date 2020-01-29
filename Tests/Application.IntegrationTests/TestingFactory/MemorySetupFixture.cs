@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.Interfaces;
-using Todo.Application.Interfaces.TodoItems;
 using Todo.Domain.Entities;
 using Todo.Factories;
 using Todo.DomainModels.Mappings;
+using Todo.Application.Services.TodoItems.ItemCommands;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
 {
@@ -34,7 +34,7 @@ namespace Todo.Application.IntegrationTests.TestingFactory
         {
             var services = new ServiceCollection();
 
-            services.AddCommonApplicationServices();
+            services.AddApplication();
             //services.AddCommonPipelineRequestPerformanceServices();
 
             services.AddDbContext<MemoryContext>(opt => opt.UseInMemoryDatabase(Guid.NewGuid().ToString()));

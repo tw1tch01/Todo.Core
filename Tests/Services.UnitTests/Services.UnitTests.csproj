@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <AssemblyName>Todo.Services.UnitTests</AssemblyName>
+
+    <RootNamespace>Todo.Services.UnitTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TodoItems\Commands\Create\**" />
+    <Compile Remove="TodoItems\Commands\Update\**" />
+    <Compile Remove="TodoItems\Queries\**" />
+    <Compile Remove="TodoItems\Specifications\**" />
+    <EmbeddedResource Remove="TodoItems\Commands\Create\**" />
+    <EmbeddedResource Remove="TodoItems\Commands\Update\**" />
+    <EmbeddedResource Remove="TodoItems\Queries\**" />
+    <EmbeddedResource Remove="TodoItems\Specifications\**" />
+    <None Remove="TodoItems\Commands\Create\**" />
+    <None Remove="TodoItems\Commands\Update\**" />
+    <None Remove="TodoItems\Queries\**" />
+    <None Remove="TodoItems\Specifications\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TodoItems\Commands\Actions\CompleteItemRequestTests.cs" />
+    <Compile Remove="TodoItems\Commands\Actions\ResetItemRequestTests.cs" />
+    <Compile Remove="TodoItems\Commands\Actions\StartItemRequestTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Src\Services\Services.csproj" />
+  </ItemGroup>
+
+</Project>
