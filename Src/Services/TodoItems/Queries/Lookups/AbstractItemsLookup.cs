@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data.Specifications;
 using Todo.Domain.Entities;
+using Todo.Domain.Enums;
 using Todo.DomainModels.TodoItems;
 using Todo.DomainModels.TodoItems.Enums;
 using Todo.Services.Common.Specifications;
@@ -68,19 +69,19 @@ namespace Todo.Services.TodoItems.Queries.Lookups
             AndSpecification(new WithinItemIds(itemIds));
         }
 
-        private void FilterByStatus(FilterTodoItemsBy.Status status)
+        private void FilterByStatus(TodoItemStatus status)
         {
-            AndSpecification(new FilterItemsBy.Status(status));
+            AndSpecification(new FilterItemsByStatus(status));
         }
 
-        private void FilterByImportance(FilterTodoItemsBy.Importance importance)
+        private void FilterByImportance(ImportanceLevel importance)
         {
-            AndSpecification(new FilterItemsBy.ImportanceLevel(importance));
+            AndSpecification(new FilterItemsByImportance(importance));
         }
 
-        private void FilterByPriority(FilterTodoItemsBy.Priority priority)
+        private void FilterByPriority(PriorityLevel priority)
         {
-            AndSpecification(new FilterItemsBy.PriortyLevel(priority));
+            AndSpecification(new FilterItemsByPriortyLevel(priority));
         }
 
         private void SortBy(SortTodoItemsBy sortBy)

@@ -23,6 +23,8 @@ namespace Todo.Services.TodoItems.Commands.UpdateItem
 
         public async Task UpdateItem(Guid itemId, UpdateItemDto itemDto)
         {
+            if (itemDto == null) throw new ArgumentNullException(nameof(itemDto));
+
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);

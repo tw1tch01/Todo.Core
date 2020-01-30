@@ -1,13 +1,13 @@
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.Services.deps.json
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.Services.dll
-C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Services.AssemblyInfoInputs.cache
-C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Services.AssemblyInfo.cs
+C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.Services.pdb
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.Domain.dll
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.DomainModels.dll
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.DomainModels.pdb
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.Domain.pdb
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Services.csprojAssemblyReference.cache
+C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Services.AssemblyInfoInputs.cache
+C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Services.AssemblyInfo.cs
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Services.csproj.CopyComplete
-C:\Projects\DevGate\Todo\Todo.Core\Src\Services\bin\Debug\netstandard2.1\Todo.Services.pdb
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Todo.Services.dll
 C:\Projects\DevGate\Todo\Todo.Core\Src\Services\obj\Debug\netstandard2.1\Todo.Services.pdb

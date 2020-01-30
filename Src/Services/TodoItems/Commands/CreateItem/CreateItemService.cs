@@ -23,6 +23,8 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
         public async Task<Guid> AddChildItem(Guid parentItemId, CreateItemDto childItemDto)
         {
+            if (childItemDto == null) throw new ArgumentNullException(nameof(childItemDto));
+
             var parentItem = await _repository.GetAsync(new GetItemById(parentItemId));
 
             if (parentItem == null) throw new NotFoundException(nameof(TodoItem), parentItemId);
@@ -38,6 +40,8 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
         public async Task<Guid> CreateItem(CreateItemDto itemDto)
         {
+            if (itemDto == null) throw new ArgumentNullException(nameof(itemDto));
+
             var item = _mapper.Map<TodoItem>(itemDto);
 
             await _repository.AddAsync(item);

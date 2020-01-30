@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoFixture;
 using NUnit.Framework;
+using Todo.Domain.Enums;
 using Todo.DomainModels.TodoItems;
 using Todo.DomainModels.TodoItems.Enums;
 
@@ -149,7 +150,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
         [Test]
         public void ToQueryString_WithFilterByStatus_ReturnsQueryStringWithSetFilterByStatusValue()
         {
-            var status = FilterTodoItemsBy.Status.Cancelled;
+            var status = TodoItemStatus.Cancelled;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
                            $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
@@ -176,7 +177,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
         [Test]
         public void ToQueryString_WithFilterByImportance_ReturnsQueryStringWithSetFilterByImportanceValue()
         {
-            var importance = FilterTodoItemsBy.Importance.Critical;
+            var importance = ImportanceLevel.Critical;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
                            $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
@@ -192,7 +193,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
                 SearchBy = null,
                 ItemIds = null,
                 FilterByStatus = null,
-                FilterByImportance= importance,
+                FilterByImportance = importance,
                 FilterByPriority = null,
                 SortBy = null
             };
@@ -203,7 +204,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
         [Test]
         public void ToQueryString_WithFilterByPriority_ReturnsQueryStringWithSetFilterByPriorityValue()
         {
-            var priority = FilterTodoItemsBy.Priority.Medium;
+            var priority = PriorityLevel.Medium;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
                            $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
@@ -219,7 +220,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
                 SearchBy = null,
                 ItemIds = null,
                 FilterByStatus = null,
-                FilterByImportance= null,
+                FilterByImportance = null,
                 FilterByPriority = priority,
                 SortBy = null
             };
@@ -246,7 +247,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
                 SearchBy = null,
                 ItemIds = null,
                 FilterByStatus = null,
-                FilterByImportance= null,
+                FilterByImportance = null,
                 FilterByPriority = null,
                 SortBy = sortBy
             };

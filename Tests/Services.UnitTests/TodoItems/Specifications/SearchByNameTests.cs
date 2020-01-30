@@ -1,8 +1,8 @@
 ﻿using System;
 using AutoFixture;
 using NUnit.Framework;
-using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
+using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Application.UnitTests.TodoItems.Specifications
 {

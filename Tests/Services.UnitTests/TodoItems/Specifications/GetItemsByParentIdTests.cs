@@ -1,15 +1,13 @@
 ﻿using System;
 using NUnit.Framework;
-using Todo.Application.TodoItems.Specifications;
 using Todo.Domain.Entities;
+using Todo.Services.TodoItems.Specifications;
 
-namespace Todo.Application.UnitTests.TodoItems.Specifications
+namespace Todo.Services.UnitTests.TodoItems.Specifications
 {
     [TestFixture]
     public class GetItemsByParentIdTests
     {
-        #region Specification
-
         [Test]
         public void IsSatisfiedBy_WhenParentItemIdIsNull_ReturnsFalse()
         {
@@ -46,7 +44,5 @@ namespace Todo.Application.UnitTests.TodoItems.Specifications
             var satisfied = specification.IsSatisfiedBy(item);
             Assert.IsTrue(satisfied);
         }
-
-        #endregion Specification
     }
 }

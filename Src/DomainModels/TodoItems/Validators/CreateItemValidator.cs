@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Todo.DomainModels.TodoItems;
 
 namespace Todo.DomainModels.TodoItems.Validators
 {

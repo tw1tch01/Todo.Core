@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Todo.Domain.Enums;
 using Todo.DomainModels.TodoItems.Enums;
 
 namespace Todo.DomainModels.TodoItems
@@ -10,9 +11,9 @@ namespace Todo.DomainModels.TodoItems
         public DateTime? CreatedBefore { get; set; }
         public string SearchBy { get; set; }
         public ICollection<Guid> ItemIds { get; set; } = new List<Guid>();
-        public FilterTodoItemsBy.Status? FilterByStatus { get; set; }
-        public FilterTodoItemsBy.Importance? FilterByImportance { get; set; }
-        public FilterTodoItemsBy.Priority? FilterByPriority { get; set; }
+        public TodoItemStatus? FilterByStatus { get; set; }
+        public ImportanceLevel? FilterByImportance { get; set; }
+        public PriorityLevel? FilterByPriority { get; set; }
         public SortTodoItemsBy? SortBy { get; set; }
 
         public string ToQueryString()
