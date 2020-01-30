@@ -17,7 +17,5 @@
 /Src/Services.UnitTests/obj/*
 /Src/Services/bin/*
 /Src/Services/obj/*
-/Tests/Application.UnitTests/bin/*
-/Tests/Application.UnitTests/obj/*
 /Src/DomainModels/bin/*
 /Src/DomainModels/obj/*
