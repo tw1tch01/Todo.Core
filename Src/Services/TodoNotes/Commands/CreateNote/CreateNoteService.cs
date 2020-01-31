@@ -24,6 +24,8 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
         public async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
         {
+            if (noteDto == null) throw new ArgumentNullException(nameof(noteDto));
+
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
@@ -39,6 +41,8 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
         public async Task<Guid> ReplyOnNote(Guid parentNoteId, CreateNoteDto childNoteDto)
         {
+            if (childNoteDto == null) throw new ArgumentNullException(nameof(childNoteDto));
+
             var note = await _repository.GetAsync(new GetNoteById(parentNoteId));
 
             if (note == null) throw new NotFoundException(nameof(TodoItem), parentNoteId);

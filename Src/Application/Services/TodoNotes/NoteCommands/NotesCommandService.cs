@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Todo.Application.Services.TodoNotes.NoteCommands;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.TodoNotes.Commands.CreateNote;
 using Todo.Services.TodoNotes.Commands.DeleteNote;
 using Todo.Services.TodoNotes.Commands.UpdateNote;
 
-namespace Todo.Application.Services.TodoNotes
+namespace Todo.Application.Services.TodoNotes.NoteCommands
 {
     public class NotesCommandService : INotesCommandService
     {

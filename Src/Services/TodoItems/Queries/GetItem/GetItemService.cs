@@ -8,6 +8,7 @@ using Todo.DomainModels.TodoItems;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoItems.Queries.GetItem
 {
@@ -29,14 +30,12 @@ namespace Todo.Services.TodoItems.Queries.GetItem
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
             var getChildItemsTask = _repository.ListAsync(new GetItemsByParentId(item.ItemId));
+            var getNotesTask = _repository.ListAsync(new GetNotesByItemId(item.ItemId).Include(n => n.Replies));
 
-            // TODO: get notes:
-            //var getNotesTask = _repository.ListAsync(new GetNotesByItemId(item.ItemId));
-
-            await Task.WhenAll(getChildItemsTask/*, getNotesTask*/);
+            await Task.WhenAll(getChildItemsTask, getNotesTask);
 
             item.ChildItems.ToList().AddRange(await getChildItemsTask);
-            //item.Notes.ToList().AddRange(await getNotesTask);
+            item.Notes.ToList().AddRange(await getNotesTask);
 
             var details = _mapper.Map<TodoItemDetails>(item);
 

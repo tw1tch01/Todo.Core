@@ -30,8 +30,4 @@
     <ProjectReference Include="..\Factories\Factories.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\TodoItems\ItemQueries\" />
-  </ItemGroup>
-
 </Project>

@@ -23,6 +23,8 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
 
         public async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
         {
+            if (noteDto == null) throw new ArgumentNullException(nameof(noteDto));
+
             var note = await _repository.GetAsync(new GetNoteById(noteId));
 
             if (note == null) throw new NotFoundException(nameof(TodoItemNote), noteId);
