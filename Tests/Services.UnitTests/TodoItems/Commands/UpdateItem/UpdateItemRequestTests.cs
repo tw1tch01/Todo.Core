@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Data.Repositories;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using Todo.DomainModels.TodoItems;
@@ -19,8 +20,9 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.UpdateItem
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
+            var mockMediator = new Mock<IMediator>();
 
-            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object);
+            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object, mockMediator.Object);
 
             Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateItem(Guid.NewGuid(), null));
         }
@@ -31,10 +33,11 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.UpdateItem
             var itemDto = new UpdateItemDto();
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
+            var mockMediator = new Mock<IMediator>();
 
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => null);
 
-            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object);
+            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object, mockMediator.Object);
 
             Assert.ThrowsAsync<NotFoundException>(() => service.UpdateItem(Guid.NewGuid(), itemDto));
         }

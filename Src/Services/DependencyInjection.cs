@@ -6,6 +6,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.Services.Common.Behaviours;
+using Todo.Services.Notifications;
 using Todo.Services.TodoItems.Commands.Actions.CancelItem;
 using Todo.Services.TodoItems.Commands.Actions.CompleteItem;
 using Todo.Services.TodoItems.Commands.Actions.ResetItem;
@@ -52,26 +53,32 @@ namespace Todo.Services
         {
             #region Items
 
-            services.AddSingleton(typeof(ICancelItemService), typeof(CancelItemService));
-            services.AddSingleton(typeof(ICompleteItemService), typeof(CompleteItemService));
-            services.AddSingleton(typeof(IResetItemService), typeof(ResetItemService));
-            services.AddSingleton(typeof(IStartItemService), typeof(StartItemService));
-            services.AddSingleton(typeof(ICreateItemService), typeof(CreateItemService));
-            services.AddSingleton(typeof(IDeleteItemService), typeof(DeleteItemService));
-            services.AddSingleton(typeof(IUpdateItemService), typeof(UpdateItemService));
-            services.AddSingleton(typeof(IGetItemService), typeof(GetItemService));
-            services.AddSingleton(typeof(IChildItemsLookupService), typeof(ChildItemsLookupService));
-            services.AddSingleton(typeof(IParentItemsLookupService), typeof(ParentItemsLookupService));
+            services.AddSingleton<ICancelItemService, CancelItemService>();
+            services.AddSingleton<ICompleteItemService, CompleteItemService>();
+            services.AddSingleton<IResetItemService, ResetItemService>();
+            services.AddSingleton<IStartItemService, StartItemService>();
+            services.AddSingleton<ICreateItemService, CreateItemService>();
+            services.AddSingleton<IDeleteItemService, DeleteItemService>();
+            services.AddSingleton<IUpdateItemService, UpdateItemService>();
+            services.AddSingleton<IGetItemService, GetItemService>();
+            services.AddSingleton<IChildItemsLookupService, ChildItemsLookupService>();
+            services.AddSingleton<IParentItemsLookupService, ParentItemsLookupService>();
 
             #endregion Items
 
             #region Notes
 
-            services.AddSingleton(typeof(ICreateNoteService), typeof(CreateNoteService));
-            services.AddSingleton(typeof(IDeleteNoteService), typeof(DeleteNoteService));
-            services.AddSingleton(typeof(IUpdateNoteService), typeof(UpdateNoteService));
+            services.AddSingleton<ICreateNoteService, CreateNoteService>();
+            services.AddSingleton<IDeleteNoteService, DeleteNoteService>();
+            services.AddSingleton<IUpdateNoteService, UpdateNoteService>();
 
             #endregion Notes
+
+            #region Notifications
+
+            services.AddSingleton<IMediator, NotificationService>();
+
+            #endregion Notifications
 
             return services;
         }

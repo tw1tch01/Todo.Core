@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
+using MediatR;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
+using Todo.Services.Events.TodoNotes;
 using Todo.Services.TodoItems.Specifications;
 using Todo.Services.TodoNotes.Specifications;
 
@@ -15,11 +17,13 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public CreateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper)
+        public CreateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper, IMediator mediator)
         {
             _repository = repository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
@@ -33,8 +37,9 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
             var note = _mapper.Map<TodoItemNote>(noteDto);
 
             item.Notes.Add(note);
-
             await _repository.SaveAsync();
+
+            await _mediator.Publish(new NoteWasCreated(note.NoteId));
 
             return note.NoteId;
         }
@@ -43,15 +48,16 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
         {
             if (childNoteDto == null) throw new ArgumentNullException(nameof(childNoteDto));
 
-            var note = await _repository.GetAsync(new GetNoteById(parentNoteId));
+            var parentNote = await _repository.GetAsync(new GetNoteById(parentNoteId));
 
-            if (note == null) throw new NotFoundException(nameof(TodoItem), parentNoteId);
+            if (parentNote == null) throw new NotFoundException(nameof(TodoItem), parentNoteId);
 
             var reply = _mapper.Map<TodoItemNote>(childNoteDto);
 
-            note.Replies.Add(reply);
-
+            parentNote.Replies.Add(reply);
             await _repository.SaveAsync();
+
+            await _mediator.Publish(new ReplyWasCreated(parentNoteId, reply.NoteId));
 
             return reply.NoteId;
         }

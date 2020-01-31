@@ -5,6 +5,8 @@
 /Src/Domain/obj/*
 /Src/DomainModels/bin/*
 /Src/DomainModels/obj/*
+/Src/Services/bin/*
+/Src/Services/obj/*
 /Tests/Application.IntegrationTests/bin/*
 /Tests/Application.IntegrationTests/obj/*
 /Tests/Domain.UnitTests/bin/*
@@ -13,11 +15,5 @@
 /Tests/DomainModels.UnitTests/obj/*
 /Tests/Factories/bin/*
 /Tests/Factories/obj/*
-/Src/Services.UnitTests/bin/*
-/Src/Services.UnitTests/obj/*
-/Src/Services/bin/*
-/Src/Services/obj/*
-/Src/DomainModels/bin/*
-/Src/DomainModels/obj/*
-/Tests/Services.UnitTests/*
-/Tests/Services.UnitTests/*
+/Tests/Services.UnitTests/bin/*
+/Tests/Services.UnitTests/obj/*

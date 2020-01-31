@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Repositories;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
@@ -20,9 +21,10 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockMediator = new Mock<IMediator>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
 
-            var service = new ResetItemService(mockRepository.Object);
+            var service = new ResetItemService(mockRepository.Object, mockMediator.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await service.ResetItem(Guid.NewGuid()));
         }
@@ -37,9 +39,10 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = DateTime.UtcNow
             };
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockMediator = new Mock<IMediator>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
 
-            var service = new ResetItemService(mockRepository.Object);
+            var service = new ResetItemService(mockRepository.Object, mockMediator.Object);
 
             await service.ResetItem(item.ItemId);
 
@@ -67,9 +70,10 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = DateTime.UtcNow
             });
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockMediator = new Mock<IMediator>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == parentItem.ItemId))).ReturnsAsync(() => parentItem);
 
-            var service = new ResetItemService(mockRepository.Object);
+            var service = new ResetItemService(mockRepository.Object, mockMediator.Object);
 
             await service.ResetItem(parentItem.ItemId);
 

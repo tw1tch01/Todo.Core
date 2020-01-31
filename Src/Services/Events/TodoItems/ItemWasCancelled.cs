@@ -13,6 +13,6 @@ namespace Todo.Services.Events.TodoItems
 
         public Guid ItemId { get; }
 
-        public DateTime CancelledOn { get; set; }
+        public DateTime CancelledOn { get; }
     }
 }

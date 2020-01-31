@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
+using MediatR;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
+using Todo.Services.Events.TodoNotes;
 using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoNotes.Commands.UpdateNote
@@ -14,11 +16,13 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public UpdateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper)
+        public UpdateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper, IMediator mediator)
         {
             _repository = repository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
@@ -32,6 +36,8 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
             _mapper.Map(noteDto, note);
 
             await _repository.SaveAsync();
+
+            await _mediator.Publish(new NoteWasUpdated(note.NoteId));
         }
     }
 }
