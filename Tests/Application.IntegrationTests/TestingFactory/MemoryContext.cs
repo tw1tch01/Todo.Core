@@ -5,10 +5,10 @@ using Data.Common;
 using Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Todo.Application.Interfaces;
 using Todo.Domain.Common;
 using Todo.Domain.Entities;
 using Todo.Factories;
+using Todo.Services.Common;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
 {

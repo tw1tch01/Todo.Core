@@ -1,5 +1,5 @@
 ﻿using System;
-using Todo.Models.TodoItems;
+using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Common
 {
@@ -22,11 +22,14 @@ namespace Todo.Application.Common
 
             public static string GetItem(Guid itemId) => $"{Pattern}?itemId={itemId}";
 
-            public static string LookupItems(TodoItemLookupParams parameters) => $"{Pattern}?{parameters.ToQueryString()}";
+            public static class Lookups
+            {
+                public static string ChildItems(Guid parentId) => $"{Pattern}?parentId={parentId}";
 
-            public static string PagedLookupItems(int page, int pageSize, TodoItemLookupParams parameters) => $"{Pattern}?Page={page}&PageSize={pageSize}&{parameters.ToQueryString()}";
+                public static string PagedParentItems(int page, int pageSize, TodoItemLookupParams parameters) => $"{Pattern}?Page={page}&PageSize={pageSize}&{parameters.ToQueryString()}";
 
-            public static string GetChildItems(Guid parentId) => $"{Pattern}?parentId={parentId}";
+                public static string ParentItems(TodoItemLookupParams parameters) => $"{Pattern}?{parameters.ToQueryString()}";
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Todo.Application.Interfaces;
+using Todo.Services.Common;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
 {

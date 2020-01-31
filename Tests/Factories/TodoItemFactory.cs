@@ -4,9 +4,9 @@ using System.Linq;
 using AutoFixture;
 using Todo.Domain.Entities;
 using Todo.Domain.Enums;
-using Todo.Models.Common;
-using Todo.Models.TodoItems;
-using Todo.Models.TodoItems.Enums;
+using Todo.DomainModels.Common;
+using Todo.DomainModels.TodoItems;
+using Todo.DomainModels.TodoItems.Enums;
 
 namespace Todo.Factories
 {
@@ -71,9 +71,9 @@ namespace Todo.Factories
             {
                 CreatedAfter = _fixture.Create<DateTime?>(),
                 CreatedBefore = _fixture.Create<DateTime?>(),
-                FilterByStatus = _fixture.Create<FilterTodoItemsBy.Status>(),
-                FilterByImportance = _fixture.Create<FilterTodoItemsBy.Importance>(),
-                FilterByPriority = _fixture.Create<FilterTodoItemsBy.Priority>(),
+                FilterByStatus = _fixture.Create<TodoItemStatus>(),
+                FilterByImportance = _fixture.Create<ImportanceLevel>(),
+                FilterByPriority = _fixture.Create<PriorityLevel>(),
                 SearchBy = _fixture.Create<string>(),
                 SortBy = _fixture.Create<SortTodoItemsBy>(),
                 ItemIds = _fixture.Create<ICollection<Guid>>()
