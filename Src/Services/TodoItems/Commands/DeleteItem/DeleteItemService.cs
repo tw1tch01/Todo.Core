@@ -30,14 +30,14 @@ namespace Todo.Services.TodoItems.Commands.DeleteItem
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
-            await _workflowService.Process(new BeforeItemDeletedWorkflow(itemId));
+            await _workflowService.Process(new BeforeItemDeletedProcess(itemId));
 
             _repository.Remove(item);
             await _repository.SaveAsync();
 
             var deletedOn = DateTime.UtcNow;
 
-            var workflow = _workflowService.Process(new ItemDeletedWorkflow(itemId, deletedOn));
+            var workflow = _workflowService.Process(new ItemDeletedProcess(itemId, deletedOn));
             var notification = _notificationService.Queue(new ItemDeletedNotification(itemId, deletedOn));
 
             await Task.WhenAll(notification, workflow);

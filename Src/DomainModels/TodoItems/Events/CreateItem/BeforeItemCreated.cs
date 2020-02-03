@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.CreateItem
 {
-    public class BeforeItemCreated : IWorkflowProcess
+    public class BeforeItemCreated
     {
         public BeforeItemCreated(Guid itemId)
         {

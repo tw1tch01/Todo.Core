@@ -18,7 +18,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
     public class ResetItemServiceTests
     {
         [Test]
-        public void Handle_WhenNoItemFound_ThrowsNotFoundException()
+        public void ResetItem_WhenNoItemFound_ThrowsNotFoundException()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
@@ -32,7 +32,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemExists_ResetsProperties()
+        public async Task ResetItem_WhenItemExists_ResetsProperties()
         {
             var item = new TodoItem
             {
@@ -58,7 +58,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemWithChildExists_ResetsAllProperties()
+        public async Task ResetItem_WhenItemWithChildExists_ResetsAllProperties()
         {
             var parentItem = new TodoItem
             {
@@ -89,6 +89,27 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 Assert.That(parentItem.ChildItems.All(i => i.StartedOn == null));
                 Assert.That(parentItem.ChildItems.All(i => i.CancelledOn == null));
                 Assert.That(parentItem.ChildItems.All(i => i.CompletedOn == null));
+            });
+        }
+
+        [Test]
+        public async Task ResetItem_VerifyingSaveAsyncIsCalled()
+        {
+            var mockItem = new Mock<TodoItem>();
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+
+            mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => mockItem.Object);
+
+            var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            await service.ResetItem(Guid.NewGuid());
+
+            Assert.Multiple(() =>
+            {
+                mockItem.Verify(a => a.ResetItem(), Times.Once);
+                mockRepository.Verify(a => a.SaveAsync(), Times.Once);
             });
         }
     }

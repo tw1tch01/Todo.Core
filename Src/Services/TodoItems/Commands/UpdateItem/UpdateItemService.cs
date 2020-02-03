@@ -36,13 +36,13 @@ namespace Todo.Services.TodoItems.Commands.UpdateItem
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
-            await _workflowService.Process(new BeforeItemUpdatedWorkflow(item.ItemId));
+            await _workflowService.Process(new BeforeItemUpdatedProcess(item.ItemId));
 
             _mapper.Map(itemDto, item);
             await _repository.SaveAsync();
 
-            var workflow = _workflowService.Process(new ItemUpdatedWorkflow(item.ItemId, item.ModifiedOn.Value));
-            var notification = _notificationService.Queue(new ItemUpdatedWorkflow(item.ItemId, item.ModifiedOn.Value));
+            var workflow = _workflowService.Process(new ItemUpdatedProcess(item.ItemId, item.ModifiedOn.Value));
+            var notification = _notificationService.Queue(new ItemUpdatedNotification(item.ItemId, item.ModifiedOn.Value));
 
             await Task.WhenAll(notification, workflow);
         }

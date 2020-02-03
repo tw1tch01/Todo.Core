@@ -1,11 +1,10 @@
 ﻿using System;
-using MediatR;
 
-namespace Todo.Services.Events.TodoNotes
+namespace Todo.DomainModels.TodoNotes.Events.CreateNote
 {
-    public class ReplyWasCreated : INotification
+    public class ReplyCreated
     {
-        public ReplyWasCreated(Guid parentNoteId, Guid replyNoteId)
+        public ReplyCreated(Guid parentNoteId, Guid replyNoteId)
         {
             ParentNoteId = parentNoteId;
             ReplyNoteId = replyNoteId;

@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
-using MediatR;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.Events.TodoNotes;
+using Todo.Services.External.Events.TodoNotes.UpdateNote;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
 using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoNotes.Commands.UpdateNote
@@ -16,13 +17,15 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly INotificationService _notificationService;
+        private readonly IWorkflowService _workflowService;
 
-        public UpdateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper, IMediator mediator)
+        public UpdateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper, INotificationService notificationService, IWorkflowService workflowService)
         {
             _repository = repository;
             _mapper = mapper;
-            _mediator = mediator;
+            _notificationService = notificationService;
+            _workflowService = workflowService;
         }
 
         public async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
@@ -33,11 +36,16 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
 
             if (note == null) throw new NotFoundException(nameof(TodoItemNote), noteId);
 
+            await _workflowService.Process(new BeforeNoteUpdatedProcess(noteId));
+
             _mapper.Map(noteDto, note);
 
             await _repository.SaveAsync();
 
-            await _mediator.Publish(new NoteWasUpdated(note.NoteId));
+            var workflow = _workflowService.Process(new NoteUpdatedProcess(note.NoteId));
+            var notification = _notificationService.Queue(new NoteUpdatedNotification(note.NoteId));
+
+            await Task.WhenAll(notification, workflow);
         }
     }
 }

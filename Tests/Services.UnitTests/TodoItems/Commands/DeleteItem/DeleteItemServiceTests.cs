@@ -15,7 +15,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.DeleteItem
     public class DeleteItemServiceTests
     {
         [Test]
-        public void AddChildItem_WhenParentItemDoesNotExist_ThrowsNotFoundException()
+        public void DeleteItem_WhenParentItemDoesNotExist_ThrowsNotFoundException()
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockNotification = new Mock<INotificationService>();

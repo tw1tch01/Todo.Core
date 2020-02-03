@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.CompleteItem
 {
-    public class ItemCompleted : IWorkflowProcess, INotificationProcess
+    public class ItemCompleted
     {
         public ItemCompleted(Guid itemId, DateTime cancelledOn)
         {

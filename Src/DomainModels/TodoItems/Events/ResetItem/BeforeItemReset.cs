@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.ResetItem
 {
-    public class BeforeItemReset : IWorkflowProcess
+    public class BeforeItemReset
     {
         public BeforeItemReset(Guid itemId)
         {

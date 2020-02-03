@@ -36,14 +36,14 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             if (parentItem == null) throw new NotFoundException(nameof(TodoItem), parentItemId);
 
-            await _workflowService.Process(new BeforeChildItemCreatedWorkflow(parentItem.ItemId));
+            await _workflowService.Process(new BeforeChildItemCreatedProcess(parentItem.ItemId));
 
             var childItem = _mapper.Map<TodoItem>(childItemDto);
 
             parentItem.ChildItems.Add(childItem);
             await _repository.SaveAsync();
 
-            var workflow = _workflowService.Process(new ChildItemCreatedWorkflow(parentItem.ItemId, childItem.ItemId));
+            var workflow = _workflowService.Process(new ChildItemCreatedProcess(parentItem.ItemId, childItem.ItemId));
             var notification = _notificationService.Queue(new ChildItemCreatedNotification(parentItem.ItemId, childItem.ItemId));
 
             await Task.WhenAll(notification, workflow);
@@ -60,7 +60,7 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
             await _repository.AddAsync(item);
             await _repository.SaveAsync();
 
-            var workflow = _workflowService.Process(new ItemCreatedWorkflow(item.ItemId));
+            var workflow = _workflowService.Process(new ItemCreatedProcess(item.ItemId));
             var notification = _notificationService.Queue(new ItemCreatedNotification(item.ItemId));
 
             await Task.WhenAll(notification, workflow);

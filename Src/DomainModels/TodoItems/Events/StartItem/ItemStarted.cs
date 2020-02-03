@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.StartItem
 {
-    public class ItemStarted : IWorkflowProcess, INotificationProcess
+    public class ItemStarted
     {
         public ItemStarted(Guid itemId, DateTime startedOn)
         {

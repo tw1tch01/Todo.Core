@@ -1,11 +1,10 @@
 ﻿using System;
-using MediatR;
 
-namespace Todo.Services.Events.TodoNotes
+namespace Todo.DomainModels.TodoNotes.Events.DeleteNote
 {
-    public class NoteWasDeleted : INotification
+    public class NoteDeleted
     {
-        public NoteWasDeleted(Guid noteId, DateTime deletedOn)
+        public NoteDeleted(Guid noteId, DateTime deletedOn)
         {
             NoteId = noteId;
             DeletedOn = deletedOn;

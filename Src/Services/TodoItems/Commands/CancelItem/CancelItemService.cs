@@ -30,13 +30,13 @@ namespace Todo.Services.TodoItems.Commands.CancelItem
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
-            await _workflowService.Process(new BeforeItemCancelledWorkflow(item.ItemId));
+            await _workflowService.Process(new BeforeItemCancelledProcess(item.ItemId));
 
             item.CancelItem();
 
             await _repository.SaveAsync();
 
-            var workflow = _workflowService.Process(new ItemCancelledWorkflow(item.ItemId, item.CancelledOn.Value));
+            var workflow = _workflowService.Process(new ItemCancelledProcess(item.ItemId, item.CancelledOn.Value));
             var notifcation = _notificationService.Queue(new ItemCancelledNotification(item.ItemId, item.CancelledOn.Value));
 
             await Task.WhenAll(notifcation, workflow);

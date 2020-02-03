@@ -30,14 +30,14 @@ namespace Todo.Services.TodoItems.Commands.StartItem
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
-            await _workflowService.Process(new BeforeItemStartedWorkflow(item.ItemId));
+            await _workflowService.Process(new BeforeItemStartedProcess(item.ItemId));
 
             item.StartItem();
 
             await _repository.SaveAsync();
 
-            var workflow = _workflowService.Process(new ItemStartedWorkflow(item.ItemId, item.StartedOn.Value));
-            var notification = _notificationService.Queue(new ItemStartedWorkflow(item.ItemId, item.StartedOn.Value));
+            var workflow = _workflowService.Process(new ItemStartedProcess(item.ItemId, item.StartedOn.Value));
+            var notification = _notificationService.Queue(new ItemStartedNotification(item.ItemId, item.StartedOn.Value));
 
             await Task.WhenAll(notification, workflow);
         }

@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.DeleteItem
 {
-    public class BeforeItemDeleted : IWorkflowProcess, INotificationProcess
+    public class BeforeItemDeleted
     {
         public BeforeItemDeleted(Guid itemId)
         {

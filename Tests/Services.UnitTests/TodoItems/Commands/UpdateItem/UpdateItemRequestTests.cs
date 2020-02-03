@@ -30,7 +30,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.UpdateItem
         }
 
         [Test]
-        public void AddChildItem_WhenParentItemDoesNotExist_ThrowsNotFoundException()
+        public void UpdateItem_WhenParentItemDoesNotExist_ThrowsNotFoundException()
         {
             var itemDto = new UpdateItemDto();
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();

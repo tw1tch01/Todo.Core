@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.CreateItem
 {
-    public class ChildItemCreated : IWorkflowProcess, INotificationProcess
+    public class ChildItemCreated
     {
         public ChildItemCreated(Guid parentItemId, Guid childItemId)
         {

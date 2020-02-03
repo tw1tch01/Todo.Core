@@ -19,7 +19,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
     public class CancelItemServiceTests
     {
         [Test]
-        public void Handle_WhenNoItemFound_ThrowsNotFoundException()
+        public void CancelItem_WhenNoItemFound_ThrowsNotFoundException()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
@@ -33,7 +33,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
+        public void CancelItem_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
         {
             var item = new TodoItem
             {
@@ -51,7 +51,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
+        public void CancelItem_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
         {
             var item = new TodoItem
             {
@@ -69,7 +69,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemFound_SetsCancelledOn()
+        public async Task CancelItem_WhenItemFound_SetsCancelledOn()
         {
             var item = new TodoItem
             {
@@ -89,7 +89,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemWithChildExists_CancelsAllCancellableItems()
+        public async Task CancelItem_WhenItemWithChildExists_CancelsAllCancellableItems()
         {
             var parentItem = new TodoItem
             {
@@ -112,6 +112,28 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
             {
                 Assert.IsNotNull(parentItem.CancelledOn);
                 Assert.That(parentItem.ChildItems.All(i => i.CancelledOn.HasValue));
+            });
+        }
+
+        [Test]
+        public async Task CancelItem_VerifyingSaveAsyncIsCalled()
+        {
+            var mockItem = new Mock<TodoItem>();
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+
+            mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => mockItem.Object);
+            mockItem.Object.CancelledOn = DateTime.UtcNow;
+
+            var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            await service.CancelItem(Guid.NewGuid());
+
+            Assert.Multiple(() =>
+            {
+                mockItem.Verify(a => a.CancelItem(), Times.Once);
+                mockRepository.Verify(a => a.SaveAsync(), Times.Once);
             });
         }
     }

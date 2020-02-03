@@ -18,7 +18,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
     public class StartItemServiceTests
     {
         [Test]
-        public void Handle_WhenNoItemFound_ThrowsNotFoundException()
+        public void StartItem_WhenNoItemFound_ThrowsNotFoundException()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
@@ -32,7 +32,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemAlreadyStarted_ThrowsItemAlreadyStartedException()
+        public void StartItem_WhenItemAlreadyStarted_ThrowsItemAlreadyStartedException()
         {
             var item = new TodoItem
             {
@@ -50,7 +50,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemAlreadyCancelled_ThrowsItemAlreadyCancelledException()
+        public void StartItem_WhenItemAlreadyCancelled_ThrowsItemAlreadyCancelledException()
         {
             var item = new TodoItem
             {
@@ -68,7 +68,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemAlreadyCompleted_ThrowsItemAlreadyCompletedException()
+        public void StartItem_WhenItemAlreadyCompleted_ThrowsItemAlreadyCompletedException()
         {
             var item = new TodoItem
             {
@@ -86,7 +86,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemExists_ResetsProperties()
+        public async Task StartItem_WhenItemExists_ResetsProperties()
         {
             var item = new TodoItem
             {
@@ -109,6 +109,28 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 Assert.IsNotNull(item.StartedOn);
                 Assert.IsNull(item.CancelledOn);
                 Assert.IsNull(item.CompletedOn);
+            });
+        }
+
+        [Test]
+        public async Task StartItem_VerifyingSaveAsyncIsCalled()
+        {
+            var mockItem = new Mock<TodoItem>();
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+
+            mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => mockItem.Object);
+            mockItem.Object.StartedOn = DateTime.UtcNow;
+
+            var service = new StartItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            await service.StartItem(Guid.NewGuid());
+
+            Assert.Multiple(() =>
+            {
+                mockItem.Verify(a => a.StartItem(), Times.Once);
+                mockRepository.Verify(a => a.SaveAsync(), Times.Once);
             });
         }
     }

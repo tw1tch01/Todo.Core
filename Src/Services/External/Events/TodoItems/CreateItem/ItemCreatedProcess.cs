@@ -1,12 +1,12 @@
 ﻿using System;
-using MediatR;
 using Todo.DomainModels.TodoItems.Events.CreateItem;
+using Todo.Services.Common;
 
 namespace Todo.Services.External.Events.TodoItems.CreateItem
 {
-    public class ItemCreatedWorkflow : ItemCreated, INotification
+    public class ItemCreatedProcess : ItemCreated, IWorkflowProcess
     {
-        public ItemCreatedWorkflow(Guid itemId) : base(itemId)
+        public ItemCreatedProcess(Guid itemId) : base(itemId)
         {
         }
     }

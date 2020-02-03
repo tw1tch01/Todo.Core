@@ -30,14 +30,14 @@ namespace Todo.Services.TodoItems.Commands.ResetItem
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
-            await _workflowService.Process(new BeforeItemResetWorkflow(item.ItemId));
+            await _workflowService.Process(new BeforeItemResetProcess(item.ItemId));
 
             item.ResetItem();
 
             await _repository.SaveAsync();
 
             var resetOn = DateTime.UtcNow;
-            var workflow = _workflowService.Process(new ItemResetWorkflow(item.ItemId, resetOn));
+            var workflow = _workflowService.Process(new ItemResetProcess(item.ItemId, resetOn));
             var notification = _notificationService.Queue(new ItemResetNotification(item.ItemId, resetOn));
 
             await Task.WhenAll(notification, workflow);

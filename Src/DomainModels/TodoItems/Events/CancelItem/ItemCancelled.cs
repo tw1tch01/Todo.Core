@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.CancelItem
 {
-    public class ItemCancelled : IWorkflowProcess, INotificationProcess
+    public class ItemCancelled
     {
         public ItemCancelled(Guid itemId, DateTime cancelledOn)
         {

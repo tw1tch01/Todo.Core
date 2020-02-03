@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.UpdateItem
 {
-    public class ItemUpdated : IWorkflowProcess, INotificationProcess
+    public class ItemUpdated
     {
         public ItemUpdated(Guid itemId, DateTime updatedOn)
         {

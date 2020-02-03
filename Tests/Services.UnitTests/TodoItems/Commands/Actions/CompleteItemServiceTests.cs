@@ -19,7 +19,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
     public class CompleteItemServiceTests
     {
         [Test]
-        public void Handle_WhenNoItemFound_ThrowsNotFoundException()
+        public void CompleteItem_WhenNoItemFound_ThrowsNotFoundException()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
@@ -33,7 +33,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
+        public void CompleteItem_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
         {
             var item = new TodoItem
             {
@@ -51,7 +51,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public void Handle_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
+        public void CompleteItem_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
         {
             var item = new TodoItem
             {
@@ -70,7 +70,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemFound_SetsCompletedOn()
+        public async Task CompleteItem_WhenItemFound_SetsCompletedOn()
         {
             var item = new TodoItem
             {
@@ -90,7 +90,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemWithChildExists_CompletesAllCompletableItems()
+        public async Task CompleteItem_WhenItemWithChildExists_CompletesAllCompletableItems()
         {
             var parentItem = new TodoItem
             {
@@ -114,6 +114,28 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
             {
                 Assert.IsNotNull(parentItem.CompletedOn);
                 Assert.That(parentItem.ChildItems.All(i => i.CompletedOn.HasValue));
+            });
+        }
+
+        [Test]
+        public async Task CompleteItem_VerifyingSaveAsyncIsCalled()
+        {
+            var mockItem = new Mock<TodoItem>();
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+
+            mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => mockItem.Object);
+            mockItem.Object.CompletedOn = DateTime.UtcNow;
+
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            await service.CompleteItem(Guid.NewGuid());
+
+            Assert.Multiple(() =>
+            {
+                mockItem.Verify(a => a.CompleteItem(), Times.Once);
+                mockRepository.Verify(a => a.SaveAsync(), Times.Once);
             });
         }
     }

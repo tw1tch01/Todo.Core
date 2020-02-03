@@ -1,9 +1,8 @@
 ﻿using System;
-using Todo.DomainModels.Common;
 
 namespace Todo.DomainModels.TodoItems.Events.CompleteItem
 {
-    public class BeforeItemCompleted : IWorkflowProcess
+    public class BeforeItemCompleted
     {
         public BeforeItemCompleted(Guid itemId)
         {

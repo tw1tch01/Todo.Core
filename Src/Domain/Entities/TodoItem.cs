@@ -57,12 +57,12 @@ namespace Todo.Domain.Entities
             return TodoItemStatus.Pending;
         }
 
-        public bool CanBeCancelled()
+        public virtual bool CanBeCancelled()
         {
             return !CancelledOn.HasValue && !CompletedOn.HasValue;
         }
 
-        public void CancelItem()
+        public virtual void CancelItem()
         {
             if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
@@ -75,12 +75,12 @@ namespace Todo.Domain.Entities
             CancelledOn = DateTime.UtcNow;
         }
 
-        public bool CanBeCompleted()
+        public virtual bool CanBeCompleted()
         {
             return !CancelledOn.HasValue && !CompletedOn.HasValue;
         }
 
-        public void CompleteItem()
+        public virtual void CompleteItem()
         {
             if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
@@ -93,7 +93,7 @@ namespace Todo.Domain.Entities
             CompletedOn = DateTime.UtcNow;
         }
 
-        public void StartItem()
+        public virtual void StartItem()
         {
             if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
@@ -106,7 +106,7 @@ namespace Todo.Domain.Entities
             CancelledOn = null;
         }
 
-        public void ResetItem()
+        public virtual void ResetItem()
         {
             StartedOn = null;
             CompletedOn = null;
@@ -119,7 +119,7 @@ namespace Todo.Domain.Entities
             return !ParentItemId.HasValue;
         }
 
-        public bool IsChildItem()
+        public virtual bool IsChildItem()
         {
             return ParentItemId.HasValue;
         }
