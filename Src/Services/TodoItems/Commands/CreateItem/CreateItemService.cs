@@ -2,30 +2,33 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
-using MediatR;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoItems;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.Events.TodoItems;
+using Todo.Services.External.Events.TodoItems.CreateItem;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
 using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.TodoItems.Commands.CreateItem
 {
-    internal class CreateItemService : ICreateItemService
+    public class CreateItemService : ICreateItemService
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly INotificationService _notificationService;
+        private readonly IWorkflowService _workflowService;
 
-        public CreateItemService(IContextRepository<ITodoContext> repository, IMapper mapper, IMediator mediator)
+        public CreateItemService(IContextRepository<ITodoContext> repository, IMapper mapper, INotificationService notificationService, IWorkflowService workflowService)
         {
             _repository = repository;
             _mapper = mapper;
-            _mediator = mediator;
+            _notificationService = notificationService;
+            _workflowService = workflowService;
         }
 
-        public async Task<Guid> AddChildItem(Guid parentItemId, CreateItemDto childItemDto)
+        public virtual async Task<Guid> AddChildItem(Guid parentItemId, CreateItemDto childItemDto)
         {
             if (childItemDto == null) throw new ArgumentNullException(nameof(childItemDto));
 
@@ -33,17 +36,22 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             if (parentItem == null) throw new NotFoundException(nameof(TodoItem), parentItemId);
 
+            await _workflowService.Process(new BeforeChildItemCreatedWorkflow(parentItem.ItemId));
+
             var childItem = _mapper.Map<TodoItem>(childItemDto);
 
             parentItem.ChildItems.Add(childItem);
             await _repository.SaveAsync();
 
-            await _mediator.Publish(new ChildItemWasCreated(parentItemId, childItem.ItemId));
+            var workflow = _workflowService.Process(new ChildItemCreatedWorkflow(parentItem.ItemId, childItem.ItemId));
+            var notification = _notificationService.Queue(new ChildItemCreatedNotification(parentItem.ItemId, childItem.ItemId));
+
+            await Task.WhenAll(notification, workflow);
 
             return childItem.ItemId;
         }
 
-        public async Task<Guid> CreateItem(CreateItemDto itemDto)
+        public virtual async Task<Guid> CreateItem(CreateItemDto itemDto)
         {
             if (itemDto == null) throw new ArgumentNullException(nameof(itemDto));
 
@@ -52,7 +60,10 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
             await _repository.AddAsync(item);
             await _repository.SaveAsync();
 
-            await _mediator.Publish(new ItemWasCreated(item.ItemId));
+            var workflow = _workflowService.Process(new ItemCreatedWorkflow(item.ItemId));
+            var notification = _notificationService.Queue(new ItemCreatedNotification(item.ItemId));
+
+            await Task.WhenAll(notification, workflow);
 
             return item.ItemId;
         }

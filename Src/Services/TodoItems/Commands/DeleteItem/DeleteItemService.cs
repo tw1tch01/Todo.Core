@@ -1,36 +1,46 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Data.Repositories;
-using MediatR;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.Events.TodoItems;
+using Todo.Services.External.Events.TodoItems.DeleteItem;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
 using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.TodoItems.Commands.DeleteItem
 {
-    internal class DeleteItemService : IDeleteItemService
+    public class DeleteItemService : IDeleteItemService
     {
         private readonly IContextRepository<ITodoContext> _repository;
-        private readonly IMediator _mediator;
+        private readonly INotificationService _notificationService;
+        private readonly IWorkflowService _workflowService;
 
-        public DeleteItemService(IContextRepository<ITodoContext> repository, IMediator mediator)
+        public DeleteItemService(IContextRepository<ITodoContext> repository, INotificationService notificationService, IWorkflowService workflowService)
         {
             _repository = repository;
-            _mediator = mediator;
+            _notificationService = notificationService;
+            _workflowService = workflowService;
         }
 
-        public async Task DeleteItem(Guid itemId)
+        public virtual async Task DeleteItem(Guid itemId)
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
+            await _workflowService.Process(new BeforeItemDeletedWorkflow(itemId));
+
             _repository.Remove(item);
             await _repository.SaveAsync();
 
-            await _mediator.Publish(new ItemWasDeleted(itemId, DateTime.UtcNow));
+            var deletedOn = DateTime.UtcNow;
+
+            var workflow = _workflowService.Process(new ItemDeletedWorkflow(itemId, deletedOn));
+            var notification = _notificationService.Queue(new ItemDeletedNotification(itemId, deletedOn));
+
+            await Task.WhenAll(notification, workflow);
         }
     }
 }

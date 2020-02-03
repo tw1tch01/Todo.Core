@@ -1,12 +1,13 @@
 ﻿using System;
 using AutoMapper;
 using Data.Repositories;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using Todo.DomainModels.TodoItems;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
 using Todo.Services.TodoItems.Commands.UpdateItem;
 using Todo.Services.TodoItems.Specifications;
 
@@ -20,9 +21,10 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.UpdateItem
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
 
-            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object, mockMediator.Object);
+            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateItem(Guid.NewGuid(), null));
         }
@@ -33,11 +35,12 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.UpdateItem
             var itemDto = new UpdateItemDto();
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
 
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => null);
 
-            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object, mockMediator.Object);
+            var service = new UpdateItemService(mockRepository.Object, mockMapper.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<NotFoundException>(() => service.UpdateItem(Guid.NewGuid(), itemDto));
         }
