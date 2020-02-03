@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Todo.Factories</AssemblyName>
     <RootNamespace>Todo.Factories</RootNamespace>
+    <Authors>Robert Breedt</Authors>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

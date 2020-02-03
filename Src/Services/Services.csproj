@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Todo.Services</AssemblyName>
     <RootNamespace>Todo.Services</RootNamespace>
+    <Authors>Robert Breedt</Authors>
   </PropertyGroup>
 
   <ItemGroup>

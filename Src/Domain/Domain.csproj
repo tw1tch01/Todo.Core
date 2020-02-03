@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Todo.Domain</AssemblyName>
     <RootNamespace>Todo.Domain</RootNamespace>
+    <Authors>Robert Breedt</Authors>
   </PropertyGroup>
 
 </Project>

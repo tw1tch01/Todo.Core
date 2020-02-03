@@ -8,6 +8,8 @@
     <AssemblyName>Todo.Application.IntegrationTests</AssemblyName>
 
     <RootNamespace>Todo.Application.IntegrationTests</RootNamespace>
+
+    <Authors>Robert Breedt</Authors>
   </PropertyGroup>
 
   <ItemGroup>

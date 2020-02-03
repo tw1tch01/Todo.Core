@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -8,6 +8,8 @@
     <AssemblyName>Todo.Services.UnitTests</AssemblyName>
 
     <RootNamespace>Todo.Services.UnitTests</RootNamespace>
+
+    <Authors>Robert Breedt</Authors>
   </PropertyGroup>
 
   <ItemGroup>

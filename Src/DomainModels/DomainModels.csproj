@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Todo.DomainModels</AssemblyName>
     <RootNamespace>Todo.DomainModels</RootNamespace>
+    <Authors>Robert Breedt</Authors>
   </PropertyGroup>
 
   <ItemGroup>

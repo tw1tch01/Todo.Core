@@ -8,6 +8,8 @@
     <AssemblyName>Todo.Domain.UnitTests</AssemblyName>
 
     <RootNamespace>Todo.Domain.UnitTests</RootNamespace>
+
+    <Authors>Robert Breedt</Authors>
   </PropertyGroup>
 
   <ItemGroup>
