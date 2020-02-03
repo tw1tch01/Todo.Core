@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Todo.Services.Common
+namespace Todo.Services.External.Workflows
 {
     public interface IWorkflowProcess : INotification
     {

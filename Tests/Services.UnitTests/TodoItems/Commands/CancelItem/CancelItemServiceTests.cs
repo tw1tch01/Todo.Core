@@ -13,7 +13,7 @@ using Todo.Services.External.Workflows;
 using Todo.Services.TodoItems.Commands.CancelItem;
 using Todo.Services.TodoItems.Specifications;
 
-namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
+namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
 {
     [TestFixture]
     public class CancelItemServiceTests

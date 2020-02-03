@@ -1,6 +1,6 @@
 ﻿using System;
 using Todo.DomainModels.TodoNotes.Events.CreateNote;
-using Todo.Services.Common;
+using Todo.Services.External.Workflows;
 
 namespace Todo.Services.External.Events.TodoNotes.CreateNote
 {

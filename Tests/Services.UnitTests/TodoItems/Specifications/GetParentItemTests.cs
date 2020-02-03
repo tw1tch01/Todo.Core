@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Todo.Domain.Entities;
 using Todo.Services.TodoItems.Specifications;
 
-namespace Todo.Application.UnitTests.TodoItems.Specifications
+namespace Todo.Services.UnitTests.TodoItems.Specifications
 {
     [TestFixture]
     public class GetParentItemTests

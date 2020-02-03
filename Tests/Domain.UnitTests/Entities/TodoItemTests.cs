@@ -4,7 +4,7 @@ using Todo.Domain.Entities;
 using Todo.Domain.Enums;
 using Todo.Domain.Exceptions;
 
-namespace Todo.Domain.UnitTests.HelperTests
+namespace Todo.Domain.UnitTests.Entities
 {
     [TestFixture]
     public class TodoItemTests

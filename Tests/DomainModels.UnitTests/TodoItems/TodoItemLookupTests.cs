@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using Todo.Domain.Entities;
-using Todo.Factories;
 using Todo.DomainModels.TodoItems;
 using Todo.DomainModels.UnitTests.Mappings;
+using Todo.Factories;
 
 namespace Todo.DomainModels.UnitTests.TodoItems
 {

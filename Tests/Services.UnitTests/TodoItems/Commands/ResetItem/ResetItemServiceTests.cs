@@ -12,7 +12,7 @@ using Todo.Services.External.Workflows;
 using Todo.Services.TodoItems.Commands.ResetItem;
 using Todo.Services.TodoItems.Specifications;
 
-namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
+namespace Todo.Services.UnitTests.TodoItems.Commands.ResetItem
 {
     [TestFixture]
     public class ResetItemServiceTests

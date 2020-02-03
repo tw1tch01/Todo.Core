@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Todo.DomainModels.Mappings;
 using NUnit.Framework;
+using Todo.DomainModels.Mappings;
 
 namespace Todo.DomainModels.UnitTests.Mappings
 {

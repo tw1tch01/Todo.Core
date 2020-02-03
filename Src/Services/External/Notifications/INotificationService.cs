@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Todo.Services.Common;
 
 namespace Todo.Services.External.Notifications
 {

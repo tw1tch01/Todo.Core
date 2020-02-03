@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using Todo.Services.Common.Specifications;
 using Todo.Domain.Entities;
+using Todo.Services.Common.Specifications;
 
 namespace Todo.Services.UnitTests.Common.Specifications
 {

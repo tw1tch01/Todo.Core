@@ -5,7 +5,7 @@ using Todo.Domain.Common;
 
 namespace Todo.Services.Common.Specifications
 {
-    public class ModifiedAfter<T> : LinqSpecification<T> where T: class, IModifiedAudit
+    public class ModifiedAfter<T> : LinqSpecification<T> where T : class, IModifiedAudit
     {
         private readonly DateTime _modifiedAfter;
 

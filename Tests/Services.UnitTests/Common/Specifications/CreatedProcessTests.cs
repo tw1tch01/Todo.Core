@@ -2,8 +2,8 @@
 using AutoFixture;
 using Moq;
 using NUnit.Framework;
-using Todo.Services.Common.Specifications;
 using Todo.Domain.Common;
+using Todo.Services.Common.Specifications;
 
 namespace Todo.Services.UnitTests.Common.Specifications
 {

@@ -1,7 +1,6 @@
 ﻿using System;
-using MediatR;
 using Todo.DomainModels.TodoItems.Events.CompleteItem;
-using Todo.Services.Common;
+using Todo.Services.External.Workflows;
 
 namespace Todo.Services.External.Events.TodoItems.CompleteItem
 {

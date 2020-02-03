@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Todo.Services.Common
+namespace Todo.Services.External.Notifications
 {
     public interface INotificationProcess : INotification
     {

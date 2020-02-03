@@ -2,9 +2,9 @@
 using AutoFixture;
 using NUnit.Framework;
 using Todo.Domain.Enums;
-using Todo.Factories;
 using Todo.DomainModels.TodoItems;
 using Todo.DomainModels.UnitTests.Mappings;
+using Todo.Factories;
 
 namespace Todo.DomainModels.UnitTests.TodoItems
 {

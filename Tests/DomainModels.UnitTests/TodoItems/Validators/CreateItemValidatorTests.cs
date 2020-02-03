@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Todo.DomainModels.TodoItems;
 using Todo.DomainModels.TodoItems.Validators;
 
-namespace Todo.DomainModels.UnitTests.Validators
+namespace Todo.DomainModels.UnitTests.TodoItems.Validators
 {
     [TestFixture]
     public class CreateItemValidatorTests

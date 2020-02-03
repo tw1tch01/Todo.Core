@@ -1,6 +1,6 @@
 ﻿using System;
 using Todo.DomainModels.TodoNotes.Events.DeleteNote;
-using Todo.Services.Common;
+using Todo.Services.External.Notifications;
 
 namespace Todo.Services.External.Events.TodoNotes.DeleteNote
 {
