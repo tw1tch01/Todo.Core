@@ -1,9 +1,6 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using Todo.Application.Notifications.TodoItems;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Todo.Application.Services.TodoItems.ItemCommands;
 using Todo.Services;
-using Todo.Services.Events.TodoItems;
 
 namespace Todo.Application
 {
@@ -14,14 +11,7 @@ namespace Todo.Application
             services.AddServices();
             services.AddScoped<IItemsCommandService, ItemsCommandService>();
 
-            //RegisterNotifications(services);
-
             return services;
-        }
-
-        private static void RegisterNotifications(IServiceCollection services)
-        {
-            services.AddTransient<INotificationHandler<ItemWasCancelled>, ItemWasCancelledSendMessage>();
         }
     }
 }

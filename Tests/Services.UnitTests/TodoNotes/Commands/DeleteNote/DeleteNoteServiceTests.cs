@@ -1,10 +1,11 @@
 ﻿using System;
 using Data.Repositories;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
 using Todo.Services.TodoNotes.Commands.DeleteNote;
 
 namespace Todo.Services.UnitTests.TodoNotes.Commands.DeleteNote
@@ -16,9 +17,10 @@ namespace Todo.Services.UnitTests.TodoNotes.Commands.DeleteNote
         public void DeleteNote_WhenNoteDoesNotExist_ThrowsNotFoundException()
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
 
-            var service = new DeleteNoteService(mockRepository.Object, mockMediator.Object);
+            var service = new DeleteNoteService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<NotFoundException>(() => service.DeleteNote(Guid.NewGuid()));
         }

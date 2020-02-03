@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
-using MediatR;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.Events.TodoNotes;
+using Todo.Services.External.Events.TodoNotes.CreateNote;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
 using Todo.Services.TodoItems.Specifications;
 using Todo.Services.TodoNotes.Specifications;
 
@@ -17,13 +18,15 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
+        private readonly INotificationService _notificationService;
+        private readonly IWorkflowService _workflowService;
 
-        public CreateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper, IMediator mediator)
+        public CreateNoteService(IContextRepository<ITodoContext> repository, IMapper mapper, INotificationService notificationService, IWorkflowService workflowService)
         {
             _repository = repository;
             _mapper = mapper;
-            _mediator = mediator;
+            _notificationService = notificationService;
+            _workflowService = workflowService;
         }
 
         public async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
@@ -34,12 +37,17 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
+            await _workflowService.Process(new BeforeNoteCreatedProcess(itemId));
+
             var note = _mapper.Map<TodoItemNote>(noteDto);
 
             item.Notes.Add(note);
             await _repository.SaveAsync();
 
-            await _mediator.Publish(new NoteWasCreated(note.NoteId));
+            var workflow = _workflowService.Process(new NotedCreatedProcess(note.NoteId));
+            var notification = _notificationService.Queue(new NotedCreatedNotification(note.NoteId));
+
+            await Task.WhenAll(notification, workflow);
 
             return note.NoteId;
         }
@@ -52,12 +60,17 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             if (parentNote == null) throw new NotFoundException(nameof(TodoItem), parentNoteId);
 
+            await _workflowService.Process(new BeforeReplyCreatedProcess(parentNote.NoteId));
+
             var reply = _mapper.Map<TodoItemNote>(childNoteDto);
 
             parentNote.Replies.Add(reply);
             await _repository.SaveAsync();
 
-            await _mediator.Publish(new ReplyWasCreated(parentNoteId, reply.NoteId));
+            var workflow = _workflowService.Process(new ReplyCreatedProcess(parentNote.NoteId, reply.NoteId));
+            var notification = _notificationService.Queue(new ReplyCreatedNotification(parentNote.NoteId, reply.NoteId));
+
+            await Task.WhenAll(notification, workflow);
 
             return reply.NoteId;
         }

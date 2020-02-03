@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Todo.DomainModels.TodoItems;
-using Todo.Services.TodoItems.Commands.Actions.CancelItem;
-using Todo.Services.TodoItems.Commands.Actions.CompleteItem;
-using Todo.Services.TodoItems.Commands.Actions.ResetItem;
-using Todo.Services.TodoItems.Commands.Actions.StartItem;
+using Todo.Services.TodoItems.Commands.CancelItem;
+using Todo.Services.TodoItems.Commands.CompleteItem;
 using Todo.Services.TodoItems.Commands.CreateItem;
 using Todo.Services.TodoItems.Commands.DeleteItem;
+using Todo.Services.TodoItems.Commands.ResetItem;
+using Todo.Services.TodoItems.Commands.StartItem;
 using Todo.Services.TodoItems.Commands.UpdateItem;
 
 namespace Todo.Application.Services.TodoItems.ItemCommands

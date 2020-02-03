@@ -2,14 +2,15 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Repositories;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
 using Todo.Domain.Exceptions;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Commands.Actions.CompleteItem;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
+using Todo.Services.TodoItems.Commands.CompleteItem;
 using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
@@ -18,20 +19,21 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
     public class CompleteItemServiceTests
     {
         [Test]
-        public void Handle_WhenNoItemFound_ThrowsNotFoundException()
+        public void CompleteItem_WhenNoItemFound_ThrowsNotFoundException()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
 
-            var service = new CompleteItemService(mockRepository.Object, mockMediator.Object);
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await service.CompleteItem(Guid.NewGuid()));
         }
 
         [Test]
-        public void Handle_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
+        public void CompleteItem_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
         {
             var item = new TodoItem
             {
@@ -39,16 +41,17 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CancelledOn = DateTime.UtcNow
             };
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
 
-            var service = new CompleteItemService(mockRepository.Object, mockMediator.Object);
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<ItemPreviouslyCancelledException>(async () => await service.CompleteItem(item.ItemId));
         }
 
         [Test]
-        public void Handle_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
+        public void CompleteItem_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
         {
             var item = new TodoItem
             {
@@ -56,17 +59,18 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = DateTime.UtcNow
             };
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
 
-            var service = new CompleteItemService(mockRepository.Object, mockMediator.Object);
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<ItemPreviouslyCompletedException>(async () => await service.CompleteItem(item.ItemId));
         }
 
         [Test]
-        public async Task Handle_WhenItemFound_SetsCompletedOn()
+        public async Task CompleteItem_WhenItemFound_SetsCompletedOn()
         {
             var item = new TodoItem
             {
@@ -74,10 +78,11 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = null
             };
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
 
-            var service = new CompleteItemService(mockRepository.Object, mockMediator.Object);
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             await service.CompleteItem(item.ItemId);
 
@@ -85,7 +90,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemWithChildExists_CompletesAllCompletableItems()
+        public async Task CompleteItem_WhenItemWithChildExists_CompletesAllCompletableItems()
         {
             var parentItem = new TodoItem
             {
@@ -97,10 +102,11 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = null
             });
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == parentItem.ItemId))).ReturnsAsync(() => parentItem);
 
-            var service = new CompleteItemService(mockRepository.Object, mockMediator.Object);
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             await service.CompleteItem(parentItem.ItemId);
 
@@ -108,6 +114,28 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
             {
                 Assert.IsNotNull(parentItem.CompletedOn);
                 Assert.That(parentItem.ChildItems.All(i => i.CompletedOn.HasValue));
+            });
+        }
+
+        [Test]
+        public async Task CompleteItem_VerifyingSaveAsyncIsCalled()
+        {
+            var mockItem = new Mock<TodoItem>();
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+
+            mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => mockItem.Object);
+            mockItem.Object.CompletedOn = DateTime.UtcNow;
+
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            await service.CompleteItem(Guid.NewGuid());
+
+            Assert.Multiple(() =>
+            {
+                mockItem.Verify(a => a.CompleteItem(), Times.Once);
+                mockRepository.Verify(a => a.SaveAsync(), Times.Once);
             });
         }
     }

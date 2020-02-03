@@ -6,13 +6,14 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.Services.Common.Behaviours;
-using Todo.Services.Notifications;
-using Todo.Services.TodoItems.Commands.Actions.CancelItem;
-using Todo.Services.TodoItems.Commands.Actions.CompleteItem;
-using Todo.Services.TodoItems.Commands.Actions.ResetItem;
-using Todo.Services.TodoItems.Commands.Actions.StartItem;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
+using Todo.Services.TodoItems.Commands.CancelItem;
+using Todo.Services.TodoItems.Commands.CompleteItem;
 using Todo.Services.TodoItems.Commands.CreateItem;
 using Todo.Services.TodoItems.Commands.DeleteItem;
+using Todo.Services.TodoItems.Commands.ResetItem;
+using Todo.Services.TodoItems.Commands.StartItem;
 using Todo.Services.TodoItems.Commands.UpdateItem;
 using Todo.Services.TodoItems.Queries.GetItem;
 using Todo.Services.TodoItems.Queries.Lookups.ChildItems;
@@ -74,11 +75,12 @@ namespace Todo.Services
 
             #endregion Notes
 
-            #region Notifications
+            #region External
 
-            services.AddSingleton<IMediator, NotificationService>();
+            services.AddSingleton<INotificationService, NotificationService>();
+            services.AddSingleton<IWorkflowService, WorkflowService>();
 
-            #endregion Notifications
+            #endregion External
 
             return services;
         }

@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Repositories;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Commands.Actions.ResetItem;
+using Todo.Services.External.Notifications;
+using Todo.Services.External.Workflows;
+using Todo.Services.TodoItems.Commands.ResetItem;
 using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
@@ -17,20 +18,21 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
     public class ResetItemServiceTests
     {
         [Test]
-        public void Handle_WhenNoItemFound_ThrowsNotFoundException()
+        public void ResetItem_WhenNoItemFound_ThrowsNotFoundException()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
 
-            var service = new ResetItemService(mockRepository.Object, mockMediator.Object);
+            var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             Assert.ThrowsAsync<NotFoundException>(async () => await service.ResetItem(Guid.NewGuid()));
         }
 
         [Test]
-        public async Task Handle_WhenItemExists_ResetsProperties()
+        public async Task ResetItem_WhenItemExists_ResetsProperties()
         {
             var item = new TodoItem
             {
@@ -39,10 +41,11 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = DateTime.UtcNow
             };
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
 
-            var service = new ResetItemService(mockRepository.Object, mockMediator.Object);
+            var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             await service.ResetItem(item.ItemId);
 
@@ -55,7 +58,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
         }
 
         [Test]
-        public async Task Handle_WhenItemWithChildExists_ResetsAllProperties()
+        public async Task ResetItem_WhenItemWithChildExists_ResetsAllProperties()
         {
             var parentItem = new TodoItem
             {
@@ -70,10 +73,11 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 CompletedOn = DateTime.UtcNow
             });
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
-            var mockMediator = new Mock<IMediator>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == parentItem.ItemId))).ReturnsAsync(() => parentItem);
 
-            var service = new ResetItemService(mockRepository.Object, mockMediator.Object);
+            var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
             await service.ResetItem(parentItem.ItemId);
 
@@ -85,6 +89,27 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.Actions
                 Assert.That(parentItem.ChildItems.All(i => i.StartedOn == null));
                 Assert.That(parentItem.ChildItems.All(i => i.CancelledOn == null));
                 Assert.That(parentItem.ChildItems.All(i => i.CompletedOn == null));
+            });
+        }
+
+        [Test]
+        public async Task ResetItem_VerifyingSaveAsyncIsCalled()
+        {
+            var mockItem = new Mock<TodoItem>();
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+
+            mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => mockItem.Object);
+
+            var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            await service.ResetItem(Guid.NewGuid());
+
+            Assert.Multiple(() =>
+            {
+                mockItem.Verify(a => a.ResetItem(), Times.Once);
+                mockRepository.Verify(a => a.SaveAsync(), Times.Once);
             });
         }
     }
