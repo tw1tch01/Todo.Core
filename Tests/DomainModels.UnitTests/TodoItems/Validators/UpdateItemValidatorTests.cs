@@ -66,25 +66,6 @@ namespace Todo.DomainModels.UnitTests.TodoItems.Validators
         }
 
         [Test]
-        public async Task WhenDescriptionLengthIsGreaterThan1024_ReturnsValidationErrorForDescription()
-        {
-            var dto = new UpdateItemDto
-            {
-                Description = GenerateString(1024)
-            };
-
-            var validator = new UpdateItemValidator();
-            var results = await validator.ValidateAsync(dto);
-
-            Assert.Multiple(() =>
-            {
-                Assert.IsFalse(results.IsValid);
-                Assert.AreEqual(1, results.Errors.Count);
-                Assert.AreEqual($"The length of '{nameof(UpdateItemDto.Description)}' must be 1024 characters or fewer. You entered {dto.Description.Length} characters.", results.Errors[0].ErrorMessage);
-            });
-        }
-
-        [Test]
         public async Task WhenRankIsLessThanZero_ReturnsValidationErrorForRank()
         {
             var dto = new UpdateItemDto
