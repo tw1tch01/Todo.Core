@@ -6,7 +6,7 @@ using Todo.DomainModels.TodoItems;
 
 namespace Todo.Application.Services.TodoItems.CachedItemCommands
 {
-    public class CachedItemsCommandService : ICachedCommandsQueryService
+    public class CachedItemsCommandService : ICachedItemsCommandsService
     {
         private readonly IItemsCommandService _commandService;
         private readonly ICacheService _cacheService;

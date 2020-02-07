@@ -2,7 +2,7 @@
 
 namespace Todo.Application.Services.TodoItems.CachedItemCommands
 {
-    public interface ICachedCommandsQueryService : IItemsCommandService
+    public interface ICachedItemsCommandsService : IItemsCommandService
     {
     }
 }

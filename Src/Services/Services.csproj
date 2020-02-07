@@ -5,6 +5,7 @@
     <AssemblyName>Todo.Services</AssemblyName>
     <RootNamespace>Todo.Services</RootNamespace>
     <Authors>Robert Breedt</Authors>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
