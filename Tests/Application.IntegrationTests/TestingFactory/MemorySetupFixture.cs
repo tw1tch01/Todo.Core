@@ -1,9 +1,7 @@
 ﻿using System;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using Todo.DomainModels.Mappings;
 using Todo.Services.Common;
 
 namespace Todo.Application.IntegrationTests.TestingFactory
@@ -30,11 +28,6 @@ namespace Todo.Application.IntegrationTests.TestingFactory
             services.AddDbContext<MemoryContext>(opt => opt.UseInMemoryDatabase(Guid.NewGuid().ToString()));
             services.AddTransient(typeof(ITodoContext), typeof(MemoryContext));
             services.AddApplication();
-
-            services.AddSingleton(opt => new MapperConfiguration(config =>
-            {
-                config.AddProfile<MappingProfile>();
-            }).CreateMapper());
 
             return services;
         }

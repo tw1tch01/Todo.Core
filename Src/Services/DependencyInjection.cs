@@ -5,8 +5,8 @@ using Data.Extensions;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Todo.DomainModels.Mappings;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.CancelItem;
 using Todo.Services.TodoItems.Commands.CompleteItem;
 using Todo.Services.TodoItems.Commands.CreateItem;
@@ -20,6 +20,7 @@ using Todo.Services.TodoItems.Queries.Lookups.ParentItems;
 using Todo.Services.TodoNotes.Commands.CreateNote;
 using Todo.Services.TodoNotes.Commands.DeleteNote;
 using Todo.Services.TodoNotes.Commands.UpdateNote;
+using Todo.Services.Workflows;
 
 [assembly: InternalsVisibleTo("Todo.Services.UnitTests")]
 
@@ -34,6 +35,11 @@ namespace Todo.Services
             services.AddDataDependencies();
 
             services.AddAutoMapper(assembly);
+            services.AddScoped(opt => new MapperConfiguration(config =>
+            {
+                config.AddProfile<MappingProfile>();
+            }).CreateMapper());
+
             services.AddMediatR(assembly);
 
             AddServicesImplementations(services);
