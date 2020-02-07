@@ -11,7 +11,7 @@ using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoNotes.Commands.DeleteNote
 {
-    internal class DeleteNoteService : IDeleteNoteService
+    public class DeleteNoteService : IDeleteNoteService
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly INotificationService _notificationService;
@@ -24,7 +24,7 @@ namespace Todo.Services.TodoNotes.Commands.DeleteNote
             _workflowService = workflowService;
         }
 
-        public async Task DeleteNote(Guid noteId)
+        public virtual async Task DeleteNote(Guid noteId)
         {
             var note = await _repository.GetAsync(new GetNoteById(noteId));
 

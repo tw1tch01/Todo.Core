@@ -9,7 +9,7 @@ using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.TodoItems.Queries.Lookups.ChildItems
 {
-    internal class ChildItemsLookupService : IChildItemsLookupService
+    public class ChildItemsLookupService : IChildItemsLookupService
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace Todo.Services.TodoItems.Queries.Lookups.ChildItems
             _mapper = mapper;
         }
 
-        public async Task<ICollection<TodoItemLookup>> LookupChildItems(Guid parentItemId)
+        public virtual async Task<ICollection<TodoItemLookup>> LookupChildItems(Guid parentItemId)
         {
             var items = await _repository.ListAsync(new GetItemsByParentId(parentItemId)
                 .OrderBy(i => i.Rank)

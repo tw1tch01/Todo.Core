@@ -13,7 +13,7 @@ using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoNotes.Commands.UpdateNote
 {
-    internal class UpdateNoteService : IUpdateNoteService
+    public class UpdateNoteService : IUpdateNoteService
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
             _workflowService = workflowService;
         }
 
-        public async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
+        public virtual async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
         {
             if (noteDto == null) throw new ArgumentNullException(nameof(noteDto));
 

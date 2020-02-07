@@ -9,7 +9,7 @@ using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.TodoItems.Queries.Lookups.ParentItems
 {
-    internal class ParentItemsLookupService : AbstractItemsLookup, IParentItemsLookupService
+    public class ParentItemsLookupService : AbstractItemsLookup, IParentItemsLookupService
     {
         private const int _defaultPageSize = 10;
         private const int _maximumPageSize = 25;
@@ -24,7 +24,7 @@ namespace Todo.Services.TodoItems.Queries.Lookups.ParentItems
             _mapper = mapper;
         }
 
-        public async Task<ICollection<ParentTodoItemLookup>> LookupParentItems(TodoItemLookupParams parameters)
+        public virtual async Task<ICollection<ParentTodoItemLookup>> LookupParentItems(TodoItemLookupParams parameters)
         {
             WithParameters(parameters);
 
@@ -35,7 +35,7 @@ namespace Todo.Services.TodoItems.Queries.Lookups.ParentItems
             return details;
         }
 
-        public async Task<PagedCollection<ParentTodoItemLookup>> PagedLookupParentItems(int page, int pageSize, TodoItemLookupParams parameters)
+        public virtual async Task<PagedCollection<ParentTodoItemLookup>> PagedLookupParentItems(int page, int pageSize, TodoItemLookupParams parameters)
         {
             WithParameters(parameters);
 

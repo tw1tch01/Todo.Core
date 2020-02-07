@@ -12,7 +12,7 @@ using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoItems.Queries.GetItem
 {
-    internal class GetItemService : IGetItemService
+    public class GetItemService : IGetItemService
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
@@ -23,7 +23,7 @@ namespace Todo.Services.TodoItems.Queries.GetItem
             _mapper = mapper;
         }
 
-        public async Task<TodoItemDetails> GetItem(Guid itemId)
+        public virtual async Task<TodoItemDetails> GetItem(Guid itemId)
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 

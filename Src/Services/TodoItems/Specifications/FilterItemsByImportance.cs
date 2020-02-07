@@ -6,7 +6,7 @@ using Todo.Domain.Enums;
 
 namespace Todo.Services.TodoItems.Specifications
 {
-    internal class FilterItemsByImportance : LinqSpecification<TodoItem>
+    public class FilterItemsByImportance : LinqSpecification<TodoItem>
     {
         private readonly ImportanceLevel _importance;
 

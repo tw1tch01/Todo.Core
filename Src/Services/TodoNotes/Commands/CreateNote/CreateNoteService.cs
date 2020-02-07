@@ -14,7 +14,7 @@ using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoNotes.Commands.CreateNote
 {
-    internal class CreateNoteService : ICreateNoteService
+    public class CreateNoteService : ICreateNoteService
     {
         private readonly IContextRepository<ITodoContext> _repository;
         private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
             _workflowService = workflowService;
         }
 
-        public async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
+        public virtual async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
         {
             if (noteDto == null) throw new ArgumentNullException(nameof(noteDto));
 
