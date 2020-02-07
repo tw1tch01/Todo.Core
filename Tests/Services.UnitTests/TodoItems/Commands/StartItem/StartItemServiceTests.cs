@@ -7,8 +7,8 @@ using Todo.Domain.Entities;
 using Todo.Domain.Exceptions;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.StartItem;
 using Todo.Services.TodoItems.Specifications;
 

@@ -4,10 +4,11 @@ using Data.Repositories;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Events.TodoItems.CancelItem;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.TodoItems.Events.CancelItem;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Events.CancelItem;
 
 namespace Todo.Services.TodoItems.Commands.CancelItem
 {

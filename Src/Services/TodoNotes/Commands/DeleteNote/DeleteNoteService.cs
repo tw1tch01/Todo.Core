@@ -4,9 +4,9 @@ using Data.Repositories;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Events.TodoNotes.DeleteNote;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.TodoNotes.Events.DeleteNote;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoNotes.Commands.DeleteNote

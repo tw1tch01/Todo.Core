@@ -6,9 +6,9 @@ using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Events.TodoNotes.UpdateNote;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.TodoNotes.Events.UpdateNote;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoNotes.Specifications;
 
 namespace Todo.Services.TodoNotes.Commands.UpdateNote

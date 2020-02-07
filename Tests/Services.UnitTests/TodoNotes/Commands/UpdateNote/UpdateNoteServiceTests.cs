@@ -6,8 +6,8 @@ using NUnit.Framework;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoNotes.Commands.UpdateNote;
 using Todo.Services.TodoNotes.Specifications;
 

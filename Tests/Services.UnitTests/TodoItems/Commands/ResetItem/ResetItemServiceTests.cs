@@ -7,8 +7,8 @@ using NUnit.Framework;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.ResetItem;
 using Todo.Services.TodoItems.Specifications;
 

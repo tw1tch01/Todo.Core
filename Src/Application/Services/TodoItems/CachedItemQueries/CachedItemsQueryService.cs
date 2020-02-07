@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Data.Common;
-using Todo.Application.Common;
 using Todo.Application.Services.TodoItems.ItemQueries;
 using Todo.DomainModels.TodoItems;
+using Todo.Services.Cache;
 
 namespace Todo.Application.Services.TodoItems.CachedItemQueries
 {

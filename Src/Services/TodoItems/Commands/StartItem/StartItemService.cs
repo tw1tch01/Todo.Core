@@ -4,9 +4,9 @@ using Data.Repositories;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Events.TodoItems.StartItem;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.TodoItems.Events.StartItem;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.TodoItems.Commands.StartItem

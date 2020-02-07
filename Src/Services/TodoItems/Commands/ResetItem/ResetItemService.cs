@@ -4,9 +4,9 @@ using Data.Repositories;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.External.Events.TodoItems.ResetItem;
-using Todo.Services.External.Notifications;
-using Todo.Services.External.Workflows;
+using Todo.Services.TodoItems.Events.ResetItem;
+using Todo.Services.Notifications;
+using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Specifications;
 
 namespace Todo.Services.TodoItems.Commands.ResetItem

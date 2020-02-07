@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Todo.Application.Common;
 using Todo.Application.Services.TodoItems.ItemCommands;
 using Todo.DomainModels.TodoItems;
+using Todo.Services.Cache;
 
 namespace Todo.Application.Services.TodoItems.CachedItemCommands
 {
