@@ -6,12 +6,11 @@ using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
 using Todo.Services.Common;
 using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoNotes.Events.CreateNote;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Specifications;
-using Todo.Services.TodoNotes.Specifications;
 using Todo.Services.TodoNotes.Events.CreateNote;
+using Todo.Services.TodoNotes.Specifications;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoNotes.Commands.CreateNote
 {

@@ -5,8 +5,8 @@
     <AssemblyName>Todo.Application</AssemblyName>
     <RootNamespace>Todo.Application</RootNamespace>
     <Authors>Robert Breedt</Authors>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <Version>1.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
