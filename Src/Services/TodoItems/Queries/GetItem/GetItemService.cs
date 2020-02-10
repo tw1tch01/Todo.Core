@@ -29,13 +29,11 @@ namespace Todo.Services.TodoItems.Queries.GetItem
 
             if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
 
-            var getChildItemsTask = _repository.ListAsync(new GetItemsByParentId(item.ItemId));
-            var getNotesTask = _repository.ListAsync(new GetNotesByItemId(item.ItemId).Include(n => n.Replies));
+            var getChildItems = await _repository.ListAsync(new GetItemsByParentId(item.ItemId));
+            var getNotes = await _repository.ListAsync(new GetNotesByItemId(item.ItemId).Include(n => n.Replies));
 
-            await Task.WhenAll(getChildItemsTask, getNotesTask);
-
-            item.ChildItems.ToList().AddRange(await getChildItemsTask);
-            item.Notes.ToList().AddRange(await getNotesTask);
+            item.ChildItems.ToList().AddRange(getChildItems);
+            item.Notes.ToList().AddRange(getNotes);
 
             var details = _mapper.Map<TodoItemDetails>(item);
 
