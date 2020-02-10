@@ -26,11 +26,10 @@ namespace Todo.Factories
             };
         }
 
-        public static CreateNoteDto GenerateCreateNoteDto(Guid itemId)
+        public static CreateNoteDto GenerateCreateNoteDto()
         {
             return new CreateNoteDto
             {
-                ItemId = itemId,
                 Comment = _fixture.Create<string>()
             };
         }
