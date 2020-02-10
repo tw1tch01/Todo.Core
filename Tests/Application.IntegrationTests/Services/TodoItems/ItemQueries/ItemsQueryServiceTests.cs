@@ -31,28 +31,14 @@ namespace Todo.Application.IntegrationTests.Services.TodoItems.ItemQueries
         public async Task GetItem_IntegrationTest()
         {
             var item = TodoItemFactory.GenerateItemWithChildren(3);
-            var item2 = TodoItemFactory.GenerateItemWithChildren(3);
+            var note = TodoNoteFactory.GenerateNote(item.ItemId);
+            var reply = TodoNoteFactory.GenerateNote(item.ItemId);
+            note.Replies.Add(reply);
+            item.Notes.Add(note);
             _memoryContext.Add(item);
-            _memoryContext.Add(item2);
             _memoryContext.SaveChanges();
 
-            _queryService = new ItemsQueryService
-            (
-                _provider.GetRequiredService<IGetItemService>(),
-                _provider.GetRequiredService<IChildItemsLookupService>(),
-                _provider.GetRequiredService<IParentItemsLookupService>()
-            );
-
             var _ = await _queryService.GetItem(item.ItemId);
-
-            _queryService = new ItemsQueryService
-            (
-                _provider.GetRequiredService<IGetItemService>(),
-                _provider.GetRequiredService<IChildItemsLookupService>(),
-                _provider.GetRequiredService<IParentItemsLookupService>()
-            );
-
-            _ = await _queryService.GetItem(item2.ItemId);
 
             Assert.Pass();
         }

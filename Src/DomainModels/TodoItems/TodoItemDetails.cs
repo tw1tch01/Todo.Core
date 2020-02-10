@@ -32,11 +32,11 @@ namespace Todo.DomainModels.TodoItems
             profile.CreateMap<TodoItem, TodoItemDetails>()
                 .ForMember(i => i.Created, o => o.MapFrom(i => i))
                 .ForMember(i => i.Modified, o => o.MapFrom(i => i))
-                .ForMember(i => i.Status, o => o.MapFrom(item => item.GetStatus()))
-                .ForMember(m => m.Importance, o => o.MapFrom(m => m.ImportanceLevel))
-                .ForMember(m => m.Priority, o => o.MapFrom(m => m.PriorityLevel))
-                .ForMember(i => i.ChildItems, o => o.MapFrom(item => item.ChildItems))
-                .ForMember(i => i.Notes, o => o.MapFrom(item => item.Notes));
+                .ForMember(i => i.Status, o => o.MapFrom(i => i.GetStatus()))
+                .ForMember(i => i.Importance, o => o.MapFrom(i => i.ImportanceLevel))
+                .ForMember(i => i.Priority, o => o.MapFrom(i => i.PriorityLevel))
+                .ForMember(i => i.ChildItems, o => o.MapFrom(i => i.ChildItems))
+                .ForMember(i => i.Notes, o => o.MapFrom(i => i.Notes));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Todo.Domain.Entities;
 using Todo.DomainModels.Common;
@@ -8,7 +9,8 @@ namespace Todo.DomainModels.TodoNotes
 {
     public class NoteDetails : IMaps<TodoItemNote>
     {
-        public int NoteId { get; set; }
+        public Guid NoteId { get; set; }
+        public Guid? ParentNoteId { get; set; }
         public CreatedAuditInfo Created { get; set; }
         public ModifiedAuditInfo Modified { get; set; }
         public string Comment { get; set; }
