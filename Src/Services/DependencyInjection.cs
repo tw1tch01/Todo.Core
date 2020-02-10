@@ -34,11 +34,8 @@ namespace Todo.Services
 
             services.AddDataDependencies();
 
-            services.AddAutoMapper(assembly);
-            services.AddScoped(opt => new MapperConfiguration(config =>
-            {
-                config.AddProfile<MappingProfile>();
-            }).CreateMapper());
+            AddAutomapper(services, assembly);
+            AddValidation(services, assembly);
 
             services.AddMediatR(assembly);
 
@@ -47,11 +44,20 @@ namespace Todo.Services
             return services;
         }
 
-        public static IServiceCollection AddValidation(this IServiceCollection services)
+        private static IServiceCollection AddValidation(this IServiceCollection services, Assembly assembly)
         {
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(assembly);
 
             return services;
+        }
+
+        private static void AddAutomapper(IServiceCollection services, Assembly assembly)
+        {
+            services.AddAutoMapper(assembly);
+            services.AddSingleton(opt => new MapperConfiguration(config =>
+            {
+                config.AddProfile<MappingProfile>();
+            }).CreateMapper());
         }
 
         private static IServiceCollection AddServicesImplementations(IServiceCollection services)

@@ -64,6 +64,7 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             var reply = _mapper.Map<TodoItemNote>(childNoteDto);
 
+            reply.ItemId = parentNote.ItemId;
             parentNote.Replies.Add(reply);
             await _repository.SaveAsync();
 

@@ -5,12 +5,12 @@
     <AssemblyName>Todo.Services</AssemblyName>
     <RootNamespace>Todo.Services</RootNamespace>
     <Authors>Robert Breedt</Authors>
-    <Version>1.4.0</Version>
+    <Version>1.4.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Data" Version="1.5.1" />
+    <PackageReference Include="Data" Version="1.5.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="8.6.1" />
     <PackageReference Include="MediatR" Version="8.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />

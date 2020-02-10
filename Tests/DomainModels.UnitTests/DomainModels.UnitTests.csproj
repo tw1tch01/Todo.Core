@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Factories\Factories.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TodoNotes\" />
-  </ItemGroup>
-
 </Project>

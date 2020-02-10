@@ -33,7 +33,7 @@ namespace Todo.Application.IntegrationTests.Services.TodoNotes.NoteCommands
             _memoryContext.Add(item);
             _memoryContext.SaveChanges();
 
-            var noteDto = TodoNoteFactory.GenerateCreateNoteDto(item.ItemId);
+            var noteDto = TodoNoteFactory.GenerateCreateNoteDto();
 
             var _ = await _commandService.CreateNote(item.ItemId, noteDto);
 
@@ -63,7 +63,7 @@ namespace Todo.Application.IntegrationTests.Services.TodoNotes.NoteCommands
             _memoryContext.Add(note);
             _memoryContext.SaveChanges();
 
-            var noteDto = TodoNoteFactory.GenerateCreateNoteDto(item.ItemId);
+            var noteDto = TodoNoteFactory.GenerateCreateNoteDto();
 
             var _ = await _commandService.ReplyOnNote(note.NoteId, noteDto);
 
