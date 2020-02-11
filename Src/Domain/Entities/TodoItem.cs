@@ -37,12 +37,17 @@ namespace Todo.Domain.Entities
         #region Navigational Properties
 
         public TodoItem ParentItem { get; set; }
-        public ICollection<TodoItem> ChildItems { get; }
-        public ICollection<TodoItemNote> Notes { get; }
+        public ICollection<TodoItem> ChildItems { get; private set; }
+        public ICollection<TodoItemNote> Notes { get; private set; }
 
         #endregion Navigational Properties
 
         #region Methods
+
+        public virtual void GroupNotesWithReplies()
+        {
+            Notes = TodoItemNote.GroupNotesWithReplies(Notes);
+        }
 
         public virtual TodoItemStatus GetStatus()
         {

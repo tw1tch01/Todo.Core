@@ -5,6 +5,7 @@
     <AssemblyName>Todo.Domain</AssemblyName>
     <RootNamespace>Todo.Domain</RootNamespace>
     <Authors>Robert Breedt</Authors>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

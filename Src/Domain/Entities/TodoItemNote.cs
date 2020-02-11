@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Todo.Domain.Common;
 
 namespace Todo.Domain.Entities
@@ -20,8 +21,25 @@ namespace Todo.Domain.Entities
 
         public TodoItem Item { get; set; }
         public TodoItemNote ParentNote { get; set; }
-        public ICollection<TodoItemNote> Replies { get; }
+        public ICollection<TodoItemNote> Replies { get; private set; }
 
         #endregion Navigational Properties
+
+        #region Methods
+
+        public static ICollection<TodoItemNote> GroupNotesWithReplies(ICollection<TodoItemNote> notes)
+        {
+            var parentNotes = new List<TodoItemNote>();
+
+            foreach (var note in notes.Where(n => !n.ParentNoteId.HasValue))
+            {
+                note.Replies = notes.Where(n => n.ParentNoteId == note.NoteId).ToList();
+                parentNotes.Add(note);
+            }
+
+            return parentNotes;
+        }
+
+        #endregion Methods
     }
 }

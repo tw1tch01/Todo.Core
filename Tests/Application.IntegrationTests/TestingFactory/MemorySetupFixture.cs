@@ -1,5 +1,4 @@
 ﻿using System;
-using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -27,14 +26,14 @@ namespace Todo.Application.IntegrationTests.TestingFactory
         {
             var services = new ServiceCollection();
 
-            //services.AddDbContext<MemoryContext>(opt => opt
-            //    .UseMySql($"Server=localhost;Database=todoapplication;User=root;Password=root;",
-            //    contextOptions =>
-            //    {
-            //        contextOptions.ServerVersion(new Version(8, 0, 16), ServerType.MySql);
-            //        contextOptions.MigrationsAssembly("Todo.Persistence.MySQL");
-            //    }), ServiceLifetime.Transient);
-            services.AddDbContext<MemoryContext>(opt => opt.UseInMemoryDatabase(Guid.NewGuid().ToString()), ServiceLifetime.Transient);
+            services.AddDbContext<MemoryContext>(opt => opt
+                .UseMySql($"Server=localhost;Database=todocore;User=root;Password=root;",
+                contextOptions =>
+                {
+                    contextOptions.ServerVersion(new Version(8, 0, 16), ServerType.MySql);
+                    contextOptions.MigrationsAssembly("Todo.Persistence.MySQL");
+                }), ServiceLifetime.Transient);
+            //services.AddDbContext<MemoryContext>(opt => opt.UseInMemoryDatabase(Guid.NewGuid().ToString()), ServiceLifetime.Transient);
             services.AddTransient<ITodoContext, MemoryContext>();
             services.AddApplication();
 

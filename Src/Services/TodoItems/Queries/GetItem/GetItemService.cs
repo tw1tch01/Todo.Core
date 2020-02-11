@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
@@ -32,8 +31,7 @@ namespace Todo.Services.TodoItems.Queries.GetItem
             var getChildItems = await _repository.ListAsync(new GetItemsByParentId(item.ItemId));
             var getNotes = await _repository.ListAsync(new GetNotesByItemId(item.ItemId).Include(n => n.Replies));
 
-            item.ChildItems.ToList().AddRange(getChildItems);
-            item.Notes.ToList().AddRange(getNotes);
+            item.GroupNotesWithReplies();
 
             var details = _mapper.Map<TodoItemDetails>(item);
 
