@@ -46,7 +46,7 @@ namespace Todo.Domain.Entities
 
         public virtual void GroupNotesWithReplies()
         {
-            Notes = TodoItemNote.GroupNotesWithReplies(Notes);
+            Notes = TodoItemNote.GetParentNotes(Notes);
         }
 
         public virtual TodoItemStatus GetStatus()

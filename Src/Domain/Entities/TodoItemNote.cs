@@ -27,17 +27,9 @@ namespace Todo.Domain.Entities
 
         #region Methods
 
-        public static ICollection<TodoItemNote> GroupNotesWithReplies(ICollection<TodoItemNote> notes)
+        public static ICollection<TodoItemNote> GetParentNotes(ICollection<TodoItemNote> notes)
         {
-            var parentNotes = new List<TodoItemNote>();
-
-            foreach (var note in notes.Where(n => !n.ParentNoteId.HasValue))
-            {
-                note.Replies = notes.Where(n => n.ParentNoteId == note.NoteId).ToList();
-                parentNotes.Add(note);
-            }
-
-            return parentNotes;
+            return notes.Where(n => !n.ParentNoteId.HasValue).ToList();
         }
 
         #endregion Methods

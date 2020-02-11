@@ -31,10 +31,16 @@ namespace Todo.Application.IntegrationTests.Services.TodoItems.ItemQueries
         public async Task GetItem_IntegrationTest()
         {
             var item = TodoItemFactory.GenerateItemWithChildren(3);
-            //var note = TodoNoteFactory.GenerateNote(item.ItemId);
-            //var reply = TodoNoteFactory.GenerateNote(item.ItemId);
-            //note.Replies.Add(reply);
-            //item.Notes.Add(note);
+            var note = TodoNoteFactory.GenerateNote(item.ItemId);
+            var note2 = TodoNoteFactory.GenerateNote(item.ItemId);
+            var reply = TodoNoteFactory.GenerateNote(item.ItemId);
+            var reply2 = TodoNoteFactory.GenerateNote(item.ItemId);
+            var reply3 = TodoNoteFactory.GenerateNote(item.ItemId);
+            reply.Replies.Add(reply3);
+            reply.Replies.Add(reply2);
+            note.Replies.Add(reply);
+            item.Notes.Add(note2);
+            item.Notes.Add(note);
             _memoryContext.Add(item);
             _memoryContext.SaveChanges();
 
