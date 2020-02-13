@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
 using Todo.Application.Services.TodoItems.ItemQueries;
+using Todo.Domain.Enums;
 using Todo.DomainModels.TodoItems;
 using Todo.Factories;
 using Todo.Services.TodoItems.Queries.GetItem;
@@ -64,7 +65,10 @@ namespace Todo.Application.IntegrationTests.Services.TodoItems.ItemQueries
         [Test]
         public async Task LookupParentItems_IntegrationTest()
         {
-            var parameters = new TodoItemLookupParams();
+            var parameters = new TodoItemLookupParams
+            {
+                FilterByStatus = TodoItemStatus.Completed
+            };
 
             var _ = await _queryService.LookupParentItems(parameters);
 

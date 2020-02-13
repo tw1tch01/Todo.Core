@@ -17,7 +17,32 @@ namespace Todo.Services.TodoItems.Specifications
 
         public override Expression<Func<TodoItem, bool>> AsExpression()
         {
-            return item => item.GetStatus().ToString().Equals(_status.ToString());
+            switch (_status)
+            {
+                case TodoItemStatus.Completed:
+                    return item => item.CompletedOn.HasValue;
+
+                case TodoItemStatus.Cancelled:
+                    return item => item.CancelledOn.HasValue;
+
+                case TodoItemStatus.InProgress:
+                    return item => !(item.CompletedOn.HasValue ||
+                                     item.CancelledOn.HasValue ||
+                                     item.DueDate < DateTime.UtcNow) &&
+                                    item.StartedOn.HasValue;
+
+                case TodoItemStatus.Overdue:
+                    return item => !(item.CompletedOn.HasValue ||
+                                     item.CancelledOn.HasValue) &&
+                                    item.DueDate < DateTime.UtcNow;
+
+                case TodoItemStatus.Pending:
+                default:
+                    return item => !(item.CompletedOn.HasValue ||
+                                     item.CancelledOn.HasValue ||
+                                     item.DueDate < DateTime.UtcNow ||
+                                     item.StartedOn.HasValue);
+            }
         }
     }
 }
