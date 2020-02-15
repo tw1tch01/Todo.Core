@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
@@ -65,9 +66,14 @@ namespace Todo.Application.IntegrationTests.Services.TodoItems.ItemQueries
         [Test]
         public async Task LookupParentItems_IntegrationTest()
         {
+            var item = TodoItemFactory.GenerateItem();
+            item.CancelledOn = null;
+            item.CompletedOn = null;
+            item.StartedOn = null;
+            item.DueDate = null;
             var parameters = new TodoItemLookupParams
             {
-                FilterByStatus = TodoItemStatus.Completed
+                FilterByStatus = TodoItemStatus.Pending
             };
 
             var _ = await _queryService.LookupParentItems(parameters);
@@ -78,9 +84,20 @@ namespace Todo.Application.IntegrationTests.Services.TodoItems.ItemQueries
         [Test]
         public async Task PagedLookupParentItems_IntegrationTest()
         {
+            var item = TodoItemFactory.GenerateItem();
+            item.CancelledOn = null;
+            item.CompletedOn = null;
+            item.StartedOn = DateTime.UtcNow;
+            item.DueDate = null;
+
+            _memoryContext.Add(item);
+            _memoryContext.SaveChanges();
+
             var page = 0;
             var pageSize = 10;
-            var parameters = new TodoItemLookupParams();
+            var parameters = new TodoItemLookupParams
+            {
+            };
 
             var _ = await _queryService.PagedLookupParentItems(page, pageSize, parameters);
 

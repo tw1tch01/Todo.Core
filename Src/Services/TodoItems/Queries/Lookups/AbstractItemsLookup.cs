@@ -104,13 +104,19 @@ namespace Todo.Services.TodoItems.Queries.Lookups
                     _specification.OrderByDescending(item => item.DueDate);
                     break;
 
-                case SortTodoItemsBy.StatusAsc:
-                    _specification.OrderBy(item => item.GetStatus());
-                    break;
+                //case SortTodoItemsBy.StatusAsc:
+                //    _specification.OrderBy(item => !item.CancelledOn.HasValue)
+                //                  .OrderBy(item => !item.CompletedOn.HasValue)
+                //                  .OrderBy(item => !item.StartedOn.HasValue)
+                //                  .OrderBy(item => !(item.DueDate.HasValue && item.DueDate < DateTime.UtcNow));
+                //    break;
 
-                case SortTodoItemsBy.StatusDesc:
-                    _specification.OrderByDescending(item => item.GetStatus());
-                    break;
+                //case SortTodoItemsBy.StatusDesc:
+                //    _specification.OrderByDescending(item => !item.CancelledOn.HasValue)
+                //                  .OrderByDescending(item => !item.CompletedOn.HasValue)
+                //                  .OrderByDescending(item => !item.StartedOn.HasValue)
+                //                  .OrderByDescending(item => !(item.DueDate.HasValue && item.DueDate < DateTime.UtcNow));
+                //    break;
 
                 case SortTodoItemsBy.ImportanceAsc:
                     _specification.OrderBy(item => item.ImportanceLevel);
