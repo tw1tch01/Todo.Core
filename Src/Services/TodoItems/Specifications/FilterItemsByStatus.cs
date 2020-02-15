@@ -26,22 +26,22 @@ namespace Todo.Services.TodoItems.Specifications
                     return item => item.CancelledOn.HasValue;
 
                 case TodoItemStatus.InProgress:
-                    return item => !(item.CompletedOn.HasValue ||
-                                     item.CancelledOn.HasValue ||
-                                     item.DueDate < DateTime.UtcNow) &&
-                                    item.StartedOn.HasValue;
+                    return item => !item.CompletedOn.HasValue &&
+                                   !item.CancelledOn.HasValue &&
+                                   !(item.DueDate < DateTime.UtcNow) &&
+                                   item.StartedOn.HasValue;
 
                 case TodoItemStatus.Overdue:
-                    return item => !(item.CompletedOn.HasValue ||
-                                     item.CancelledOn.HasValue) &&
-                                    item.DueDate < DateTime.UtcNow;
+                    return item => !item.CompletedOn.HasValue &&
+                                   !item.CancelledOn.HasValue &&
+                                   item.DueDate < DateTime.UtcNow;
 
                 case TodoItemStatus.Pending:
                 default:
-                    return item => !(item.CompletedOn.HasValue ||
-                                     item.CancelledOn.HasValue ||
-                                     item.DueDate < DateTime.UtcNow ||
-                                     item.StartedOn.HasValue);
+                    return item => !item.CompletedOn.HasValue &&
+                                   !item.CancelledOn.HasValue &&
+                                   !(item.DueDate < DateTime.UtcNow) &&
+                                   !item.StartedOn.HasValue;
             }
         }
     }
