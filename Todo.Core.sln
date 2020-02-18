@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{736A5A00-DA94-4F74-9F37-1A6BA6EE35FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{C74D3C6D-C380-4A35-A934-8F6D27D09261}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\README.md = Docs\README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A8A5674A-AAAB-42CE-ADCA-C12FF1781005}"
 EndProject
@@ -23,9 +26,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Factories", "Tests\Factories\Factories.csproj", "{F4BE8189-B994-4399-B5DF-42FEBEE4B48F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Src\Services\Services.csproj", "{5BA7C024-89C7-472F-B7EC-49470B6C9F8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Src\Services\Services.csproj", "{5BA7C024-89C7-472F-B7EC-49470B6C9F8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.UnitTests", "Tests\Services.UnitTests\Services.UnitTests.csproj", "{CB4458A2-757F-46A3-B687-2013E4C29194}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.UnitTests", "Tests\Services.UnitTests\Services.UnitTests.csproj", "{CB4458A2-757F-46A3-B687-2013E4C29194}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

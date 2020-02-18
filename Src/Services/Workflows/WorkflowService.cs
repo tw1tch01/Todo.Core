@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using Todo.Services.Workflows;
 
 namespace Todo.Services.Workflows
 {
