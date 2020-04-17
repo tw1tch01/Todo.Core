@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
-using Todo.Application.Services.TodoItems.ItemCommands;
+using Todo.Application.Services.TodoItems;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoItems;
 using Todo.Factories;

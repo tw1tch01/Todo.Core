@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using AutoMapper;
 using Data.Extensions;
-using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.DomainModels.Mappings;
@@ -35,18 +34,10 @@ namespace Todo.Services
             services.AddDataDependencies();
 
             AddAutomapper(services, assembly);
-            AddValidation(services, assembly);
 
             services.AddMediatR(assembly);
 
             AddServicesImplementations(services);
-
-            return services;
-        }
-
-        private static IServiceCollection AddValidation(this IServiceCollection services, Assembly assembly)
-        {
-            services.AddValidatorsFromAssembly(assembly);
 
             return services;
         }

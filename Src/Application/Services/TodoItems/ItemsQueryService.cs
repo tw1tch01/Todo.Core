@@ -7,9 +7,9 @@ using Todo.Services.TodoItems.Queries.GetItem;
 using Todo.Services.TodoItems.Queries.Lookups.ChildItems;
 using Todo.Services.TodoItems.Queries.Lookups.ParentItems;
 
-namespace Todo.Application.Services.TodoItems.ItemQueries
+namespace Todo.Application.Services.TodoItems
 {
-    public class ItemsQueryService : IItemsQueryService
+    public class ItemsQueryService : IGetItemService, IChildItemsLookupService, IParentItemsLookupService
     {
         private readonly IGetItemService _getItemService;
         private readonly IChildItemsLookupService _childItemsLookupService;
@@ -27,24 +27,12 @@ namespace Todo.Application.Services.TodoItems.ItemQueries
             _parentItemsLookupService = parentItemsLookupService;
         }
 
-        public async Task<TodoItemDetails> GetItem(Guid itemId)
-        {
-            return await _getItemService.GetItem(itemId);
-        }
+        public Task<TodoItemDetails> GetItem(Guid itemId) => _getItemService.GetItem(itemId);
 
-        public async Task<ICollection<TodoItemLookup>> LookupChildItems(Guid parentId)
-        {
-            return await _childItemsLookupService.LookupChildItems(parentId);
-        }
+        public Task<ICollection<TodoItemLookup>> LookupChildItems(Guid parentId) => _childItemsLookupService.LookupChildItems(parentId);
 
-        public async Task<ICollection<ParentTodoItemLookup>> LookupParentItems(TodoItemLookupParams parameters)
-        {
-            return await _parentItemsLookupService.LookupParentItems(parameters);
-        }
+        public Task<ICollection<ParentTodoItemLookup>> LookupParentItems(TodoItemLookupParams parameters) => _parentItemsLookupService.LookupParentItems(parameters);
 
-        public async Task<PagedCollection<ParentTodoItemLookup>> PagedLookupParentItems(int page, int pageSize, TodoItemLookupParams parameters)
-        {
-            return await _parentItemsLookupService.PagedLookupParentItems(page, pageSize, parameters);
-        }
+        public Task<PagedCollection<ParentTodoItemLookup>> PagedLookupParentItems(int page, int pageSize, TodoItemLookupParams parameters) => _parentItemsLookupService.PagedLookupParentItems(page, pageSize, parameters);
     }
 }

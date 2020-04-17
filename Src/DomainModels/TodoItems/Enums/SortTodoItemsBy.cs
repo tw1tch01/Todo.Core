@@ -6,8 +6,6 @@
         NameDesc,
         DueDateAsc,
         DueDateDesc,
-        //StatusAsc,
-        //StatusDesc,
         ImportanceAsc,
         ImportanceDesc,
         PriorityAsc,

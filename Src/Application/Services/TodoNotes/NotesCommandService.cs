@@ -5,9 +5,9 @@ using Todo.Services.TodoNotes.Commands.CreateNote;
 using Todo.Services.TodoNotes.Commands.DeleteNote;
 using Todo.Services.TodoNotes.Commands.UpdateNote;
 
-namespace Todo.Application.Services.TodoNotes.NoteCommands
+namespace Todo.Application.Services.TodoNotes
 {
-    public class NotesCommandService : INotesCommandService
+    public class NotesCommandService : ICreateNoteService, IDeleteNoteService, IUpdateNoteService
     {
         private readonly ICreateNoteService _createNoteService;
         private readonly IDeleteNoteService _deleteNoteService;
@@ -25,24 +25,12 @@ namespace Todo.Application.Services.TodoNotes.NoteCommands
             _updateNoteService = updateNoteService;
         }
 
-        public async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
-        {
-            return await _createNoteService.CreateNote(itemId, noteDto);
-        }
+        public Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto) => _createNoteService.CreateNote(itemId, noteDto);
 
-        public async Task DeleteNote(Guid noteId)
-        {
-            await _deleteNoteService.DeleteNote(noteId);
-        }
+        public Task DeleteNote(Guid noteId) => _deleteNoteService.DeleteNote(noteId);
 
-        public async Task<Guid> ReplyOnNote(Guid parentNoteId, CreateNoteDto noteDto)
-        {
-            return await _createNoteService.ReplyOnNote(parentNoteId, noteDto);
-        }
+        public Task<Guid> ReplyOnNote(Guid parentNoteId, CreateNoteDto noteDto) => _createNoteService.ReplyOnNote(parentNoteId, noteDto);
 
-        public async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
-        {
-            await _updateNoteService.UpdateNote(noteId, noteDto);
-        }
+        public Task UpdateNote(Guid noteId, UpdateNoteDto noteDto) => _updateNoteService.UpdateNote(noteId, noteDto);
     }
 }

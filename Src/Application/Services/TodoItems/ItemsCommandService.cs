@@ -9,9 +9,9 @@ using Todo.Services.TodoItems.Commands.ResetItem;
 using Todo.Services.TodoItems.Commands.StartItem;
 using Todo.Services.TodoItems.Commands.UpdateItem;
 
-namespace Todo.Application.Services.TodoItems.ItemCommands
+namespace Todo.Application.Services.TodoItems
 {
-    public class ItemsCommandService : IItemsCommandService
+    public class ItemsCommandService : ICreateItemService, IDeleteItemService, IUpdateItemService, ICancelItemService, ICompleteItemService, IResetItemService, IStartItemService
     {
         private readonly ICreateItemService _createItemService;
         private readonly IDeleteItemService _deleteItemService;
@@ -41,44 +41,20 @@ namespace Todo.Application.Services.TodoItems.ItemCommands
             _startItemService = startItemService;
         }
 
-        public async Task<Guid> AddChildItem(Guid parentId, CreateItemDto childItemDto)
-        {
-            return await _createItemService.AddChildItem(parentId, childItemDto);
-        }
+        public Task<Guid> AddChildItem(Guid parentId, CreateItemDto childItemDto) => _createItemService.AddChildItem(parentId, childItemDto);
 
-        public async Task CancelItem(Guid itemId)
-        {
-            await _cancelItemService.CancelItem(itemId);
-        }
+        public Task CancelItem(Guid itemId) => _cancelItemService.CancelItem(itemId);
 
-        public async Task CompleteItem(Guid itemId)
-        {
-            await _completeItemService.CompleteItem(itemId);
-        }
+        public Task CompleteItem(Guid itemId) => _completeItemService.CompleteItem(itemId);
 
-        public async Task<Guid> CreateItem(CreateItemDto itemDto)
-        {
-            return await _createItemService.CreateItem(itemDto);
-        }
+        public Task<Guid> CreateItem(CreateItemDto itemDto) => _createItemService.CreateItem(itemDto);
 
-        public async Task DeleteItem(Guid itemId)
-        {
-            await _deleteItemService.DeleteItem(itemId);
-        }
+        public Task DeleteItem(Guid itemId) => _deleteItemService.DeleteItem(itemId);
 
-        public async Task ResetItem(Guid itemId)
-        {
-            await _resetItemService.ResetItem(itemId);
-        }
+        public Task ResetItem(Guid itemId) => _resetItemService.ResetItem(itemId);
 
-        public async Task StartItem(Guid itemId)
-        {
-            await _startItemService.StartItem(itemId);
-        }
+        public Task StartItem(Guid itemId) => _startItemService.StartItem(itemId);
 
-        public async Task UpdateItem(Guid itemId, UpdateItemDto itemDto)
-        {
-            await _updateItemService.UpdateItem(itemId, itemDto);
-        }
+        public Task UpdateItem(Guid itemId, UpdateItemDto itemDto) => _updateItemService.UpdateItem(itemId, itemDto);
     }
 }

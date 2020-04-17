@@ -18,7 +18,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
         {
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -45,7 +45,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var createdAfter = DateTime.UtcNow;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={createdAfter}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -72,7 +72,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var createdBefore = DateTime.UtcNow;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={createdBefore}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -99,7 +99,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var searchBy = _fixture.Create<string>();
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={searchBy}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{searchBy}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -126,7 +126,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var itemIds = new List<Guid> { Guid.NewGuid() };
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={string.Join(',', itemIds)}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -153,7 +153,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var status = TodoItemStatus.Cancelled;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={status}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -180,7 +180,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var importance = ImportanceLevel.Critical;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={importance}&" +
@@ -207,7 +207,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var priority = PriorityLevel.Medium;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +
@@ -234,7 +234,7 @@ namespace Todo.DomainModels.UnitTests.TodoItems
             var sortBy = SortTodoItemsBy.NameAsc;
             var expected = $"{nameof(TodoItemLookupParams.CreatedAfter)}={null}&" +
                            $"{nameof(TodoItemLookupParams.CreatedBefore)}={null}&" +
-                           $"{nameof(TodoItemLookupParams.SearchBy)}={null}&" +
+                           $"{nameof(TodoItemLookupParams.SearchBy)}=\"{null}\"&" +
                            $"{nameof(TodoItemLookupParams.ItemIds)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByStatus)}={null}&" +
                            $"{nameof(TodoItemLookupParams.FilterByImportance)}={null}&" +

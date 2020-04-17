@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
-using Todo.Application.Services.TodoItems.ItemQueries;
+using Todo.Application.Services.TodoItems;
 using Todo.Domain.Enums;
 using Todo.DomainModels.TodoItems;
 using Todo.Factories;

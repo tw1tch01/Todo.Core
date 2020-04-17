@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Todo.Application.IntegrationTests.TestingFactory;
-using Todo.Application.Services.TodoNotes.NoteCommands;
+using Todo.Application.Services.TodoNotes;
 using Todo.Factories;
 using Todo.Services.TodoNotes.Commands.CreateNote;
 using Todo.Services.TodoNotes.Commands.DeleteNote;

@@ -20,7 +20,7 @@ namespace Todo.DomainModels.TodoItems
         {
             return $"{nameof(CreatedAfter)}={CreatedAfter}&" +
                    $"{nameof(CreatedBefore)}={CreatedBefore}&" +
-                   $"{nameof(SearchBy)}={SearchBy}&" +
+                   $"{nameof(SearchBy)}=\"{SearchBy}\"&" +
                    $"{nameof(ItemIds)}={string.Join(',', ItemIds ?? new List<Guid>())}&" +
                    $"{nameof(FilterByStatus)}={FilterByStatus}&" +
                    $"{nameof(FilterByImportance)}={FilterByImportance}&" +
