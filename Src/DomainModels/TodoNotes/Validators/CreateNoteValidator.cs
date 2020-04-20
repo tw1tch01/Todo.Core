@@ -7,6 +7,7 @@ namespace Todo.DomainModels.TodoNotes.Validators
         public CreateNoteValidator()
         {
             RuleFor(a => a.Comment).NotEmpty();
+            RuleFor(a => a.ItemId).NotEmpty();
         }
     }
 }

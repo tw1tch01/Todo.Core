@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
 using Moq;
 using NUnit.Framework;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.TodoItems.Queries.GetItem;
 using Todo.Services.TodoItems.Specifications;
 
@@ -14,7 +14,7 @@ namespace Todo.Services.UnitTests.TodoItems.Queries.GetItem
     public class GetItemServiceTests
     {
         [Test]
-        public void GetItem_WhenItemDoesNotExist_ThrowsNotFoundException()
+        public async Task GetItem_WhenItemDoesNotExist_ReturnsNull()
         {
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockMapper = new Mock<IMapper>();
@@ -22,7 +22,9 @@ namespace Todo.Services.UnitTests.TodoItems.Queries.GetItem
 
             mockRepository.Setup(a => a.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => null);
 
-            Assert.ThrowsAsync<NotFoundException>(() => service.GetItem(Guid.NewGuid()));
+            var result = await service.GetItem(Guid.NewGuid());
+
+            Assert.IsNull(result);
         }
     }
 }

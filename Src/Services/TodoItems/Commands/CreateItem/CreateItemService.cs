@@ -2,14 +2,16 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
+using FluentValidation.Results;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoItems;
+using Todo.DomainModels.TodoItems.Validators;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Events.CreateItem;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
+using Todo.Services.TodoItems.Events.CreateItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoItems.Commands.CreateItem
 {
@@ -28,13 +30,38 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
             _workflowService = workflowService;
         }
 
-        public virtual async Task<Guid> AddChildItem(Guid parentItemId, CreateItemDto childItemDto)
+        public virtual async Task<ItemValidationResult> CreateItem(CreateItemDto itemDto)
+        {
+            if (itemDto == null) throw new ArgumentNullException(nameof(itemDto));
+
+            var validationResult = ValidateDto(itemDto);
+
+            if (!validationResult.IsValid) return ItemValidationResultFactory.InvalidDto(validationResult.Errors);
+
+            var item = _mapper.Map<TodoItem>(itemDto);
+
+            await _repository.AddAsync(item);
+            await _repository.SaveAsync();
+
+            var workflow = _workflowService.Process(new ItemCreatedProcess(item.ItemId));
+            var notification = _notificationService.Queue(new ItemCreatedNotification(item.ItemId));
+
+            await Task.WhenAll(notification, workflow);
+
+            return ItemValidationResultFactory.ItemCreated(item.ItemId, item.CreatedOn);
+        }
+
+        public virtual async Task<ItemValidationResult> AddChildItem(Guid parentItemId, CreateItemDto childItemDto)
         {
             if (childItemDto == null) throw new ArgumentNullException(nameof(childItemDto));
 
+            var validationResult = ValidateDto(childItemDto);
+
+            if (!validationResult.IsValid) return ItemValidationResultFactory.InvalidDto(validationResult.Errors);
+
             var parentItem = await _repository.GetAsync(new GetItemById(parentItemId));
 
-            if (parentItem == null) throw new NotFoundException(nameof(TodoItem), parentItemId);
+            if (parentItem == null) return ItemValidationResultFactory.ItemNotFound(parentItemId);
 
             await _workflowService.Process(new BeforeChildItemCreatedProcess(parentItem.ItemId));
 
@@ -48,24 +75,18 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             await Task.WhenAll(notification, workflow);
 
-            return childItem.ItemId;
+            return ItemValidationResultFactory.ItemCreated(childItem.ItemId, childItem.CreatedOn);
         }
 
-        public virtual async Task<Guid> CreateItem(CreateItemDto itemDto)
+        #region Private Methods
+
+        private ValidationResult ValidateDto(CreateItemDto itemDto)
         {
-            if (itemDto == null) throw new ArgumentNullException(nameof(itemDto));
-
-            var item = _mapper.Map<TodoItem>(itemDto);
-
-            await _repository.AddAsync(item);
-            await _repository.SaveAsync();
-
-            var workflow = _workflowService.Process(new ItemCreatedProcess(item.ItemId));
-            var notification = _notificationService.Queue(new ItemCreatedNotification(item.ItemId));
-
-            await Task.WhenAll(notification, workflow);
-
-            return item.ItemId;
+            var validator = ItemValidatorFactory.CreateItemValidator();
+            var result = validator.Validate(itemDto);
+            return result;
         }
+
+        #endregion Private Methods
     }
 }

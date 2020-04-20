@@ -161,6 +161,84 @@ namespace Todo.Domain.UnitTests.Entities
 
         #endregion CancelItem
 
+        #region IsCancelled
+
+        [Test]
+        public void IsCancelled_WhenCancelledOnHasValue_ReturnsTrue()
+        {
+            var item = new TodoItem
+            {
+                CancelledOn = DateTime.UtcNow
+            };
+            var result = item.IsCancelled();
+            Assert.IsTrue(result, "Should return true if CancelledOn has a value");
+        }
+
+        [Test]
+        public void IsCancelled_WhenCancelledOnIsNull_ReturnsFalse()
+        {
+            var item = new TodoItem
+            {
+                CancelledOn = null
+            };
+            var result = item.IsCancelled();
+            Assert.IsFalse(result, "Should return false if CancelledOn does not have a value");
+        }
+
+        #endregion IsCancelled
+
+        #region IsCompleted
+
+        [Test]
+        public void IsCompleted_WhenCompletedOnHasValue_ReturnsTrue()
+        {
+            var item = new TodoItem
+            {
+                CompletedOn = DateTime.UtcNow
+            };
+            var result = item.IsCompleted();
+            Assert.IsTrue(result, "Should return true if CompletedOn has a value");
+        }
+
+        [Test]
+        public void IsCompleted_WhenCompletedOnIsNull_ReturnsFalse()
+        {
+            var item = new TodoItem
+            {
+                CompletedOn = null
+            };
+            var result = item.IsCompleted();
+            Assert.IsFalse(result, "Should return false if CompletedOn does not have a value");
+        }
+
+        #endregion IsCompleted
+
+        #region HasStarted
+
+        [Test]
+        public void HasStarted_WhenStartedOnHasValue_ReturnsTrue()
+        {
+            var item = new TodoItem
+            {
+                StartedOn = DateTime.UtcNow
+            };
+            var result = item.HasStarted();
+            Assert.IsTrue(result, "Should return true if StartedOn has a value");
+        }
+
+        [Test]
+        public void HasStarted_WhenStartedOnIsNull_ReturnsFalse()
+        {
+            var item = new TodoItem
+            {
+                StartedOn = null
+            };
+            var result = item.HasStarted();
+            Assert.IsFalse(result, "Should return false if StartedOn does not have a value");
+        }
+
+        #endregion HasStarted
+
         #region CanBeCompleted
 
         [Test]

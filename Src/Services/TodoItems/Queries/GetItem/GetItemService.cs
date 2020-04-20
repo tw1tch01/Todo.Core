@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
-using Todo.Domain.Entities;
 using Todo.DomainModels.TodoItems;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.TodoItems.Specifications;
 using Todo.Services.TodoNotes.Specifications;
 
@@ -26,7 +24,7 @@ namespace Todo.Services.TodoItems.Queries.GetItem
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (item == null) return null;
 
             var getChildItems = await _repository.ListAsync(new GetItemsByParentId(item.ItemId));
             var getNotes = await _repository.ListAsync(new GetNotesByItemId(item.ItemId).Include(n => n.Replies));

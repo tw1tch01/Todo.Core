@@ -5,13 +5,12 @@ using Data.Repositories;
 using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
-using Todo.Domain.Exceptions;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.CompleteItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
 {
@@ -19,21 +18,22 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
     public class CompleteItemServiceTests
     {
         [Test]
-        public void CompleteItem_WhenNoItemFound_ThrowsNotFoundException()
+        public async Task CompleteItem_WhenNoItemFound_ReturnsItemNotFoundResult()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
-
             var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await service.CompleteItem(Guid.NewGuid()));
+            var result = await service.CompleteItem(Guid.NewGuid());
+
+            Assert.IsInstanceOf<ItemNotFoundResult>(result);
         }
 
         [Test]
-        public void CompleteItem_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
+        public async Task CompleteItem_WhenItemIsCancelled_ReturnsItemPreviouslyCancelledResult()
         {
             var item = new TodoItem
             {
@@ -44,14 +44,15 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemPreviouslyCancelledException>(async () => await service.CompleteItem(item.ItemId));
+            var result = await service.CompleteItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemPreviouslyCancelledResult>(result);
         }
 
         [Test]
-        public void CompleteItem_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
+        public async Task CompleteItem_WhenItemIsCompleted_ReturnsItemPreviouslyCompletedResult()
         {
             var item = new TodoItem
             {
@@ -63,14 +64,15 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemPreviouslyCompletedException>(async () => await service.CompleteItem(item.ItemId));
+            var result = await service.CompleteItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemPreviouslyCompletedResult>(result);
         }
 
         [Test]
-        public async Task CompleteItem_WhenItemFound_SetsCompletedOn()
+        public async Task CompleteItem_WhenItemCanBeCompleted_ReturnsItemCompletedResult()
         {
             var item = new TodoItem
             {
@@ -81,10 +83,28 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            await service.CompleteItem(item.ItemId);
+            var result = await service.CompleteItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemCompletedResult>(result);
+        }
+
+        [Test]
+        public async Task CompleteItem_WhenItemCanBeCompleted_SetsCompletedOn()
+        {
+            var item = new TodoItem
+            {
+                ItemId = Guid.NewGuid(),
+                CompletedOn = null
+            };
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+            mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
+            var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            var result = await service.CompleteItem(item.ItemId);
 
             Assert.IsNotNull(item.CompletedOn);
         }
@@ -108,7 +128,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
 
             var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            await service.CompleteItem(parentItem.ItemId);
+            var result = await service.CompleteItem(parentItem.ItemId);
 
             Assert.Multiple(() =>
             {
@@ -130,7 +150,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CompleteItem
 
             var service = new CompleteItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            await service.CompleteItem(Guid.NewGuid());
+            var result = await service.CompleteItem(Guid.NewGuid());
 
             Assert.Multiple(() =>
             {

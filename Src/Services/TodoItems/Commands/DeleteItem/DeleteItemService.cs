@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Data.Repositories;
-using Todo.Domain.Entities;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Events.DeleteItem;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
+using Todo.Services.TodoItems.Events.DeleteItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoItems.Commands.DeleteItem
 {
@@ -24,11 +23,11 @@ namespace Todo.Services.TodoItems.Commands.DeleteItem
             _workflowService = workflowService;
         }
 
-        public virtual async Task DeleteItem(Guid itemId)
+        public virtual async Task<ItemValidationResult> DeleteItem(Guid itemId)
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
 
             await _workflowService.Process(new BeforeItemDeletedProcess(itemId));
 
@@ -41,6 +40,8 @@ namespace Todo.Services.TodoItems.Commands.DeleteItem
             var notification = _notificationService.Queue(new ItemDeletedNotification(itemId, deletedOn));
 
             await Task.WhenAll(notification, workflow);
+
+            return ItemValidationResultFactory.ItemDeleted(itemId, deletedOn);
         }
     }
 }

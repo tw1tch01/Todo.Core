@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Data.Repositories;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.TodoNotes.Events.DeleteNote;
 using Todo.Services.Notifications;
 using Todo.Services.Workflows;
 using Todo.Services.TodoNotes.Specifications;
+using Todo.Services.TodoNotes.Validation;
 
 namespace Todo.Services.TodoNotes.Commands.DeleteNote
 {
@@ -24,11 +24,11 @@ namespace Todo.Services.TodoNotes.Commands.DeleteNote
             _workflowService = workflowService;
         }
 
-        public virtual async Task DeleteNote(Guid noteId)
+        public virtual async Task<NoteValidationResult> DeleteNote(Guid noteId)
         {
             var note = await _repository.GetAsync(new GetNoteById(noteId));
 
-            if (note == null) throw new NotFoundException(nameof(TodoItemNote), noteId);
+            if (note == null) return NoteValidationResultFactory.NoteNotFound(noteId);
 
             await _workflowService.Process(new BeforeNoteDeletedProcess(noteId));
 
@@ -41,6 +41,8 @@ namespace Todo.Services.TodoNotes.Commands.DeleteNote
             var notification = _notificationService.Queue(new NoteDeletedNotification(noteId, deletedOn));
 
             await Task.WhenAll(notification, workflow);
+
+            return NoteValidationResultFactory.NoteDeleted(noteId, deletedOn);
         }
     }
 }

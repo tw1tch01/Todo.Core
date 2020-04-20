@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Data.Repositories;
-using Todo.Domain.Entities;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.Notifications;
 using Todo.Services.TodoItems.Events.CancelItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
 using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoItems.Commands.CancelItem
@@ -24,11 +23,15 @@ namespace Todo.Services.TodoItems.Commands.CancelItem
             _workflowService = workflowService;
         }
 
-        public virtual async Task CancelItem(Guid itemId)
+        public virtual async Task<ItemValidationResult> CancelItem(Guid itemId)
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
+
+            if (item.IsCancelled()) return ItemValidationResultFactory.ItemPreviouslyCancelled(item.ItemId, item.CancelledOn.Value);
+
+            if (item.IsCompleted()) return ItemValidationResultFactory.ItemPreviouslyCompleted(item.ItemId, item.CompletedOn.Value);
 
             await _workflowService.Process(new BeforeItemCancelledProcess(item.ItemId));
 
@@ -40,6 +43,8 @@ namespace Todo.Services.TodoItems.Commands.CancelItem
             var notifcation = _notificationService.Queue(new ItemCancelledNotification(item.ItemId, item.CancelledOn.Value));
 
             await Task.WhenAll(notifcation, workflow);
+
+            return ItemValidationResultFactory.ItemCancelled(item.ItemId, item.CancelledOn.Value);
         }
     }
 }

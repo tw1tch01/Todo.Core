@@ -4,13 +4,12 @@ using Data.Repositories;
 using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
-using Todo.Domain.Exceptions;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.StartItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.UnitTests.TodoItems.Commands.StartItem
 {
@@ -18,21 +17,22 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.StartItem
     public class StartItemServiceTests
     {
         [Test]
-        public void StartItem_WhenNoItemFound_ThrowsNotFoundException()
+        public async Task StartItem_WhenNoItemFound_ReturnsItemNotFoundResult()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
-
             var service = new StartItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await service.StartItem(Guid.NewGuid()));
+            var result = await service.StartItem(Guid.NewGuid());
+
+            Assert.IsInstanceOf<ItemNotFoundResult>(result);
         }
 
         [Test]
-        public void StartItem_WhenItemAlreadyStarted_ThrowsItemAlreadyStartedException()
+        public async Task StartItem_WhenItemAlreadyStarted_ReturnsItemAlreadyStartedResult()
         {
             var item = new TodoItem
             {
@@ -43,14 +43,15 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.StartItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new StartItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemAlreadyStartedException>(async () => await service.StartItem(item.ItemId));
+            var result = await service.StartItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemAlreadyStartedResult>(result);
         }
 
         [Test]
-        public void StartItem_WhenItemAlreadyCancelled_ThrowsItemAlreadyCancelledException()
+        public async Task StartItem_WhenItemAlreadyCancelled_ReturnsItemPreviouslyCancelledResult()
         {
             var item = new TodoItem
             {
@@ -61,14 +62,15 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.StartItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new StartItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemPreviouslyCancelledException>(async () => await service.StartItem(item.ItemId));
+            var result = await service.StartItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemPreviouslyCancelledResult>(result);
         }
 
         [Test]
-        public void StartItem_WhenItemAlreadyCompleted_ThrowsItemAlreadyCompletedException()
+        public async Task StartItem_WhenItemAlreadyCompleted_ReturnsItemPreviouslyCompletedResult()
         {
             var item = new TodoItem
             {
@@ -79,14 +81,37 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.StartItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new StartItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemPreviouslyCompletedException>(async () => await service.StartItem(item.ItemId));
+            var result = await service.StartItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemPreviouslyCompletedResult>(result);
         }
 
         [Test]
-        public async Task StartItem_WhenItemExists_ResetsProperties()
+        public async Task StartItem_WhenCanBeStarted_ReturnsItemStartedResult()
+        {
+            var item = new TodoItem
+            {
+                ItemId = Guid.NewGuid(),
+                StartedOn = null,
+                CancelledOn = null,
+                CompletedOn = null
+            };
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+            mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
+
+            var service = new StartItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            var result = await service.StartItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemStartedResult>(result);
+        }
+
+        [Test]
+        public async Task StartItem_WhenCanBeStarted_StartsItem()
         {
             var item = new TodoItem
             {

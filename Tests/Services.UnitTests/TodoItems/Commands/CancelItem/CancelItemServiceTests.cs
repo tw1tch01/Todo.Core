@@ -5,13 +5,12 @@ using Data.Repositories;
 using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
-using Todo.Domain.Exceptions;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.CancelItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
 {
@@ -19,21 +18,22 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
     public class CancelItemServiceTests
     {
         [Test]
-        public void CancelItem_WhenNoItemFound_ThrowsNotFoundException()
+        public async Task CancelItem_WhenNoItemFound_ReturnsItemNotFoundResult()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
-
             var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await service.CancelItem(Guid.NewGuid()));
+            var result = await service.CancelItem(Guid.NewGuid());
+
+            Assert.IsInstanceOf<ItemNotFoundResult>(result);
         }
 
         [Test]
-        public void CancelItem_WhenItemIsCancelled_ThrowsItemPreviouslyCancelledException()
+        public async Task CancelItem_WhenItemIsCancelled_ReturnItemPreviouslyCancelledResult()
         {
             var item = new TodoItem
             {
@@ -44,14 +44,15 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemPreviouslyCancelledException>(async () => await service.CancelItem(item.ItemId));
+            var result = await service.CancelItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemPreviouslyCancelledResult>(result);
         }
 
         [Test]
-        public void CancelItem_WhenItemIsCompleted_ThrowsItemPreviouslyCompletedException()
+        public async Task CancelItem_WhenItemIsCompleted_ReturnsItemPreviouslyCompletedResult()
         {
             var item = new TodoItem
             {
@@ -62,14 +63,15 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
-
             var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<ItemPreviouslyCompletedException>(async () => await service.CancelItem(item.ItemId));
+            var result = await service.CancelItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemPreviouslyCompletedResult>(result);
         }
 
         [Test]
-        public async Task CancelItem_WhenItemFound_SetsCancelledOn()
+        public async Task CancelItem_WhenItemCanBeCancelled_ReturnsItemCancelledResult()
         {
             var item = new TodoItem
             {
@@ -83,7 +85,27 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
 
             var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            await service.CancelItem(item.ItemId);
+            var result = await service.CancelItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemCancelledResult>(result);
+        }
+
+        [Test]
+        public async Task CancelItem_WhenItemCanBeCancelled_SetsCancelledOn()
+        {
+            var item = new TodoItem
+            {
+                ItemId = Guid.NewGuid(),
+                CancelledOn = null
+            };
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+            mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
+
+            var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            var result = await service.CancelItem(item.ItemId);
 
             Assert.IsNotNull(item.CancelledOn);
         }
@@ -106,7 +128,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
 
             var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            await service.CancelItem(parentItem.ItemId);
+            var result = await service.CancelItem(parentItem.ItemId);
 
             Assert.Multiple(() =>
             {
@@ -128,7 +150,7 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.CancelItem
 
             var service = new CancelItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            await service.CancelItem(Guid.NewGuid());
+            var result = await service.CancelItem(Guid.NewGuid());
 
             Assert.Multiple(() =>
             {

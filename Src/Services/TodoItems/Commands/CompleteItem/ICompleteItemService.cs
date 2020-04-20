@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Todo.Services.TodoItems.Validation;
 
 namespace Todo.Services.TodoItems.Commands.CompleteItem
 {
     public interface ICompleteItemService
     {
-        Task CompleteItem(Guid itemId);
+        Task<ItemValidationResult> CompleteItem(Guid itemId);
     }
 }

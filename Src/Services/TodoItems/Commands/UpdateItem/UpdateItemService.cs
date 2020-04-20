@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
-using Todo.Domain.Entities;
+using FluentValidation.Results;
 using Todo.DomainModels.TodoItems;
+using Todo.DomainModels.TodoItems.Validators;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Events.UpdateItem;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
+using Todo.Services.TodoItems.Events.UpdateItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoItems.Commands.UpdateItem
 {
@@ -28,13 +29,17 @@ namespace Todo.Services.TodoItems.Commands.UpdateItem
             _workflowService = workflowService;
         }
 
-        public virtual async Task UpdateItem(Guid itemId, UpdateItemDto itemDto)
+        public virtual async Task<ItemValidationResult> UpdateItem(Guid itemId, UpdateItemDto itemDto)
         {
             if (itemDto == null) throw new ArgumentNullException(nameof(itemDto));
 
+            var validationResult = ValidateDto(itemDto);
+
+            if (!validationResult.IsValid) return ItemValidationResultFactory.InvalidDto(validationResult.Errors);
+
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
 
             await _workflowService.Process(new BeforeItemUpdatedProcess(item.ItemId));
 
@@ -45,6 +50,19 @@ namespace Todo.Services.TodoItems.Commands.UpdateItem
             var notification = _notificationService.Queue(new ItemUpdatedNotification(item.ItemId, item.ModifiedOn.Value));
 
             await Task.WhenAll(notification, workflow);
+
+            return ItemValidationResultFactory.ItemUpdated(item.ItemId, item.ModifiedOn.Value);
         }
+
+        #region Private Methods
+
+        private ValidationResult ValidateDto(UpdateItemDto itemDto)
+        {
+            var validator = ItemValidatorFactory.UpdateItemValidator();
+            var result = validator.Validate(itemDto);
+            return result;
+        }
+
+        #endregion Private Methods
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Data.Repositories;
-using Todo.Domain.Entities;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Events.StartItem;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
+using Todo.Services.TodoItems.Events.StartItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoItems.Commands.StartItem
 {
@@ -24,11 +23,17 @@ namespace Todo.Services.TodoItems.Commands.StartItem
             _workflowService = workflowService;
         }
 
-        public virtual async Task StartItem(Guid itemId)
+        public virtual async Task<ItemValidationResult> StartItem(Guid itemId)
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
+
+            if (item.IsCancelled()) return ItemValidationResultFactory.ItemPreviouslyCancelled(item.ItemId, item.CancelledOn.Value);
+
+            if (item.IsCompleted()) return ItemValidationResultFactory.ItemPreviouslyCompleted(item.ItemId, item.CompletedOn.Value);
+
+            if (item.HasStarted()) return ItemValidationResultFactory.ItemAlreadyStarted(item.ItemId, item.StartedOn.Value);
 
             await _workflowService.Process(new BeforeItemStartedProcess(item.ItemId));
 
@@ -40,6 +45,8 @@ namespace Todo.Services.TodoItems.Commands.StartItem
             var notification = _notificationService.Queue(new ItemStartedNotification(item.ItemId, item.StartedOn.Value));
 
             await Task.WhenAll(notification, workflow);
+
+            return ItemValidationResultFactory.ItemStarted(item.ItemId, item.StartedOn.Value);
         }
     }
 }

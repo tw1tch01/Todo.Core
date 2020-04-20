@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Todo.Domain.Common;
 using Todo.Domain.Enums;
 using Todo.Domain.Exceptions;
 
+[assembly: InternalsVisibleTo("Todo.Domain.UnitTests")]
 namespace Todo.Domain.Entities
 {
     public class TodoItem : BaseEntity
@@ -62,27 +64,32 @@ namespace Todo.Domain.Entities
             return TodoItemStatus.Pending;
         }
 
-        public virtual bool CanBeCancelled()
+        public virtual bool IsCompleted()
         {
-            return !CancelledOn.HasValue && !CompletedOn.HasValue;
+            return CompletedOn.HasValue;
+        }
+
+        public virtual bool IsCancelled()
+        {
+            return CancelledOn.HasValue;
+        }
+
+        public virtual bool HasStarted()
+        {
+            return StartedOn.HasValue;
         }
 
         public virtual void CancelItem()
         {
-            if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
+            if (IsCancelled()) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
-            if (CompletedOn.HasValue) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
+            if (IsCompleted()) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
 
             ChildItems.OrderBy(item => item.Rank).ToList().ForEach(item =>
             {
                 if (item.CanBeCancelled()) item.CancelItem();
             });
             CancelledOn = DateTime.UtcNow;
-        }
-
-        public virtual bool CanBeCompleted()
-        {
-            return !CancelledOn.HasValue && !CompletedOn.HasValue;
         }
 
         public virtual void CompleteItem()
@@ -100,11 +107,11 @@ namespace Todo.Domain.Entities
 
         public virtual void StartItem()
         {
-            if (CancelledOn.HasValue) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
+            if (IsCancelled()) throw new ItemPreviouslyCancelledException(CancelledOn.Value, ItemId);
 
-            if (CompletedOn.HasValue) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
+            if (IsCompleted()) throw new ItemPreviouslyCompletedException(CompletedOn.Value, ItemId);
 
-            if (StartedOn.HasValue) throw new ItemAlreadyStartedException(StartedOn.Value, ItemId);
+            if (HasStarted()) throw new ItemAlreadyStartedException(StartedOn.Value, ItemId);
 
             StartedOn = DateTime.UtcNow;
             CompletedOn = null;
@@ -130,5 +137,19 @@ namespace Todo.Domain.Entities
         }
 
         #endregion Methods
+
+        #region Private methods
+
+        internal bool CanBeCancelled()
+        {
+            return !IsCancelled() && !IsCompleted();
+        }
+
+        internal bool CanBeCompleted()
+        {
+            return !IsCancelled() && !IsCompleted();
+        }
+
+        #endregion Private methods
     }
 }

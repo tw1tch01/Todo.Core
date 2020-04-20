@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
-using Todo.Domain.Entities;
+using FluentValidation.Results;
 using Todo.DomainModels.TodoNotes;
+using Todo.DomainModels.TodoNotes.Validators;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoNotes.Events.UpdateNote;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
+using Todo.Services.TodoNotes.Events.UpdateNote;
 using Todo.Services.TodoNotes.Specifications;
+using Todo.Services.TodoNotes.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoNotes.Commands.UpdateNote
 {
@@ -28,13 +29,17 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
             _workflowService = workflowService;
         }
 
-        public virtual async Task UpdateNote(Guid noteId, UpdateNoteDto noteDto)
+        public virtual async Task<NoteValidationResult> UpdateNote(Guid noteId, UpdateNoteDto noteDto)
         {
             if (noteDto == null) throw new ArgumentNullException(nameof(noteDto));
 
+            var validationResult = ValidateDto(noteDto);
+
+            if (!validationResult.IsValid) return NoteValidationResultFactory.InvalidDto(validationResult.Errors);
+
             var note = await _repository.GetAsync(new GetNoteById(noteId));
 
-            if (note == null) throw new NotFoundException(nameof(TodoItemNote), noteId);
+            if (note == null) return NoteValidationResultFactory.NoteNotFound(noteId);
 
             await _workflowService.Process(new BeforeNoteUpdatedProcess(noteId));
 
@@ -46,6 +51,19 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
             var notification = _notificationService.Queue(new NoteUpdatedNotification(note.NoteId));
 
             await Task.WhenAll(notification, workflow);
+
+            return NoteValidationResultFactory.NoteUpdated(note.NoteId, note.ModifiedOn.Value);
         }
+
+        #region Private Methods
+
+        private ValidationResult ValidateDto(UpdateNoteDto noteDto)
+        {
+            var validator = NoteValidatorFactory.UpdateNoteValidator();
+            var result = validator.Validate(noteDto);
+            return result;
+        }
+
+        #endregion Private Methods
     }
 }

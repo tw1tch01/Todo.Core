@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Data.Repositories;
-using Todo.Domain.Entities;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
-using Todo.Services.TodoItems.Events.ResetItem;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
+using Todo.Services.TodoItems.Events.ResetItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoItems.Commands.ResetItem
 {
@@ -24,11 +23,11 @@ namespace Todo.Services.TodoItems.Commands.ResetItem
             _workflowService = workflowService;
         }
 
-        public virtual async Task ResetItem(Guid itemId)
+        public virtual async Task<ItemValidationResult> ResetItem(Guid itemId)
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
 
             await _workflowService.Process(new BeforeItemResetProcess(item.ItemId));
 
@@ -41,6 +40,8 @@ namespace Todo.Services.TodoItems.Commands.ResetItem
             var notification = _notificationService.Queue(new ItemResetNotification(item.ItemId, resetOn));
 
             await Task.WhenAll(notification, workflow);
+
+            return ItemValidationResultFactory.ItemReset(item.ItemId, resetOn);
         }
     }
 }

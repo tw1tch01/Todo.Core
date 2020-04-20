@@ -6,11 +6,11 @@ using Moq;
 using NUnit.Framework;
 using Todo.Domain.Entities;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.Notifications;
-using Todo.Services.Workflows;
 using Todo.Services.TodoItems.Commands.ResetItem;
 using Todo.Services.TodoItems.Specifications;
+using Todo.Services.TodoItems.Validation;
+using Todo.Services.Workflows;
 
 namespace Todo.Services.UnitTests.TodoItems.Commands.ResetItem
 {
@@ -18,17 +18,38 @@ namespace Todo.Services.UnitTests.TodoItems.Commands.ResetItem
     public class ResetItemServiceTests
     {
         [Test]
-        public void ResetItem_WhenNoItemFound_ThrowsNotFoundException()
+        public async Task ResetItem_WhenNoItemFound_ReturnItemNotFoundResult()
         {
             TodoItem item = null;
             var mockRepository = new Mock<IContextRepository<ITodoContext>>();
             var mockNotification = new Mock<INotificationService>();
             var mockWorkflow = new Mock<IWorkflowService>();
             mockRepository.Setup(m => m.GetAsync(It.IsAny<GetItemById>())).ReturnsAsync(() => item);
-
             var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
 
-            Assert.ThrowsAsync<NotFoundException>(async () => await service.ResetItem(Guid.NewGuid()));
+            var result = await service.ResetItem(Guid.NewGuid());
+
+            Assert.IsInstanceOf<ItemNotFoundResult>(result);
+        }
+
+        [Test]
+        public async Task ResetItem_WhenItemExists_ReturnsItemResetResult()
+        {
+            var item = new TodoItem
+            {
+                StartedOn = DateTime.UtcNow,
+                CancelledOn = DateTime.UtcNow,
+                CompletedOn = DateTime.UtcNow
+            };
+            var mockRepository = new Mock<IContextRepository<ITodoContext>>();
+            var mockNotification = new Mock<INotificationService>();
+            var mockWorkflow = new Mock<IWorkflowService>();
+            mockRepository.Setup(m => m.GetAsync(It.Is<GetItemById>(a => a.ItemId == item.ItemId))).ReturnsAsync(() => item);
+            var service = new ResetItemService(mockRepository.Object, mockNotification.Object, mockWorkflow.Object);
+
+            var result = await service.ResetItem(item.ItemId);
+
+            Assert.IsInstanceOf<ItemResetResult>(result);
         }
 
         [Test]

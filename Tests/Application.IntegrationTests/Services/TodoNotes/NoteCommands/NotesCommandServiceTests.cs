@@ -35,7 +35,7 @@ namespace Todo.Application.IntegrationTests.Services.TodoNotes.NoteCommands
 
             var noteDto = TodoNoteFactory.GenerateCreateNoteDto();
 
-            var _ = await _commandService.CreateNote(item.ItemId, noteDto);
+            var _ = await _commandService.CreateNote(noteDto);
 
             Assert.Pass();
         }

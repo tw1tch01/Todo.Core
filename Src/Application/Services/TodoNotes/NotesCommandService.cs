@@ -4,6 +4,7 @@ using Todo.DomainModels.TodoNotes;
 using Todo.Services.TodoNotes.Commands.CreateNote;
 using Todo.Services.TodoNotes.Commands.DeleteNote;
 using Todo.Services.TodoNotes.Commands.UpdateNote;
+using Todo.Services.TodoNotes.Validation;
 
 namespace Todo.Application.Services.TodoNotes
 {
@@ -25,12 +26,12 @@ namespace Todo.Application.Services.TodoNotes
             _updateNoteService = updateNoteService;
         }
 
-        public Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto) => _createNoteService.CreateNote(itemId, noteDto);
+        public Task<NoteValidationResult> CreateNote(CreateNoteDto noteDto) => _createNoteService.CreateNote(noteDto);
 
-        public Task DeleteNote(Guid noteId) => _deleteNoteService.DeleteNote(noteId);
+        public Task<NoteValidationResult> DeleteNote(Guid noteId) => _deleteNoteService.DeleteNote(noteId);
 
-        public Task<Guid> ReplyOnNote(Guid parentNoteId, CreateNoteDto noteDto) => _createNoteService.ReplyOnNote(parentNoteId, noteDto);
+        public Task<NoteValidationResult> ReplyOnNote(Guid parentNoteId, CreateNoteDto replyDto) => _createNoteService.ReplyOnNote(parentNoteId, replyDto);
 
-        public Task UpdateNote(Guid noteId, UpdateNoteDto noteDto) => _updateNoteService.UpdateNote(noteId, noteDto);
+        public Task<NoteValidationResult> UpdateNote(Guid noteId, UpdateNoteDto noteDto) => _updateNoteService.UpdateNote(noteId, noteDto);
     }
 }

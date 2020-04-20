@@ -2,14 +2,16 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Data.Repositories;
+using FluentValidation.Results;
 using Todo.Domain.Entities;
 using Todo.DomainModels.TodoNotes;
+using Todo.DomainModels.TodoNotes.Validators;
 using Todo.Services.Common;
-using Todo.Services.Common.Exceptions;
 using Todo.Services.Notifications;
 using Todo.Services.TodoItems.Specifications;
 using Todo.Services.TodoNotes.Events.CreateNote;
 using Todo.Services.TodoNotes.Specifications;
+using Todo.Services.TodoNotes.Validation;
 using Todo.Services.Workflows;
 
 namespace Todo.Services.TodoNotes.Commands.CreateNote
@@ -29,15 +31,19 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
             _workflowService = workflowService;
         }
 
-        public virtual async Task<Guid> CreateNote(Guid itemId, CreateNoteDto noteDto)
+        public virtual async Task<NoteValidationResult> CreateNote(CreateNoteDto noteDto)
         {
             if (noteDto == null) throw new ArgumentNullException(nameof(noteDto));
 
-            var item = await _repository.GetAsync(new GetItemById(itemId));
+            var validationResult = ValidateDto(noteDto);
 
-            if (item == null) throw new NotFoundException(nameof(TodoItem), itemId);
+            if (!validationResult.IsValid) return NoteValidationResultFactory.InvalidDto(validationResult.Errors);
 
-            await _workflowService.Process(new BeforeNoteCreatedProcess(itemId));
+            var item = await _repository.GetAsync(new GetItemById(noteDto.ItemId));
+
+            if (item == null) return NoteValidationResultFactory.ItemNotFound(noteDto.ItemId);
+
+            await _workflowService.Process(new BeforeNoteCreatedProcess(noteDto.ItemId));
 
             var note = _mapper.Map<TodoItemNote>(noteDto);
 
@@ -49,22 +55,27 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             await Task.WhenAll(notification, workflow);
 
-            return note.NoteId;
+            return NoteValidationResultFactory.NoteCreated(note.NoteId, note.CreatedOn);
         }
 
-        public async Task<Guid> ReplyOnNote(Guid parentNoteId, CreateNoteDto childNoteDto)
+        public async Task<NoteValidationResult> ReplyOnNote(Guid parentNoteId, CreateNoteDto replyDto)
         {
-            if (childNoteDto == null) throw new ArgumentNullException(nameof(childNoteDto));
+            if (replyDto == null) throw new ArgumentNullException(nameof(replyDto));
+
+            var validationResult = ValidateDto(replyDto);
+
+            if (!validationResult.IsValid) return NoteValidationResultFactory.InvalidDto(validationResult.Errors);
 
             var parentNote = await _repository.GetAsync(new GetNoteById(parentNoteId));
 
-            if (parentNote == null) throw new NotFoundException(nameof(TodoItem), parentNoteId);
+            if (parentNote == null) return NoteValidationResultFactory.NoteNotFound(parentNoteId);
+
+            if (parentNote.ItemId != replyDto.ItemId) return NoteValidationResultFactory.ItemIdMismatch(parentNote.ItemId, replyDto.ItemId);
 
             await _workflowService.Process(new BeforeReplyCreatedProcess(parentNote.NoteId));
 
-            var reply = _mapper.Map<TodoItemNote>(childNoteDto);
+            var reply = _mapper.Map<TodoItemNote>(replyDto);
 
-            reply.ItemId = parentNote.ItemId;
             parentNote.Replies.Add(reply);
             await _repository.SaveAsync();
 
@@ -73,7 +84,18 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             await Task.WhenAll(notification, workflow);
 
-            return reply.NoteId;
+            return NoteValidationResultFactory.NoteCreated(reply.NoteId, reply.CreatedOn);
         }
+
+        #region Private Methods
+
+        private ValidationResult ValidateDto(CreateNoteDto noteDto)
+        {
+            var validator = NoteValidatorFactory.CreateNoteValidator();
+            var result = validator.Validate(noteDto);
+            return result;
+        }
+
+        #endregion Private Methods
     }
 }
