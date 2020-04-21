@@ -35,11 +35,11 @@ namespace Todo.Services.TodoItems.Commands.UpdateItem
 
             var validationResult = ValidateDto(itemDto);
 
-            if (!validationResult.IsValid) return ItemValidationResultFactory.InvalidDto(validationResult.Errors);
+            if (!validationResult.IsValid) return new InvalidDtoResult(validationResult.Errors);
 
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
+            if (item == null) return new ItemNotFoundResult(itemId);
 
             await _workflowService.Process(new BeforeItemUpdatedProcess(item.ItemId));
 
@@ -51,14 +51,14 @@ namespace Todo.Services.TodoItems.Commands.UpdateItem
 
             await Task.WhenAll(notification, workflow);
 
-            return ItemValidationResultFactory.ItemUpdated(item.ItemId, item.ModifiedOn.Value);
+            return new ItemUpdatedResult(item.ItemId, item.ModifiedOn.Value);
         }
 
         #region Private Methods
 
         private ValidationResult ValidateDto(UpdateItemDto itemDto)
         {
-            var validator = ItemValidatorFactory.UpdateItemValidator();
+            var validator = new UpdateItemValidator();
             var result = validator.Validate(itemDto);
             return result;
         }

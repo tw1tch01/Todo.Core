@@ -27,7 +27,7 @@ namespace Todo.Services.TodoItems.Commands.ResetItem
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
+            if (item == null) return new ItemNotFoundResult(itemId);
 
             await _workflowService.Process(new BeforeItemResetProcess(item.ItemId));
 
@@ -41,7 +41,7 @@ namespace Todo.Services.TodoItems.Commands.ResetItem
 
             await Task.WhenAll(notification, workflow);
 
-            return ItemValidationResultFactory.ItemReset(item.ItemId, resetOn);
+            return new ItemResetResult(item.ItemId, resetOn);
         }
     }
 }

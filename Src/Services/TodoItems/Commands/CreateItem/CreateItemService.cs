@@ -36,7 +36,7 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             var validationResult = ValidateDto(itemDto);
 
-            if (!validationResult.IsValid) return ItemValidationResultFactory.InvalidDto(validationResult.Errors);
+            if (!validationResult.IsValid) return new InvalidDtoResult(validationResult.Errors);
 
             var item = _mapper.Map<TodoItem>(itemDto);
 
@@ -48,7 +48,7 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             await Task.WhenAll(notification, workflow);
 
-            return ItemValidationResultFactory.ItemCreated(item.ItemId, item.CreatedOn);
+            return new ItemCreatedResult(item.ItemId, item.CreatedOn);
         }
 
         public virtual async Task<ItemValidationResult> AddChildItem(Guid parentItemId, CreateItemDto childItemDto)
@@ -57,11 +57,11 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             var validationResult = ValidateDto(childItemDto);
 
-            if (!validationResult.IsValid) return ItemValidationResultFactory.InvalidDto(validationResult.Errors);
+            if (!validationResult.IsValid) return new InvalidDtoResult(validationResult.Errors);
 
             var parentItem = await _repository.GetAsync(new GetItemById(parentItemId));
 
-            if (parentItem == null) return ItemValidationResultFactory.ItemNotFound(parentItemId);
+            if (parentItem == null) return new ItemNotFoundResult(parentItemId);
 
             await _workflowService.Process(new BeforeChildItemCreatedProcess(parentItem.ItemId));
 
@@ -75,14 +75,14 @@ namespace Todo.Services.TodoItems.Commands.CreateItem
 
             await Task.WhenAll(notification, workflow);
 
-            return ItemValidationResultFactory.ItemCreated(childItem.ItemId, childItem.CreatedOn);
+            return new ItemCreatedResult(childItem.ItemId, childItem.CreatedOn);
         }
 
         #region Private Methods
 
         private ValidationResult ValidateDto(CreateItemDto itemDto)
         {
-            var validator = ItemValidatorFactory.CreateItemValidator();
+            var validator = new CreateItemValidator();
             var result = validator.Validate(itemDto);
             return result;
         }

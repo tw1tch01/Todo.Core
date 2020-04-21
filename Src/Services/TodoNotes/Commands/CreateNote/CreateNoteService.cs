@@ -37,11 +37,11 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             var validationResult = ValidateDto(noteDto);
 
-            if (!validationResult.IsValid) return NoteValidationResultFactory.InvalidDto(validationResult.Errors);
+            if (!validationResult.IsValid) return new InvalidDtoResult(validationResult.Errors);
 
             var item = await _repository.GetAsync(new GetItemById(noteDto.ItemId));
 
-            if (item == null) return NoteValidationResultFactory.ItemNotFound(noteDto.ItemId);
+            if (item == null) return new ItemNotFoundResult(noteDto.ItemId);
 
             await _workflowService.Process(new BeforeNoteCreatedProcess(noteDto.ItemId));
 
@@ -55,7 +55,7 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             await Task.WhenAll(notification, workflow);
 
-            return NoteValidationResultFactory.NoteCreated(note.NoteId, note.CreatedOn);
+            return new NoteCreatedResult(note.NoteId, note.CreatedOn);
         }
 
         public async Task<NoteValidationResult> ReplyOnNote(Guid parentNoteId, CreateNoteDto replyDto)
@@ -64,13 +64,13 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             var validationResult = ValidateDto(replyDto);
 
-            if (!validationResult.IsValid) return NoteValidationResultFactory.InvalidDto(validationResult.Errors);
+            if (!validationResult.IsValid) return new InvalidDtoResult(validationResult.Errors);
 
             var parentNote = await _repository.GetAsync(new GetNoteById(parentNoteId));
 
-            if (parentNote == null) return NoteValidationResultFactory.NoteNotFound(parentNoteId);
+            if (parentNote == null) return new NoteNotFoundResult(parentNoteId);
 
-            if (parentNote.ItemId != replyDto.ItemId) return NoteValidationResultFactory.ItemIdMismatch(parentNote.ItemId, replyDto.ItemId);
+            if (parentNote.ItemId != replyDto.ItemId) return new ItemIdMismatchResult(parentNote.ItemId, replyDto.ItemId);
 
             await _workflowService.Process(new BeforeReplyCreatedProcess(parentNote.NoteId));
 
@@ -84,14 +84,14 @@ namespace Todo.Services.TodoNotes.Commands.CreateNote
 
             await Task.WhenAll(notification, workflow);
 
-            return NoteValidationResultFactory.NoteCreated(reply.NoteId, reply.CreatedOn);
+            return new NoteCreatedResult(reply.NoteId, reply.CreatedOn);
         }
 
         #region Private Methods
 
         private ValidationResult ValidateDto(CreateNoteDto noteDto)
         {
-            var validator = NoteValidatorFactory.CreateNoteValidator();
+            var validator = new CreateNoteValidator();
             var result = validator.Validate(noteDto);
             return result;
         }

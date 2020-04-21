@@ -27,7 +27,7 @@ namespace Todo.Services.TodoItems.Commands.DeleteItem
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
+            if (item == null) return new ItemNotFoundResult(itemId);
 
             await _workflowService.Process(new BeforeItemDeletedProcess(itemId));
 
@@ -41,7 +41,7 @@ namespace Todo.Services.TodoItems.Commands.DeleteItem
 
             await Task.WhenAll(notification, workflow);
 
-            return ItemValidationResultFactory.ItemDeleted(itemId, deletedOn);
+            return new ItemDeletedResult(itemId, deletedOn);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Todo.Services.TodoNotes.Commands.DeleteNote
         {
             var note = await _repository.GetAsync(new GetNoteById(noteId));
 
-            if (note == null) return NoteValidationResultFactory.NoteNotFound(noteId);
+            if (note == null) return new NoteNotFoundResult(noteId);
 
             await _workflowService.Process(new BeforeNoteDeletedProcess(noteId));
 
@@ -42,7 +42,7 @@ namespace Todo.Services.TodoNotes.Commands.DeleteNote
 
             await Task.WhenAll(notification, workflow);
 
-            return NoteValidationResultFactory.NoteDeleted(noteId, deletedOn);
+            return new NoteDeletedResult(noteId, deletedOn);
         }
     }
 }

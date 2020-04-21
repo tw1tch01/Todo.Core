@@ -35,11 +35,11 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
 
             var validationResult = ValidateDto(noteDto);
 
-            if (!validationResult.IsValid) return NoteValidationResultFactory.InvalidDto(validationResult.Errors);
+            if (!validationResult.IsValid) return new InvalidDtoResult(validationResult.Errors);
 
             var note = await _repository.GetAsync(new GetNoteById(noteId));
 
-            if (note == null) return NoteValidationResultFactory.NoteNotFound(noteId);
+            if (note == null) return new NoteNotFoundResult(noteId);
 
             await _workflowService.Process(new BeforeNoteUpdatedProcess(noteId));
 
@@ -52,14 +52,14 @@ namespace Todo.Services.TodoNotes.Commands.UpdateNote
 
             await Task.WhenAll(notification, workflow);
 
-            return NoteValidationResultFactory.NoteUpdated(note.NoteId, note.ModifiedOn.Value);
+            return new NoteUpdatedResult(note.NoteId, note.ModifiedOn.Value);
         }
 
         #region Private Methods
 
         private ValidationResult ValidateDto(UpdateNoteDto noteDto)
         {
-            var validator = NoteValidatorFactory.UpdateNoteValidator();
+            var validator = new UpdateNoteValidator();
             var result = validator.Validate(noteDto);
             return result;
         }

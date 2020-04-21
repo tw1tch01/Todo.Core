@@ -27,11 +27,11 @@ namespace Todo.Services.TodoItems.Commands.CancelItem
         {
             var item = await _repository.GetAsync(new GetItemById(itemId));
 
-            if (item == null) return ItemValidationResultFactory.ItemNotFound(itemId);
+            if (item == null) return new ItemNotFoundResult(itemId);
 
-            if (item.IsCancelled()) return ItemValidationResultFactory.ItemPreviouslyCancelled(item.ItemId, item.CancelledOn.Value);
+            if (item.IsCancelled()) return new ItemPreviouslyCancelledResult(item.ItemId, item.CancelledOn.Value);
 
-            if (item.IsCompleted()) return ItemValidationResultFactory.ItemPreviouslyCompleted(item.ItemId, item.CompletedOn.Value);
+            if (item.IsCompleted()) return new ItemPreviouslyCompletedResult(item.ItemId, item.CompletedOn.Value);
 
             await _workflowService.Process(new BeforeItemCancelledProcess(item.ItemId));
 
@@ -44,7 +44,7 @@ namespace Todo.Services.TodoItems.Commands.CancelItem
 
             await Task.WhenAll(notifcation, workflow);
 
-            return ItemValidationResultFactory.ItemCancelled(item.ItemId, item.CancelledOn.Value);
+            return new ItemCancelledResult(item.ItemId, item.CancelledOn.Value);
         }
     }
 }
