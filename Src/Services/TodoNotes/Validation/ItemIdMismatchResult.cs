@@ -9,7 +9,7 @@ namespace Todo.Services.TodoNotes.Validation
         private const string _replyItemIdKey = "ReplyItemId";
 
         public ItemIdMismatchResult(Guid parentNoteItemId, Guid replyItemId)
-            : base(Guid.Empty, _message)
+            : base(_message)
         {
             Data[_parentNoteItemIdKey] = parentNoteItemId;
             Data[_replyItemIdKey] = replyItemId;

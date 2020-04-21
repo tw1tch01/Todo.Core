@@ -17,7 +17,7 @@ namespace Todo.Services.Common.Validation
 
         public bool IsValid { get; }
         public string Message { get; }
-        public IDictionary<string, object> Data { get; }
+        public IDictionary<string, object> Data { get; protected set; }
 
         internal static Dictionary<string, List<string>> GetValidationFailures(ICollection<ValidationFailure> failures)
         {

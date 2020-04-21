@@ -4,7 +4,7 @@ using FluentValidation.Results;
 
 namespace Todo.Services.TodoItems.Validation
 {
-    internal static class ItemValidationResultFactory
+    public static class ItemValidationResultFactory
     {
         #region Invalid Results
 

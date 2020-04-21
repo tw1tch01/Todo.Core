@@ -9,7 +9,7 @@ namespace Todo.Services.TodoNotes.Validation
         private const string _itemIdKey = nameof(TodoItemNote.ItemId);
 
         public ItemNotFoundResult(Guid itemId)
-            : base(Guid.Empty, _message)
+            : base(_message)
         {
             Data[_itemIdKey] = itemId;
         }
